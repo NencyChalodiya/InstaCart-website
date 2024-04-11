@@ -36,7 +36,7 @@ const Navbar = ({ onLoginButton, onSignupHandler }) => {
 
   return (
     <div className="fixed top-0 z-10 w-full bg-white">
-      <header className="flex items-center justify-between mx-8 border-gray-300 ">
+      <header className="flex items-center justify-between px-4 py-6 mx-8 border-gray-300 max-h-20">
         <div className="flex flex-row items-center w-full ">
           <div className="flex mr-2 cursor-pointer">
             {open ? (
@@ -94,24 +94,24 @@ const Navbar = ({ onLoginButton, onSignupHandler }) => {
                 <div className="relative h-full">
                   <input
                     type="text"
-                    className="flex items-center relative w-full border-[2px] rounded-lg text-base bg-transparent indent-10 text-black placeholder-black  outline-black pr-12 h-full box-border"
+                    className="box-border relative flex items-center w-full h-full pr-12 text-base text-black placeholder-black bg-transparent rounded-lg shadow-inner indent-10 outline-black "
                     placeholder="Search products and stores"
-                  ></input>
+                  />
                 </div>
               </form>
             </div>
           </div>
         </div>
-        <div className="flex flex-row ">
-          <button className="relative px-[6px] py-[1px] mx-[22px]  font-medium text-[#343538] bg-transparent border-none cursor-pointer text-lg leading-5">
+        <div className="flex flex-row">
+          <button className="relative px-[6px] py-[1px] mx-[22px]  font-medium text-[#343538] bg-transparent  cursor-pointer text-lg leading-5">
             <span
-              className="block whitespace-nowrap overflow-ellipsis"
+              className="block text-lg leading-5 cursor-pointer whitespace-nowrap overflow-ellipsis"
               onClick={onLoginButton}
             >
               Log in
             </span>
           </button>
-          <button className="px-4 py-1 m-6 text-white bg-[#2C890F] border-none rounded-[20px] relative cursor-pointer font-semibold text-lg leading-5">
+          <button className="px-4 py-2 m-6 text-white bg-[#2C890F] border-none rounded-[20px] relative cursor-pointer font-semibold text-lg leading-5">
             <span
               className="block overflow-hidden whitespace-nowrap overflow-ellipsis"
               onClick={onSignupHandler}

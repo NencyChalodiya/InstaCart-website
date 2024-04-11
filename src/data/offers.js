@@ -28,7 +28,7 @@ export const offersCategory = [
       "https://www.instacart.com/image-server/197x197/filters:fill(FFF,true):format(jpg)/d2lnr5mha7bycj.cloudfront.net/product-image/file/large_12981a88-9c60-41c3-8912-30c8a51a690b.jpg",
     offerCategoryPrice: "10",
     offerCategoryName: "Cupcake Vineyards Chardonnay",
-    offerCategoryIngre: "Notes of apple,lemon,vanilla...",
+    offerCategoryIngre: "Notes of apple,lemon,vanilla..",
     offerCategoryWeight: "750ml",
   },
   {
@@ -37,7 +37,7 @@ export const offersCategory = [
       "https://www.instacart.com/image-server/197x197/filters:fill(FFF,true):format(jpg)/d2lnr5mha7bycj.cloudfront.net/product-image/file/large_12981a88-9c60-41c3-8912-30c8a51a690b.jpg",
     offerCategoryPrice: "10",
     offerCategoryName: "Cupcake Vineyards Chardonnay",
-    offerCategoryIngre: "Notes of apple,lemon,vanilla...",
+    offerCategoryIngre: "Notes of apple,lemon,vanilla..",
     offerCategoryWeight: "750ml",
   },
   {
@@ -46,7 +46,7 @@ export const offersCategory = [
       "https://www.instacart.com/image-server/197x197/filters:fill(FFF,true):format(jpg)/d2lnr5mha7bycj.cloudfront.net/product-image/file/large_12981a88-9c60-41c3-8912-30c8a51a690b.jpg",
     offerCategoryPrice: "10",
     offerCategoryName: "Cupcake Vineyards Chardonnay",
-    offerCategoryIngre: "Notes of apple,lemon,vanilla...",
+    offerCategoryIngre: "Notes of apple,lemon,vanilla..",
     offerCategoryWeight: "750ml",
   },
   {
@@ -55,7 +55,7 @@ export const offersCategory = [
       "https://www.instacart.com/image-server/197x197/filters:fill(FFF,true):format(jpg)/d2lnr5mha7bycj.cloudfront.net/product-image/file/large_12981a88-9c60-41c3-8912-30c8a51a690b.jpg",
     offerCategoryPrice: "10",
     offerCategoryName: "Cupcake Vineyards Chardonnay",
-    offerCategoryIngre: "Notes of apple,lemon,vanilla...",
+    offerCategoryIngre: "Notes of apple,lemon,vanilla..",
     offerCategoryWeight: "750ml",
   },
   {
@@ -64,7 +64,7 @@ export const offersCategory = [
       "https://www.instacart.com/image-server/197x197/filters:fill(FFF,true):format(jpg)/d2lnr5mha7bycj.cloudfront.net/product-image/file/large_12981a88-9c60-41c3-8912-30c8a51a690b.jpg",
     offerCategoryPrice: "10",
     offerCategoryName: "Cupcake Vineyards Chardonnay",
-    offerCategoryIngre: "Notes of apple,lemon,vanilla...",
+    offerCategoryIngre: "Notes of apple,lemon,vanilla..",
     offerCategoryWeight: "750ml",
   },
 ];

@@ -6,8 +6,11 @@ const Store = () => {
   return (
     <div className="pl-5 pr-5">
       <div className="w-full mt-8 mb-8">
-        <h2 className="text-3xl font-bold text-center text-black">
-          Choose Your store in <span>San Fransisco Bay Area</span>
+        <h2 className="text-3xl font-bold text-center text-[#343538]">
+          Choose Your store in{" "}
+          <span className="text-[#2C890F] cursor-pointer">
+            San Francisco Bay Area
+          </span>
         </h2>
         <div className="flex flex-col items-center w-full">
           <ul className="grid justify-center w-full grid-cols-2 gap-6 px-0 py-8 m-0 lg:grid-cols-3 max-w-7xl">
