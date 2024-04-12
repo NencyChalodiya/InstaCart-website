@@ -5,6 +5,7 @@ import AddToCart from "../AddToCart/AddToCart";
 import Navbar from "../../components/LandingPageComponents/Navbar";
 
 const BrandStoreCategoryPage = () => {
+  const [isHovered, setIsHovered] = useState(false);
   const recipes = [
     "Recipes",
     "Snacks & Candy",
@@ -42,6 +43,9 @@ const BrandStoreCategoryPage = () => {
     });
   }, [params]);
   // console.log(storeData);
+  const handleOnHoverClick = () => {
+    setIsHovered(!isHovered);
+  };
   return (
     <>
       <Navbar />
@@ -347,43 +351,106 @@ const BrandStoreCategoryPage = () => {
                         storeData.items.map((item, index) => (
                           <li
                             key={index}
-                            className="flex flex-col cursor-pointer"
+                            className="relative flex flex-col cursor-pointer"
                             onClick={() => setaddToCart(true)}
                           >
-                            <div className="relative overflow-hidden rounded-xl">
-                              <div className="w-full h-[200px] object-cover">
-                                {" "}
-                                {item.itemsImg}
+                            <div className="absolute z-10 top-1 right-1">
+                              {" "}
+                              {/* Move absolute positioning here */}
+                              <div className="inline-block rounded-[20px] p-[2px] bg-[#2C890F]">
+                                <button
+                                  className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 bg-[#2C890F]"
+                                  onMouseOver={handleOnHoverClick}
+                                >
+                                  <div>
+                                    <div className="flex items-center px-2">
+                                      <svg
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="#FFFFFF"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        size="24"
+                                        color="systemGrayscale00"
+                                        aria-hidden="true"
+                                      >
+                                        <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
+                                      </svg>
+                                      {isHovered ? (
+                                        <span className="pl-1 text-white bg-[]">
+                                          Add to Cart
+                                        </span>
+                                      ) : (
+                                        <span className="pl-1 text-white">
+                                          Add
+                                        </span>
+                                      )}
+                                    </div>
+                                  </div>
+                                </button>
                               </div>
                             </div>
-                            <div className="px-2 mt-2">
-                              <div className="py-[1px] px-1 ">
-                                <span className="text-sm font-bold text-gray-700 align-super">
-                                  $
-                                </span>
-                                <span className="mr-[2px] font-bold text-2xl leading-5 text-gray-700">
-                                  {item.itemsPrice}
-                                </span>
-                                <span className="text-sm font-bold text-gray-700 align-super">
-                                  49
-                                </span>
+                            <div>
+                              <div className="relative overflow-hidden rounded-xl">
+                                <div className="w-full h-[200px] object-cover">
+                                  {" "}
+                                  {item.itemsImg}
+                                </div>
                               </div>
-                              <div className="">
-                                <span className="text-gray-500">
-                                  {item.itemName}
-                                </span>
-                              </div>
-                              <div>
-                                <p className="mt-[6px] text-gray-400">
-                                  {item.itemsDesc}
-                                </p>
-                              </div>
-                              <div className="flex">
-                                <div className="text-gray-400">
-                                  {item.itemWeight}
+                              <div className="px-2 mt-2">
+                                <div className="py-[1px] px-1 ">
+                                  <span className="text-sm font-bold text-gray-700 align-super">
+                                    $
+                                  </span>
+                                  <span className="mr-[2px] font-bold text-2xl leading-5 text-gray-700">
+                                    {item.itemsPrice}
+                                  </span>
+                                  <span className="text-sm font-bold text-gray-700 align-super">
+                                    49
+                                  </span>
+                                </div>
+                                <div className="">
+                                  <span className="text-gray-500">
+                                    {item.itemName}
+                                  </span>
+                                </div>
+                                <div>
+                                  <p className="mt-[6px] text-gray-400">
+                                    {item.itemsDesc}
+                                  </p>
+                                </div>
+                                <div className="flex">
+                                  <div className="text-gray-400">
+                                    {item.itemWeight}
+                                  </div>
                                 </div>
                               </div>
                             </div>
+                            {/* <div className="absolute z-10 top-1 right-1">
+                              <div className="inline-block rounded-[20px] p-[2px] bg-[#2C890F]">
+                                <button className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 bg-[#2C890F]">
+                                  <div>
+                                    <div className="flex items-center px-1">
+                                      <svg
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="#FFFFFF"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        size="24"
+                                        color="systemGrayscale00"
+                                        aria-hidden="true"
+                                      >
+                                        <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
+                                      </svg>
+                                      <span className="pl-1 text-white">
+                                        Add
+                                      </span>
+                                    </div>
+                                  </div>
+                                </button>
+                              </div>
+                            </div> */}
                           </li>
                         ))
                       ) : (

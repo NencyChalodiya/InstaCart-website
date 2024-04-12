@@ -68,25 +68,97 @@ const YourRecipes = () => {
               <div className="mt-12 "></div>
               <div className="px-16 my-12">
                 <div className="mb-6">
-                  <h1 className="text-xl leading-6">
-                    Explore main ingredients1
+                  <h1 className="text-2xl font-bold text-[#343538] leading-6">
+                    Explore main ingredients
                   </h1>
                 </div>
               </div>
               <div>
                 <div className="relative flex flex-row">
-                  <div className="w-full">
-                    <ul className="w-full h-full gap-6 bg-cover gird grid-col-6 isolate">
-                      <li>
-                        <a className="relative block">
-                          <div className="flex rounded-xl h-[92px]">
+                  <div className="w-full ">
+                    <ul className="flex justify-around mx-12 px-14 ">
+                      <li className="inline-block ">
+                        <a className="relative block" href="#">
+                          <div className="flex rounded-xl h-[92px] bg-[#EEF0F2]">
                             <div className="pt-4 px-2 min-w-[1%] flex-grow flex-shrink">
                               <span className="text-sm leading-4">
                                 Vegetables
                               </span>
                             </div>
                             <div
-                              className="w-[70px] bg-no-repeat bg-cover"
+                              className="w-[70px] bg-no-repeat bg-cover rounded-r-lg"
+                              style={{
+                                backgroundImage:
+                                  "url(https://www.instacart.com/image-server/200x200/d2lnr5mha7bycj.cloudfront.net/collections/collection-collection/image/fd4f6b73-8929-43e9-bebe-b2c5623f01a2.png)",
+                              }}
+                            ></div>
+                          </div>
+                        </a>
+                      </li>
+                      <li className="inline-block pl-12">
+                        <a className="relative block" href="#">
+                          <div className="flex rounded-xl h-[92px] bg-[#EEF0F2]">
+                            <div className="pt-4 px-2 min-w-[1%] flex-grow flex-shrink">
+                              <span className="text-sm leading-4">
+                                Vegetables
+                              </span>
+                            </div>
+                            <div
+                              className="w-[70px] bg-no-repeat bg-cover rounded-r-lg"
+                              style={{
+                                backgroundImage:
+                                  "url(https://www.instacart.com/image-server/200x200/d2lnr5mha7bycj.cloudfront.net/collections/collection-collection/image/fd4f6b73-8929-43e9-bebe-b2c5623f01a2.png)",
+                              }}
+                            ></div>
+                          </div>
+                        </a>
+                      </li>
+                      <li className="inline-block mr-[-10px]">
+                        <a className="relative block" href="#">
+                          <div className="flex rounded-xl h-[92px] bg-[#EEF0F2]">
+                            <div className="pt-4 px-2 min-w-[1%] flex-grow flex-shrink">
+                              <span className="text-sm leading-4">
+                                Vegetables
+                              </span>
+                            </div>
+                            <div
+                              className="w-[70px] bg-no-repeat bg-cover rounded-r-lg"
+                              style={{
+                                backgroundImage:
+                                  "url(https://www.instacart.com/image-server/200x200/d2lnr5mha7bycj.cloudfront.net/collections/collection-collection/image/fd4f6b73-8929-43e9-bebe-b2c5623f01a2.png)",
+                              }}
+                            ></div>
+                          </div>
+                        </a>
+                      </li>
+                      <li className="inline-block mr-[-10px]">
+                        <a className="relative block" href="#">
+                          <div className="flex rounded-xl h-[92px] bg-[#EEF0F2]">
+                            <div className="pt-4 px-2 min-w-[1%] flex-grow flex-shrink">
+                              <span className="text-sm leading-4">
+                                Vegetables
+                              </span>
+                            </div>
+                            <div
+                              className="w-[70px] bg-no-repeat bg-cover rounded-r-lg"
+                              style={{
+                                backgroundImage:
+                                  "url(https://www.instacart.com/image-server/200x200/d2lnr5mha7bycj.cloudfront.net/collections/collection-collection/image/fd4f6b73-8929-43e9-bebe-b2c5623f01a2.png)",
+                              }}
+                            ></div>
+                          </div>
+                        </a>
+                      </li>
+                      <li className="inline-block mr-[-10px]">
+                        <a className="relative block" href="#">
+                          <div className="flex rounded-xl h-[92px] bg-[#EEF0F2]">
+                            <div className="pt-4 px-2 min-w-[1%] flex-grow flex-shrink">
+                              <span className="text-sm leading-4">
+                                Vegetables
+                              </span>
+                            </div>
+                            <div
+                              className="w-[70px] bg-no-repeat bg-cover rounded-r-lg"
                               style={{
                                 backgroundImage:
                                   "url(https://www.instacart.com/image-server/200x200/d2lnr5mha7bycj.cloudfront.net/collections/collection-collection/image/fd4f6b73-8929-43e9-bebe-b2c5623f01a2.png)",

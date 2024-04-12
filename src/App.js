@@ -7,7 +7,7 @@ import OffersCategoryPage from "./pages/OffersCategoryPage/OffersCategoryPage";
 import YourOrders from "./pages/StoreSidebarPages/YourOrders";
 import YourLists from "./pages/StoreSidebarPages/YourLists";
 import YourRecipes from "./pages/StoreSidebarPages/YourRecipes";
-import AccountSettings from "./pages/StoreSidebarPages/AccountSettings";
+import AccountSettings from "./pages/StoreSidebarPages/AccountSettings/AccountSettings";
 function App() {
   return (
     <>
