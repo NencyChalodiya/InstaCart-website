@@ -3,7 +3,12 @@ import { useParams } from "react-router-dom";
 import Navbar from "../../components/LandingPageComponents/Navbar";
 import { offers } from "../../data/offers";
 import { offersCategory } from "../../data/offers";
+import ItemsCategory from "../../components/ItemsCategory";
+import HeaderAddToCart from "../../components/HeaderAddToCart";
+import { useSelector } from "react-redux";
 const OffersCategoryPage = () => {
+  const { Items } = useSelector((state) => state);
+  console.log(Items.items);
   const recipes = [
     "Recipes",
     "Snacks & Candy",
@@ -28,6 +33,7 @@ const OffersCategoryPage = () => {
   ];
   const [brandOfferLogo, setbrandOfferLogo] = useState(null);
   const params = useParams();
+
   useEffect(() => {
     offers.map((o) => {
       if (o.id == params.offerId) {
@@ -35,11 +41,9 @@ const OffersCategoryPage = () => {
       }
     });
   }, [params]);
-  console.log(params);
-  console.log(brandOfferLogo);
   return (
     <>
-      <Navbar />
+      <HeaderAddToCart />
       <div className="h-full bg-white">
         <div
           className="fixed z-10 w-64 overflow-y-auto bg-white border-r-2 top-20"
@@ -295,66 +299,11 @@ const OffersCategoryPage = () => {
                   </div>
 
                   <div className="relative h-full overflow-hidden">
-                    <ul className="flex flex-row w-full h-full">
+                    {/* <ul className="flex flex-row w-full h-full">
                       {offersCategory.map((category) => (
-                        <li className="flex ml-4 mr-2" key={category.id}>
-                          <div className="w-[140px] min-w-[157px] max-w-[197px]">
-                            <div className="h-full">
-                              <div className="relative h-full overflow-hidden rounded-xl">
-                                <a
-                                  href="/"
-                                  className="relative flex flex-col h-full"
-                                >
-                                  <div className="mb-2 relative overflow-hidden pt-[100%]">
-                                    <div className="absolute inset-0 flex items-center justify-center">
-                                      <img
-                                        src={category.offerCategoryImg}
-                                        alt="wi=ne-img-2"
-                                        className="absolute inset-0 object-cover w-full h-full rounded-xl"
-                                      />
-                                    </div>
-                                  </div>
-                                  <div>
-                                    <div>
-                                      <div>
-                                        <div className="flex ">
-                                          <div className="py-[1px] px-1 ">
-                                            <span className="text-sm font-bold text-gray-700 align-super">
-                                              $
-                                            </span>
-                                            <span className="mr-[2px] font-bold text-2xl leading-5 text-gray-700">
-                                              {category.offerCategoryPrice}
-                                            </span>
-                                            <span className="text-sm font-bold text-gray-700 align-super">
-                                              49
-                                            </span>
-                                          </div>
-                                        </div>
-                                        <div className="">
-                                          <span className="text-gray-500">
-                                            {category.offerCategoryName}
-                                          </span>
-                                        </div>
-                                        <div>
-                                          <p className="mt-[6px] text-gray-400">
-                                            {category.offerCategoryIngre}
-                                          </p>
-                                        </div>
-                                        <div className="flex">
-                                          <div className="text-gray-400">
-                                            {category.offerCategoryWeight}
-                                          </div>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                        </li>
+                        <ItemsCategory category={category} />
                       ))}
-                    </ul>
+                    </ul> */}
                   </div>
                 </div>
               </div>
@@ -445,46 +394,9 @@ const OffersCategoryPage = () => {
                   <div>
                     <div class="relative flex flex-row">
                       <div class="w-full">
-                        <ul class="w-full h-full min-h-[304px] grid grid-cols-8 gap-4 justify-between mt-2">
-                          {offersCategory.map((category) => (
-                            <li class="flex flex-col">
-                              <div class="relative overflow-hidden rounded-xl">
-                                <div class="w-full h-[200px]">
-                                  <img
-                                    src={category.offerCategoryImg}
-                                    alt="Product Image"
-                                  />
-                                </div>
-                              </div>
-                              <div class="px-2 mt-1">
-                                <div className="py-[1px] px-1 ">
-                                  <span className="text-sm font-bold text-gray-700 align-super">
-                                    $
-                                  </span>
-                                  <span className="mr-[2px] font-bold text-2xl leading-5 text-gray-700">
-                                    {category.offerCategoryPrice}
-                                  </span>
-                                  <span className="text-sm font-bold text-gray-700 align-super">
-                                    49
-                                  </span>
-                                </div>
-                                <div className="">
-                                  <span className="text-gray-500">
-                                    {category.offerCategoryName}
-                                  </span>
-                                </div>
-                                <div>
-                                  <p className="mt-[6px] text-gray-400">
-                                    {category.offerCategoryIngre}
-                                  </p>
-                                </div>
-                                <div className="flex">
-                                  <div className="text-gray-400">
-                                    {category.offerCategoryWeight}
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
+                        <ul class="w-full h-full min-h-[304px] grid grid-cols-7 gap-2 justify-between mt-2">
+                          {Items.items.map((category) => (
+                            <ItemsCategory category={category} />
                           ))}
                         </ul>
                       </div>

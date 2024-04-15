@@ -35,7 +35,7 @@ const Navbar = ({ onLoginButton, onSignupHandler }) => {
   // };
 
   return (
-    <div className="fixed top-0 z-10 w-full bg-white">
+    <div className="fixed top-0 z-20 w-full bg-white">
       <header className="flex items-center justify-between px-4 py-6 mx-8 border-gray-300 max-h-20">
         <div className="flex flex-row items-center w-full ">
           <div className="flex mr-2 cursor-pointer">

@@ -5,7 +5,6 @@ import AddToCart from "../AddToCart/AddToCart";
 import Navbar from "../../components/LandingPageComponents/Navbar";
 
 const BrandStoreCategoryPage = () => {
-  const [isHovered, setIsHovered] = useState(false);
   const recipes = [
     "Recipes",
     "Snacks & Candy",
@@ -43,9 +42,7 @@ const BrandStoreCategoryPage = () => {
     });
   }, [params]);
   // console.log(storeData);
-  const handleOnHoverClick = () => {
-    setIsHovered(!isHovered);
-  };
+
   return (
     <>
       <Navbar />
@@ -358,10 +355,7 @@ const BrandStoreCategoryPage = () => {
                               {" "}
                               {/* Move absolute positioning here */}
                               <div className="inline-block rounded-[20px] p-[2px] bg-[#2C890F]">
-                                <button
-                                  className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 bg-[#2C890F]"
-                                  onMouseOver={handleOnHoverClick}
-                                >
+                                <button className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 bg-[#2C890F]">
                                   <div>
                                     <div className="flex items-center px-2">
                                       <svg
@@ -376,15 +370,9 @@ const BrandStoreCategoryPage = () => {
                                       >
                                         <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
                                       </svg>
-                                      {isHovered ? (
-                                        <span className="pl-1 text-white bg-[]">
-                                          Add to Cart
-                                        </span>
-                                      ) : (
-                                        <span className="pl-1 text-white">
-                                          Add
-                                        </span>
-                                      )}
+                                      <span className="pl-1 text-white">
+                                        Add
+                                      </span>
                                     </div>
                                   </div>
                                 </button>

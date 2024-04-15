@@ -8,6 +8,10 @@ import YourOrders from "./pages/StoreSidebarPages/YourOrders";
 import YourLists from "./pages/StoreSidebarPages/YourLists";
 import YourRecipes from "./pages/StoreSidebarPages/YourRecipes";
 import AccountSettings from "./pages/StoreSidebarPages/AccountSettings/AccountSettings";
+import InstaCart_Plus from "./pages/StoreSidebarPages/InstaCart_Plus";
+import Refferals from "./pages/StoreSidebarPages/Refferals";
+import Gift_Cards from "./pages/StoreSidebarPages/Gift_Cards";
+import Manage_promos from "./pages/StoreSidebarPages/Manage_promos";
 function App() {
   return (
     <>
@@ -23,6 +27,16 @@ function App() {
         <Route path="/store/your-lists" element={<YourLists />} />
         <Route path="/store/recipes" element={<YourRecipes />} />
         <Route path="/store/account" element={<AccountSettings />} />
+        <Route
+          path="/store/account/instacart-plus"
+          element={<InstaCart_Plus />}
+        />
+        <Route path="/store/referrals" element={<Refferals />} />
+        <Route path="/p/gift-cards" element={<Gift_Cards />} />
+        <Route
+          path="/store/account/manage_promos"
+          element={<Manage_promos />}
+        />
       </Routes>
     </>
   );
