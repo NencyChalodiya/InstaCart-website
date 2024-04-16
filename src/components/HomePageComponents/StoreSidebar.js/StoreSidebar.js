@@ -1,12 +1,50 @@
 import { Drawer } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { storeSidbarData } from "../../../data/StoreSidebardata";
+import { Link } from "react-router-dom";
+import { creditsAndPromos } from "../../../data/StoreSidebardata";
+import { support } from "../../../data/StoreSidebardata";
+import { ourApps } from "../../../data/StoreSidebardata";
 const StoreSidebar = ({ open, onCancel }) => {
+  const [hoveredFirstItem, setHoveredFirstItem] = useState(null);
+  const [hoveredSecondItem, setHoveredSecondItem] = useState(null);
+  const [hoveredThirdItem, setHoveredThirdItem] = useState(null);
+  const [hoveredFourthItem, setHoveredFourthItem] = useState(null);
+  const handleMouseFirstEnter = (index) => {
+    setHoveredFirstItem(index);
+  };
+
+  const handleMouseFirstLeave = () => {
+    setHoveredFirstItem(null);
+  };
+  const handleMouseSecondEnter = (index) => {
+    setHoveredSecondItem(index);
+  };
+
+  const handleMouseSecondLeave = () => {
+    setHoveredSecondItem(null);
+  };
+  const handleMouseThirdEnter = (index) => {
+    setHoveredThirdItem(index);
+  };
+
+  const handleMouseThirdLeave = () => {
+    setHoveredThirdItem(null);
+  };
+
+  const handleMouseFourthEnter = (index) => {
+    setHoveredFourthItem(index);
+  };
+
+  const handleMouseFourthLeave = () => {
+    setHoveredFourthItem(null);
+  };
+
   return (
     <>
       <Drawer placement="left" visible={open} onClose={onCancel}>
         <nav>
-          <ul className="list-none">
+          <ul className="list-none ">
             <div className="relative mb-3">
               <div className="pl-3 pr-3 ">
                 <div className="flex flex-row justify-between">
@@ -107,21 +145,31 @@ const StoreSidebar = ({ open, onCancel }) => {
               </div>
             </div>
 
-            <div className="pb-3 pl-3 pr-3 ">
+            <div className="pb-3 pl-3 pr-3">
               <hr />
-              {storeSidbarData.map((sidebarItems) => (
-                <li>
-                  <a
-                    href="/"
-                    className="box-border relative flex items-center w-full pl-3 pr-3 rounded-lg cursor-pointer flex-nowrap"
+              {storeSidbarData.map((sidebarItems, index) => (
+                <li
+                  key={index}
+                  onMouseEnter={() => handleMouseFirstEnter(index)}
+                  onMouseLeave={handleMouseFirstLeave}
+                  style={{
+                    backgroundColor:
+                      hoveredFirstItem === index ? "#f2f3f7" : "white",
+                  }}
+                  className="mb-2 rounded-lg"
+                >
+                  <Link
+                    to={`/store/${sidebarItems.route}`}
+                    className="box-border relative flex items-center w-full pl-3 pr-3 cursor-pointer flex-nowrap"
+                    style={{
+                      color: hoveredFirstItem === index ? "black" : "black",
+                    }}
                   >
-                    <span className="flex items-center h-10 ">
+                    <span className="flex items-center h-10">
                       {sidebarItems.unselectedLogo}
                     </span>
-                    <span className="pt-2 pb-2 ml-8 ">
-                      {sidebarItems.title}
-                    </span>
-                  </a>
+                    <span className="pt-2 pb-2 ml-8">{sidebarItems.title}</span>
+                  </Link>
                 </li>
               ))}
 
@@ -130,7 +178,39 @@ const StoreSidebar = ({ open, onCancel }) => {
                 Credits and promos
               </h2>
               <ul className="flex flex-col list-none">
-                <li>
+                {creditsAndPromos.map((items, index) => (
+                  <li
+                    key={index}
+                    onMouseEnter={() => handleMouseSecondEnter(index)}
+                    onMouseLeave={handleMouseSecondLeave}
+                    style={{
+                      backgroundColor:
+                        hoveredSecondItem === index ? "#f2f3f7" : "white",
+                    }}
+                    className="mb-2 rounded-lg"
+                  >
+                    <Link
+                      to={`/store/${items.route}`}
+                      className="box-border flex items-center w-full pl-3 pr-3 rounded-lg cursor-pointer flex-nowrap"
+                    >
+                      <span className="flex items-center h-10 ">
+                        {items.unselectedLogo}
+                      </span>
+                      <span
+                        className="pt-2 pb-2 ml-8"
+                        style={{
+                          color:
+                            items.title === "Invite friends,earn money"
+                              ? "#D43683"
+                              : "black",
+                        }}
+                      >
+                        {items.title}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+                {/* <li>
                   <a
                     href="/"
                     className="w-full flex flex-nowrap items-center box-border pr-3 pl-3 rounded-lg text-[#D43683] cursor-pointer"
@@ -237,61 +317,38 @@ const StoreSidebar = ({ open, onCancel }) => {
                       Apply:Instacart Mastercard
                     </span>
                   </a>
-                </li>
+                </li> */}
               </ul>
               <hr />
               <h2 className="flex items-center h-10 pl-3 pr-3 text-gray-400">
                 Support
               </h2>
               <ul className="flex flex-col list-none">
-                <li>
-                  <a
-                    href="/"
-                    className="box-border flex items-center w-full pl-3 pr-3 rounded-lg cursor-pointer flex-nowrap"
+                {support.map((item, index) => (
+                  <li
+                    key={index}
+                    onMouseEnter={() => handleMouseThirdEnter(index)}
+                    onMouseLeave={handleMouseThirdLeave}
+                    style={{
+                      backgroundColor:
+                        hoveredThirdItem === index ? "#f2f3f7" : "white",
+                    }}
+                    className="mb-2 rounded-lg"
                   >
-                    <span className="flex items-center h-10 ">
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="#343538"
-                        xmlns="http://www.w3.org/2000/svg"
-                        size="24"
-                        class="e-6su6fj"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                          d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10m.871-8.21h-1.918c-.256-1.293.057-2.103 1.492-2.799.867-.412 1.08-.853 1.08-1.379 0-.739-.469-1.307-1.535-1.307-1.023 0-1.549.54-1.606 1.549H8.21C8.324 7.794 9.688 6.5 12.104 6.5c2.516 0 3.681 1.293 3.681 2.942 0 1.208-.583 1.947-1.976 2.714-.824.44-.994.768-.937 1.635m.47 2.516c0 .71-.555 1.194-1.379 1.194-.853 0-1.393-.455-1.393-1.208 0-.696.569-1.194 1.393-1.194.81 0 1.379.47 1.379 1.208"
-                        ></path>
-                      </svg>
-                    </span>
-                    <span className="pt-2 pb-2 ml-8">Help Center</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/"
-                    className="box-border relative flex items-center w-full pl-3 pr-3 rounded-lg cursor-pointer flex-nowrap"
-                  >
-                    <span className="flex items-center h-10 ">
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="#343538"
-                        xmlns="http://www.w3.org/2000/svg"
-                        size="24"
-                        class="e-6su6fj"
-                        aria-hidden="true"
-                      >
-                        <path d="M12.01 2A6 6 0 0 1 18 7.986V8q0 .377-.045.741a5.8 5.8 0 0 1-1.091 2.774 6 6 0 0 1-.328.413c-.78 1.003-1.35 2.212-1.54 3.44l-5.992.628a7.44 7.44 0 0 0-1.488-4.01 6 6 0 0 1-.718-.993 5.8 5.8 0 0 1-.75-2.223A6 6 0 0 1 6 8v-.005q0-.11.004-.22A6 6 0 0 1 12 2zM9 17.499l6-.623v1.5L9 19zM14 19.984l-4 .436v.492a1 1 0 0 0 1.084.997l2-.17a1 1 0 0 0 .916-.995z"></path>
-                      </svg>
-                    </span>
-                    <span className="pt-2 pb-2 ml-8">How Instacart works</span>
-                  </a>
-                </li>
+                    <Link
+                      to={`/${item.route}`}
+                      className="box-border flex items-center w-full pl-3 pr-3 rounded-lg cursor-pointer flex-nowrap"
+                      style={{
+                        color: hoveredFirstItem === index ? "black" : "black",
+                      }}
+                    >
+                      <span className="flex items-center h-10 ">
+                        {item.unselectedLogo}
+                      </span>
+                      <span className="pt-2 pb-2 ml-8">{item.title}</span>
+                    </Link>
+                  </li>
+                ))}
               </ul>
 
               <hr />
@@ -299,58 +356,31 @@ const StoreSidebar = ({ open, onCancel }) => {
                 our apps
               </h2>
               <ul className="flex flex-col list-none">
-                <li>
-                  <a
-                    href="/"
-                    className="box-border flex items-center w-full pl-3 pr-3 rounded-lg cursor-pointer flex-nowrap"
+                {ourApps.map((item, index) => (
+                  <li
+                    key={index}
+                    onMouseEnter={() => handleMouseFourthEnter(index)}
+                    onMouseLeave={handleMouseFourthLeave}
+                    style={{
+                      backgroundColor:
+                        hoveredFourthItem === index ? "#f2f3f7" : "white",
+                    }}
+                    className="mb-2 rounded-lg"
                   >
-                    <span className="flex items-center h-10 ">
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="#343538"
-                        xmlns="http://www.w3.org/2000/svg"
-                        size="24"
-                        class="e-6su6fj"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                          d="M15.911 1.5c.127 1.115-.335 2.232-1.024 3.036-.685.802-1.811 1.426-2.914 1.343-.148-1.09.409-2.226 1.043-2.94.707-.8 1.908-1.401 2.895-1.439m4.078 13.969.011-.032c-.056-.021-2.613-.983-2.639-3.843-.022-2.34 1.921-3.495 2.113-3.61l.012-.006c-1.157-1.635-2.956-1.857-3.594-1.885-.937-.092-1.844.255-2.585.538-.471.18-.875.334-1.177.334-.336 0-.752-.159-1.218-.337-.61-.233-1.305-.5-2.026-.488-1.668.025-3.204.937-4.066 2.382-1.728 2.905-.441 7.213 1.248 9.572.827 1.153 1.808 2.454 3.102 2.405.578-.022.99-.192 1.414-.367.49-.202 1-.412 1.805-.412.77 0 1.256.204 1.723.4.447.186.876.366 1.518.354 1.34-.023 2.191-1.178 3.008-2.337a10.4 10.4 0 0 0 1.351-2.668"
-                        ></path>
-                      </svg>
-                    </span>
-                    <span className="pt-2 pb-2 ml-8">App Store</span>
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href="/"
-                    className="box-border relative flex items-center w-full pl-3 pr-3 rounded-lg cursor-pointer flex-nowrap"
-                  >
-                    <span className="flex items-center h-10 ">
-                      <svg
-                        width="24"
-                        height="24"
-                        viewBox="0 0 24 24"
-                        fill="#343538"
-                        xmlns="http://www.w3.org/2000/svg"
-                        size="24"
-                        class="e-6su6fj"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                          d="M6 5.135q0-.133.021-.258L13.073 12 6.02 19.123A1.6 1.6 0 0 1 6 18.865zm1.608 15.228c.221-.015.446-.082.658-.208l8.111-4.817-1.897-1.916zM15.887 12l2.263 2.286 1.678-.996a1.5 1.5 0 0 0 0-2.58l-1.678-.996zm.49-3.338L8.266 3.845a1.5 1.5 0 0 0-.658-.208l6.872 6.942z"
-                        ></path>
-                      </svg>
-                    </span>
-                    <span className="pt-2 pb-2 ml-8">Google Play</span>
-                  </a>
-                </li>
+                    <a
+                      href="/"
+                      className="box-border flex items-center w-full pl-3 pr-3 rounded-lg cursor-pointer flex-nowrap"
+                      style={{
+                        color: hoveredFourthItem === index ? "black" : "black",
+                      }}
+                    >
+                      <span className="flex items-center h-10 ">
+                        {item.unselectedLogo}
+                      </span>
+                      <span className="pt-2 pb-2 ml-8">{item.title}</span>
+                    </a>
+                  </li>
+                ))}
               </ul>
 
               <hr />

@@ -2,7 +2,7 @@ import React from "react";
 import { Modal } from "antd";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { offersCategory } from "../../data/offers";
-const AddToCart = ({ addToCart, onBackClick }) => {
+const AddToCart = ({ addToCartModal, onBackClick, itemsAdd }) => {
   return (
     <Modal
       // title={
@@ -15,18 +15,18 @@ const AddToCart = ({ addToCart, onBackClick }) => {
       //   </div>
       // }
       centered
-      open={addToCart}
+      open={addToCartModal}
       closable={false}
       width={1450}
       footer={false}
     >
       <div className="h-[700px] overflow-auto ">
         <div className="flex-grow flex-shrink px-4 pb-8">
-          <div className="flex items-center ">
-            <IoArrowBackOutline
-              className="w-5 h-5 mr-2 cursor-pointer"
-              onClick={onBackClick}
-            />
+          <div
+            className="flex items-center cursor-pointer"
+            onClick={onBackClick}
+          >
+            <IoArrowBackOutline className="w-5 h-5 mr-2 cursor-pointer" />
             <span className="text-base">Back</span>
           </div>
 
@@ -285,6 +285,7 @@ const AddToCart = ({ addToCart, onBackClick }) => {
                   <div>
                     <ul className="flex flex-col justify-center w-full h-full">
                       {/* Your list of images */}
+
                       <li className="inline-block p-1">
                         <button className="border p-1 m-[1px] bg-white cursor-pointer w-[46px] flex rounded-xl">
                           <img
@@ -343,11 +344,11 @@ const AddToCart = ({ addToCart, onBackClick }) => {
                       </button>
                     </div>
                   </div>
-                </div>
+                </div>{" "}
                 <div className="flex items-center w-full ">
                   <div className="my-4 mx-auto max-h-[416px] max-w-[416px]">
                     <img
-                      src="https://www.instacart.com/assets/domains/product-image/file/large_3fd1f56d-b73f-426e-b25b-96678d8ff361.jpg"
+                      src={itemsAdd.offerCategoryImg}
                       alt="main-img"
                       className="max-w-full h-80 rounded-xl"
                     />
@@ -356,12 +357,14 @@ const AddToCart = ({ addToCart, onBackClick }) => {
                 <div className="mb-[35px]    w-full ">
                   <h2 className="mt-2 mb-2 ">
                     <span className="text-2xl font-bold leading-5 ">
-                      Jameson Triple Distilled Irish Whiskey
+                      {itemsAdd.offerCategoryName}
                     </span>
                   </h2>
                   <div>
                     <div className="flex">
-                      <span className="text-sm leading-4 ">750ml</span>
+                      <span className="text-sm leading-4 ">
+                        {itemsAdd.offerCategoryWeight}
+                      </span>
                     </div>
                   </div>
                   <div className="my-2">
@@ -445,7 +448,6 @@ const AddToCart = ({ addToCart, onBackClick }) => {
                   </div>
                   {/* Additional details for the whiskey can go here */}
                 </div>
-
                 <div className="w-full ml-6 mb-[5px]  ">
                   <div className="border rounded-xl px-4 mb-[35px]  w-[450px]  ">
                     <div className="mt-4">

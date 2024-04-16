@@ -8,7 +8,7 @@ const Store = () => {
       <div className="w-full mt-8 mb-8">
         <h2 className="text-3xl font-bold text-center text-[#343538]">
           Choose Your store in{" "}
-          <span className="text-[#2C890F] cursor-pointer">
+          <span className="text-[#2C890F] cursor-pointer hover:underline">
             San Francisco Bay Area
           </span>
         </h2>
@@ -18,7 +18,7 @@ const Store = () => {
               <StoreList store={store} key={store.id} />
             ))}
           </ul>
-          <button className="mt-8 font-sans text-base font-normal leading-6 text-green-600 bg-transparent border-none cursor-pointer font-bodyLarge1 font-wght-600 font-opsz-8 focus:outline-none">
+          <button className="mt-8 font-sans text-lg font-semibold leading-6 bg-transparent border-none cursor-pointer font-bodyLarge1 font-wght-600 font-opsz-8 focus:outline-none text-[#2C890F] hover:underline">
             Show all
           </button>
         </div>

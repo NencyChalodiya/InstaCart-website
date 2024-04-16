@@ -6,9 +6,12 @@ import { offersCategory } from "../../data/offers";
 import ItemsCategory from "../../components/ItemsCategory";
 import HeaderAddToCart from "../../components/HeaderAddToCart";
 import { useSelector } from "react-redux";
+import AddToCart from "../AddToCart/AddToCart";
 const OffersCategoryPage = () => {
+  const [addToCartModal, setaddToCartModal] = useState(false);
+  const [itemsAdd, setItemsAdd] = useState(null);
   const { Items } = useSelector((state) => state);
-  console.log(Items.items);
+  //console.log(Items.items);
   const recipes = [
     "Recipes",
     "Snacks & Candy",
@@ -41,6 +44,12 @@ const OffersCategoryPage = () => {
       }
     });
   }, [params]);
+
+  const openAddtoCartModal = (category) => {
+    setaddToCartModal(true);
+    setItemsAdd(category);
+  };
+
   return (
     <>
       <HeaderAddToCart />
@@ -396,7 +405,12 @@ const OffersCategoryPage = () => {
                       <div class="w-full">
                         <ul class="w-full h-full min-h-[304px] grid grid-cols-7 gap-2 justify-between mt-2">
                           {Items.items.map((category) => (
-                            <ItemsCategory category={category} />
+                            <ItemsCategory
+                              category={category}
+                              setCartHandler={() =>
+                                openAddtoCartModal(category)
+                              }
+                            />
                           ))}
                         </ul>
                       </div>
@@ -408,6 +422,11 @@ const OffersCategoryPage = () => {
           </div>
         </div>
       </div>
+      <AddToCart
+        addToCartModal={addToCartModal}
+        onBackClick={() => setaddToCartModal(false)}
+        itemsAdd={itemsAdd}
+      />
     </>
   );
 };

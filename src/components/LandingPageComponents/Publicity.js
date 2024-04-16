@@ -2,7 +2,7 @@ import React from "react";
 import { publicity } from "../../data/publicity";
 const Publicity = () => {
   return (
-    <div className="flex flex-col items-center justify-center max-w-6xl p-8 m-auto ">
+    <div className="flex flex-col items-center justify-center p-8 m-auto max-w-7xl ">
       <h2 className="max-w-lg pb-5 text-3xl font-bold leading-8 text-center">
         The largest online grocery marketplace in North America
       </h2>
@@ -15,7 +15,7 @@ const Publicity = () => {
           />
         </div>
 
-        <div className="flex-col w-full">
+        <div className="flex w-full ">
           {publicity.map((item) => (
             <div className="flex flex-col flex-grow flex-shrink mb-4 bg-gray-100 border rounded-2xl">
               <div className="flex-grow flex-shrink block p-8 ">

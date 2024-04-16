@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { AddItem, RemoveItem } from "../utils/Reducers/ItemSlice";
 
-const ItemsCategory = ({ category }) => {
+const ItemsCategory = ({ category, setCartHandler }) => {
   const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
   const handleMouseEnter = () => {
@@ -23,7 +23,11 @@ const ItemsCategory = ({ category }) => {
 
   return (
     <>
-      <li class="flex flex-col relative " key={category.id}>
+      <li
+        class="flex flex-col relative "
+        key={category.id}
+        onClick={setCartHandler}
+      >
         <div className="absolute z-10 top-1 right-1">
           <div className="inline-block rounded-[20px] p-[2px] bg-[#2C890F]">
             {category.qty ? (
