@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
+import { AddItemToCart, RemoveItemFromCart } from "../utils/Reducers/CartSlice";
 import { AddItem, RemoveItem } from "../utils/Reducers/ItemSlice";
 
 const ItemsCategory = ({ category, setCartHandler }) => {
   const dispatch = useDispatch();
   const [isHovered, setIsHovered] = useState(false);
+
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -12,14 +14,16 @@ const ItemsCategory = ({ category, setCartHandler }) => {
     setIsHovered(false);
   };
 
-  const AddtoCart = (category) => {
+  const AddtoCart = (category, e) => {
+    e.stopPropagation();
     dispatch(AddItem(category));
+    dispatch(AddItemToCart(category));
   };
-  const RemoveFromCart = (category) => {
+  const RemoveFromCart = (category, e) => {
+    e.stopPropagation();
     dispatch(RemoveItem(category));
+    dispatch(RemoveItemFromCart(category));
   };
-
-  console.log(category);
 
   return (
     <>
@@ -37,7 +41,7 @@ const ItemsCategory = ({ category, setCartHandler }) => {
                     <span className="flex justify-center items-center min-h-[40px] flex-nowrap">
                       <button
                         className="flex flex-nowrap justify-center items-center  relative left-[1px]"
-                        onClick={() => RemoveFromCart(category)}
+                        onClick={(e) => RemoveFromCart(category, e)}
                       >
                         {category.qty > 1 ? (
                           <svg
@@ -83,7 +87,7 @@ const ItemsCategory = ({ category, setCartHandler }) => {
                       </span>
                       <button
                         className="flex flex-nowrap items-center relative right-[1px]"
-                        onClick={() => AddtoCart(category)}
+                        onClick={(e) => AddtoCart(category, e)}
                       >
                         <svg
                           width="24"
@@ -129,7 +133,7 @@ const ItemsCategory = ({ category, setCartHandler }) => {
 
                   <span
                     className="text-white"
-                    onClick={() => AddtoCart(category)}
+                    onClick={(e) => AddtoCart(category, e)}
                   >
                     {isHovered ? "Add to cart" : "Add"}
                   </span>

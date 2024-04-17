@@ -348,7 +348,7 @@ const AddToCart = ({ addToCartModal, onBackClick, itemsAdd }) => {
                 <div className="flex items-center w-full ">
                   <div className="my-4 mx-auto max-h-[416px] max-w-[416px]">
                     <img
-                      src={itemsAdd.offerCategoryImg}
+                      src={itemsAdd?.offerCategoryImg}
                       alt="main-img"
                       className="max-w-full h-80 rounded-xl"
                     />
@@ -357,13 +357,13 @@ const AddToCart = ({ addToCartModal, onBackClick, itemsAdd }) => {
                 <div className="mb-[35px]    w-full ">
                   <h2 className="mt-2 mb-2 ">
                     <span className="text-2xl font-bold leading-5 ">
-                      {itemsAdd.offerCategoryName}
+                      {itemsAdd?.offerCategoryName}
                     </span>
                   </h2>
                   <div>
                     <div className="flex">
                       <span className="text-sm leading-4 ">
-                        {itemsAdd.offerCategoryWeight}
+                        {itemsAdd?.offerCategoryWeight}
                       </span>
                     </div>
                   </div>

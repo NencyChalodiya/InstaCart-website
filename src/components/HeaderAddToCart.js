@@ -1,10 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { CiSearch } from "react-icons/ci";
 import { IoLocationSharp } from "react-icons/io5";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { FaShoppingCart } from "react-icons/fa";
+import { useSelector } from "react-redux";
+import TotalCartItems from "../pages/TotalCartItems/TotalCartItems";
 const HeaderAddToCart = () => {
+  const [totalCartItemsModal, setTotalCartItemsModal] = useState(false);
+  const { cartItems } = useSelector((state) => state.cartItems);
+  console.log(cartItems);
   return (
     <header className="fixed z-20 flex items-center justify-between pt-1 pb-1 bg-white border-gray-300 px-25">
       <div className="flex flex-row items-center w-full ">
@@ -45,13 +50,20 @@ const HeaderAddToCart = () => {
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-2 mt-4 justify-evenly">
+        <div
+          className="flex items-center gap-2 mt-4 justify-evenly"
+          onClick={() => setTotalCartItemsModal(true)}
+        >
           <FaShoppingCart className="w-[28px] h-[28px]" />
-          <span className="text-gray-400">0</span>
+          <span className="text-gray-400">{cartItems?.length || 0}</span>
         </div>
       </div>
 
       <div></div>
+      <TotalCartItems
+        totalCartItemsModal={totalCartItemsModal}
+        onCancel={() => setTotalCartItemsModal(false)}
+      />
     </header>
   );
 };

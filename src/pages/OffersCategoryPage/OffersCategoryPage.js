@@ -10,6 +10,7 @@ import AddToCart from "../AddToCart/AddToCart";
 const OffersCategoryPage = () => {
   const [addToCartModal, setaddToCartModal] = useState(false);
   const [itemsAdd, setItemsAdd] = useState(null);
+
   const { Items } = useSelector((state) => state);
   //console.log(Items.items);
   const recipes = [

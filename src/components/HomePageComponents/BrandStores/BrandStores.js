@@ -4,7 +4,7 @@ import { brandStoresData } from "../../../BrandStoreData/brandStoreData";
 import { Link } from "react-router-dom";
 const BrandStores = () => {
   const { id } = useParams();
-  console.log(id);
+
   return (
     <>
       <div className="mt-44">

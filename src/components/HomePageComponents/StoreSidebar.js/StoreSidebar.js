@@ -154,7 +154,12 @@ const StoreSidebar = ({ open, onCancel }) => {
                   onMouseLeave={handleMouseFirstLeave}
                   style={{
                     backgroundColor:
-                      hoveredFirstItem === index ? "#f2f3f7" : "white",
+                      hoveredFirstItem === index &&
+                      sidebarItems.title !== "Stores"
+                        ? "#f2f3f7"
+                        : sidebarItems.title === "Stores"
+                        ? "#343538" // Background becomes black for "Stores"
+                        : "white",
                   }}
                   className="mb-2 rounded-lg"
                 >
@@ -162,11 +167,19 @@ const StoreSidebar = ({ open, onCancel }) => {
                     to={`/store/${sidebarItems.route}`}
                     className="box-border relative flex items-center w-full pl-3 pr-3 cursor-pointer flex-nowrap"
                     style={{
-                      color: hoveredFirstItem === index ? "black" : "black",
+                      color:
+                        hoveredFirstItem === index &&
+                        sidebarItems.title !== "Stores"
+                          ? "black"
+                          : sidebarItems.title === "Stores"
+                          ? "white" // Text becomes white for "Stores"
+                          : "black",
                     }}
                   >
                     <span className="flex items-center h-10">
-                      {sidebarItems.unselectedLogo}
+                      {sidebarItems.title === "Stores" // Check if title is "Stores"
+                        ? sidebarItems.selectedLogo
+                        : sidebarItems.unselectedLogo}
                     </span>
                     <span className="pt-2 pb-2 ml-8">{sidebarItems.title}</span>
                   </Link>

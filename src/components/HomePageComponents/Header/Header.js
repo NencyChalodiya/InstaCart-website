@@ -8,8 +8,10 @@ import { storeDetailLogo } from "../../../data/storeDetailLogo";
 import Carousel from "@itseasy21/react-elastic-carousel";
 import "./Header.css";
 import StoreSidebar from "../StoreSidebar.js/StoreSidebar";
+import { useSelector } from "react-redux";
 const Header = () => {
   const [open, setopen] = useState(false);
+
   const onClosebutton = () => {
     setopen(false);
   };

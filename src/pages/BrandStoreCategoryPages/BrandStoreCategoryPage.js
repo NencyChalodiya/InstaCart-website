@@ -31,7 +31,6 @@ const BrandStoreCategoryPage = () => {
   const [storeData, setstoreData] = useState(null);
   const [brandsStoreLogo, setbrandsStoreLogo] = useState(null);
   const params = useParams();
-  console.log(params);
 
   useEffect(() => {
     brandStoresData.map((d) => {
