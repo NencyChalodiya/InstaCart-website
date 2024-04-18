@@ -33,8 +33,17 @@ const ItemSlice = createSlice({
         }
       }
     },
+
+    DeleteTotalItems(state, action) {
+      const itemIndex = state.items.findIndex(
+        (item) => item.id === action?.payload?.id
+      );
+      if (itemIndex !== -1) {
+        delete state.items[itemIndex].qty;
+      }
+    },
   },
 });
 
-export const { AddItem, RemoveItem } = ItemSlice.actions;
+export const { AddItem, RemoveItem, DeleteTotalItems } = ItemSlice.actions;
 export default ItemSlice.reducer;

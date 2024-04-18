@@ -1,8 +1,25 @@
 import { Modal } from "antd";
-import React from "react";
+import React, { useState } from "react";
 import { BsTelephoneForwardFill } from "react-icons/bs";
+import API from "../services/api";
 
-const Signup = ({ signup, onCancel,onClickLogin }) => {
+const Signup = ({ signup, onCancel, onClickLogin }) => {
+  const [userDetails, setUserDetails] = useState({ email: "", password: "" });
+
+  const registerUser = async () => {
+    let payload = {
+      email: userDetails.email,
+      password: userDetails.password,
+    };
+    try {
+      const data = await API.RegisterUser(payload);
+      console.log(data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //console.log(userDetails);
   return (
     <Modal
       title={<span className="text-3xl font-bold">Sign Up</span>}
@@ -43,7 +60,7 @@ const Signup = ({ signup, onCancel,onClickLogin }) => {
             <h2 className="w-full leading-[0.1em]  text-center border-b-[1px] mt-[10px] mb-[20px]">
               <span className="pl-[10px] pr-[10px] bg-white">or</span>
             </h2>
-            <form>
+            <div>
               <div className="relative mt-3 mb-3">
                 <h4 className="mb-2 text-gray-400">
                   Enter your Email to get started
@@ -55,6 +72,28 @@ const Signup = ({ signup, onCancel,onClickLogin }) => {
                       name="email"
                       placeholder="Email"
                       className="w-full h-full p-5 text-base leading-6 bg-transparent border-none rounded-lg"
+                      onChange={(e) =>
+                        setUserDetails({
+                          ...userDetails,
+                          email: e.target.value,
+                        })
+                      }
+                    />
+                  </div>
+                </div>
+                <div className="box-border flex flex-row items-center mt-4 border flex-nowrap h-14 rounded-xl">
+                  <div className="relative flex-grow h-full">
+                    <input
+                      type="password"
+                      name="password"
+                      placeholder="Password"
+                      className="w-full h-full p-5 text-base leading-6 bg-transparent border-none rounded-lg"
+                      onChange={(e) =>
+                        setUserDetails({
+                          ...userDetails,
+                          password: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -73,14 +112,16 @@ const Signup = ({ signup, onCancel,onClickLogin }) => {
                 <button
                   type="submit"
                   className="box-border relative flex items-center justify-center w-full bg-green-600 border cursor-pointer h-14 rounded-xl"
+                  onClick={() => registerUser()}
                 >
                   <span className="block text-xl font-semibold leading-5 text-white">
-                    Continue
+                    Sign up
                   </span>
                 </button>
               </div>
-              <hr />
-            </form>
+            </div>
+            <hr />
+
             <div className="pt-2 pb-2 ml-4 mr-4 text-center ">
               <div className="mt-3 mb-3">
                 <p className="text-lg">Already have an account?</p>

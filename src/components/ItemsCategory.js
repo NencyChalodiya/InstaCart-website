@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { AddItemToCart, RemoveItemFromCart } from "../utils/Reducers/CartSlice";
-import { AddItem, RemoveItem } from "../utils/Reducers/ItemSlice";
+import {
+  AddItem,
+  DeleteTotalItems,
+  RemoveItem,
+} from "../utils/Reducers/ItemSlice";
 
 const ItemsCategory = ({ category, setCartHandler }) => {
   const dispatch = useDispatch();
@@ -18,6 +22,7 @@ const ItemsCategory = ({ category, setCartHandler }) => {
     e.stopPropagation();
     dispatch(AddItem(category));
     dispatch(AddItemToCart(category));
+    setIsHovered(false);
   };
   const RemoveFromCart = (category, e) => {
     e.stopPropagation();

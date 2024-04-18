@@ -3,8 +3,10 @@ import { GiHamburgerMenu } from "react-icons/gi";
 import { CiSearch } from "react-icons/ci";
 import Sidebar from "./Sidebar";
 import { RxCross2 } from "react-icons/rx";
-
+import { useLocation } from "react-router-dom";
 const Navbar = ({ onLoginButton, onSignupHandler }) => {
+  const { pathname } = useLocation();
+  console.log(pathname);
   const [open, isOpen] = useState(false);
   // const [login, isLogin] = useState(false);
   // const [signup, isSignup] = useState(false);
