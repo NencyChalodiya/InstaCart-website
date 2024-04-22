@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal } from "antd";
-const EditEmailAddress = ({ editEmailAddress, onCancel }) => {
+
+const EditEmailAddress = ({ editEmailAddress, onCancel, userEmail }) => {
   return (
     <Modal
       centered
@@ -44,6 +45,7 @@ const EditEmailAddress = ({ editEmailAddress, onCancel }) => {
                   type="email"
                   className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
                   placeholder="Email Address"
+                  value={userEmail}
                 />
               </div>
             </div>

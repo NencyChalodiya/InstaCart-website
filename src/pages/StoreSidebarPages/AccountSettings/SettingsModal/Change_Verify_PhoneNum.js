@@ -2,7 +2,11 @@ import React from "react";
 import { Modal } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
-const Change_Verify_PhoneNum = ({ verifyPhoneNumber, onCancel }) => {
+const Change_Verify_PhoneNum = ({
+  verifyPhoneNumber,
+  onCancel,
+  userPhoneNumber,
+}) => {
   const items = [
     {
       label: (
@@ -137,6 +141,7 @@ const Change_Verify_PhoneNum = ({ verifyPhoneNumber, onCancel }) => {
                       <input
                         className="pt-[5px] px-3 pb-2 w-full h-full  rounded-xl bg-transparent outline-none"
                         placeholder="Phone number"
+                        value={userPhoneNumber}
                       />
                     </div>
                   </div>

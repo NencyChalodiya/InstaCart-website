@@ -10,10 +10,12 @@ import Footer from "../components/LandingPageComponents/Footer";
 import Login from "./Login";
 import ResetPassword from "./ResetPassword";
 import Signup from "./Signup";
-const Home = () => {
+const LandingPage = () => {
   const [loginModal, setLoginModal] = useState(false);
   const [resetPasswordModal, setResetPasswordModal] = useState(false);
   const [signUpModal, setSignUpModal] = useState(false);
+
+  console.log("dsdsd");
 
   return (
     <>
@@ -73,4 +75,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default LandingPage;

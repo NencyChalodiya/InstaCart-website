@@ -1,7 +1,7 @@
 import "./App.css";
 import LandingPage from "./pages/LandingPage";
 import Home from "./pages/Home";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import BrandStoreCategoryPage from "./pages/BrandStoreCategoryPages/BrandStoreCategoryPage";
 import OffersCategoryPage from "./pages/OffersCategoryPage/OffersCategoryPage";
 import YourOrders from "./pages/StoreSidebarPages/YourOrders";
@@ -15,15 +15,24 @@ import Manage_promos from "./pages/StoreSidebarPages/Manage_promos";
 import HelpCenter from "./pages/StoreSidebarPages/HelpCenter";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
+import ForgotPassword from "./pages/ForgotPassword";
 function App() {
+  const location = useLocation();
+  console.log(location);
   const userData = JSON.parse(localStorage.getItem("userData"));
+  //console.log(userData);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!userData || !userData?.email) {
-      navigate("/"); // Redirect to login if userData is not present
+    if (!location.pathname.includes("/change-password")) {
+      if (!userData || !userData?.id) {
+        navigate("/"); // Redirect to login if userData is not present
+      } else {
+        navigate("/store");
+      }
     }
-  }, [userData]);
+  }, []);
+
   return (
     <>
       <Routes>
@@ -51,6 +60,10 @@ function App() {
         ) : (
           <>
             <Route path="/" element={<LandingPage />} />
+            <Route
+              path="/change-password/:token"
+              element={<ForgotPassword />}
+            />
           </>
         )}
       </Routes>

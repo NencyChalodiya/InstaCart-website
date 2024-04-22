@@ -77,6 +77,14 @@ const Request = async (
         "content-type": "application/json",
       },
     };
+  } else {
+    let token = getToken();
+    config = {
+      ...config,
+      headers: {
+        Authorization: `${token}`,
+      },
+    };
   }
   if (priv) {
     let token = getToken();

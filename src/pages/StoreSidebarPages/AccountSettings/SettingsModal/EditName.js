@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal } from "antd";
-const EditName = ({ editName, onCancel }) => {
+const EditName = ({ editName, onCancel, userName }) => {
   return (
     <Modal centered open={editName} footer={false} width={540} closable={false}>
       <div>
@@ -37,16 +37,8 @@ const EditName = ({ editName, onCancel }) => {
                 <input
                   type="text"
                   className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
-                  placeholder="First Name"
-                />
-              </div>
-            </div>
-            <div className="flex flex-row flex-nowrap items-center rounded-xl h-[55px] box-border max-w-[600px]">
-              <div className="relative flex-grow h-full">
-                <input
-                  type="text"
-                  className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
-                  placeholder="Last Name"
+                  placeholder="Name"
+                  value={userName}
                 />
               </div>
             </div>

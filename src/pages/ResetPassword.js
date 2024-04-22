@@ -1,8 +1,29 @@
-import React from "react";
-import { Modal } from "antd";
+import React, { useState } from "react";
+import { Modal, message } from "antd";
 import { IoArrowBackOutline } from "react-icons/io5";
+import API from "../services/api";
 
-const ResetPassword = ({ resetPassword, onClickSignup,onClickBack  }) => {
+const ResetPassword = ({ resetPassword, onClickSignup, onClickBack }) => {
+  const [resetPasswordDetails, setResetPasswordDetals] = useState({
+    email: "",
+  });
+
+  const handleResetPassword = async () => {
+    try {
+      let payload = {
+        email: resetPasswordDetails.email,
+      };
+      const response = await API.ResetPasswordUser(payload);
+      console.log(response);
+      if (response.status) {
+        //console.log("mail sent successfully");
+        message.success("Mail sent Successfully");
+      }
+    } catch (error) {
+      //console.log("login failed", error);
+      message.error("Failed to sent mail");
+    }
+  };
   return (
     <Modal
       title={
@@ -22,7 +43,7 @@ const ResetPassword = ({ resetPassword, onClickSignup,onClickBack  }) => {
       <div className="min-h-[300px] static">
         <div className="w-full h-48 ">
           <div className="w-full h-52">
-            <form>
+            <div>
               <div className="relative mt-3 mb-3">
                 <h4 className="mb-2 text-gray-400">
                   We’ll send you a link to reset your password
@@ -34,6 +55,12 @@ const ResetPassword = ({ resetPassword, onClickSignup,onClickBack  }) => {
                       name="email"
                       placeholder="Email"
                       className="w-full h-full p-5 text-base leading-6 bg-transparent border-none rounded-lg"
+                      onChange={(e) =>
+                        setResetPasswordDetals({
+                          ...resetPasswordDetails,
+                          email: e.target.value,
+                        })
+                      }
                     />
                   </div>
                 </div>
@@ -43,6 +70,7 @@ const ResetPassword = ({ resetPassword, onClickSignup,onClickBack  }) => {
                 <button
                   type="submit"
                   className="box-border relative flex items-center justify-center w-full bg-green-600 border cursor-pointer h-14 rounded-xl"
+                  onClick={() => handleResetPassword()}
                 >
                   <span className="block text-xl font-semibold leading-5 text-white">
                     Reset Password
@@ -52,7 +80,7 @@ const ResetPassword = ({ resetPassword, onClickSignup,onClickBack  }) => {
               <div className="mt-12">
                 <hr />
               </div>
-            </form>
+            </div>
             <div className="pt-2 pb-2 ml-4 mr-4 text-center">
               <div className="mt-3 mb-3">
                 <p className="text-lg">Don’t have an account?</p>

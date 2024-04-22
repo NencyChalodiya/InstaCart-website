@@ -3,9 +3,9 @@ import { offers } from "../../../data/offers";
 import { Link } from "react-router-dom";
 const Offers = () => {
   return (
-    <div className=" max-w-7xl mx-52">
+    <div className="mx-72 max-w-7xl">
       <div className="mb-8 ">
-        <div className="grid grid-cols-2 gap-6 ">
+        <div className="grid grid-cols-2 gap-8 ">
           {offers.map((offer) => (
             <Link
               to={`/store/${offer.brandTitle}/${offer.id}`}
@@ -45,7 +45,11 @@ const Offers = () => {
                   </button>
                 </span>
               </div>
-              <img src={offer.offersImg} alt="adv-img1" />
+              <img
+                src={offer.offersImg}
+                alt="adv-img1"
+                className="w-[615px] h-[265px]"
+              />
             </Link>
           ))}
 

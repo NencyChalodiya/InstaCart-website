@@ -1,10 +1,10 @@
 import React from "react";
-import StoreList from "../../LandingPageComponents/StoreList";
+
 import { MdElectricBolt } from "react-icons/md";
 import { brandStoresData } from "../../../BrandStoreData/brandStoreData";
 const StoreToHelpYouSave = () => {
   return (
-    <div className=" max-w-7xl mx-52">
+    <div className=" max-w-7xl mx-72">
       <div className="mb-8 ">
         <div className="flex items-center justify-between mb-4">
           <div>

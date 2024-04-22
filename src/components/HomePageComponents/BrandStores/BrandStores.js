@@ -8,7 +8,7 @@ const BrandStores = () => {
   return (
     <>
       <div className="mt-44">
-        <div className=" max-w-7xl">
+        <div className="px-16  max-w-7xl">
           <div className="mb-8">
             <ul className="flex justify-between mx-52">
               {brandStoresData.map((items) => (

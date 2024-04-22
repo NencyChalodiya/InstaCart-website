@@ -20,7 +20,10 @@ const Header = () => {
       <div className="fixed top-0 z-10 w-full bg-[#F7F5F0]">
         <div className="w-full min-w-[1024] flex justify-start items-center h-20 pl-6 box-border ">
           <span className="ml-[-4px] mr-2 relative">
-            <button className="cursor-pointer bg-transparent rounded-[4px] h-8 w-8 flex justify-center items-center">
+            <button
+              className="cursor-pointer bg-transparent rounded-[4px] h-8 w-8 flex justify-center items-center"
+              onClick={() => setopen(true)}
+            >
               <span className="cursor-pointer">
                 <svg
                   width="24"
@@ -137,7 +140,7 @@ const Header = () => {
           style={{ width: "calc(1280px + 80px)" }}
         >
           <div className="relative pt-1 bg-[#F7F5F0]">
-            <div className="overflow-y-hidden overflow-x-auto flex justify-between max-h-[68px] box-content px-6">
+            <div className="overflow-y-hidden overflow-x-auto flex justify-between max-h-[68px] box-content px-2">
               {storeDetailLogo.map((itemsSvg) => (
                 <button className="min-h-11 cursor-pointer bg-transparent relative rounded-[8px] max-w-32 pt-1 pr-2 pb-3 pl-3 text-[#242529] flex flex-col items-center justify-center">
                   <span className="flex items-center justify-center mb-2 max-h-6">

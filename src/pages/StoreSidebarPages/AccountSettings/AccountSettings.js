@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../../components/LandingPageComponents/Navbar";
 import { Link } from "react-router-dom";
 import { Form } from "antd";
@@ -7,11 +7,31 @@ import EditEmailAddress from "./SettingsModal/EditEmailAddress";
 import CreatePassword from "./SettingsModal/CreatePassword";
 import EditName from "./SettingsModal/EditName";
 import Change_Verify_PhoneNum from "./SettingsModal/Change_Verify_PhoneNum";
+import API from "../../../services/api";
 const AccountSettings = () => {
   const [editEmailAddress, openEditEmailAdress] = useState(false);
   const [changePassword, openChangePassword] = useState(false);
   const [editName, openEditName] = useState(false);
   const [verifyPhoneNumber, opneVerifyPhoneNumber] = useState(false);
+  const [userSettingsDetail, setUserSettingsDetail] = useState(null);
+  const getAccountSettingsDetails = async () => {
+    try {
+      //console.log("dkjasnd");
+      const response = await API.GetUserDetails();
+      //console.log(response);
+      if (response.status) {
+        //console.log(response.user);
+        setUserSettingsDetail(response.user);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getAccountSettingsDetails();
+  }, []);
+  console.log(userSettingsDetail);
+
   return (
     <>
       <Navbar />
@@ -281,7 +301,7 @@ const AccountSettings = () => {
                         Email address
                       </p>
                       <p className="mt-1 text-sm leading-4 text-[#83878E]">
-                        nencychalodiya2002@gmail.com
+                        {userSettingsDetail?.email || "--"}
                       </p>
                     </div>
                     <button
@@ -315,7 +335,7 @@ const AccountSettings = () => {
                     <div className="flex flex-col mt-4">
                       <p className="text-sm leading-4 text-[#343538] ">Name</p>
                       <p className="mt-1 text-sm leading-4 text-[#83878E]">
-                        Nency Chalodiya
+                        {userSettingsDetail?.name || "-"}
                       </p>
                     </div>
                     <button
@@ -331,7 +351,7 @@ const AccountSettings = () => {
                         Phone number
                       </p>
                       <p className="mt-1 text-sm leading-4 text-[#83878E]">
-                        No phone number
+                        {userSettingsDetail?.phone_number || "--"}
                       </p>
                     </div>
                     <button
@@ -458,15 +478,21 @@ const AccountSettings = () => {
         <EditEmailAddress
           editEmailAddress={editEmailAddress}
           onCancel={() => openEditEmailAdress(false)}
+          userEmail={userSettingsDetail?.email}
         />
         <CreatePassword
           changePassword={changePassword}
           onCancel={() => openChangePassword(false)}
         />
-        <EditName editName={editName} onCancel={() => openEditName(false)} />
+        <EditName
+          editName={editName}
+          onCancel={() => openEditName(false)}
+          userName={userSettingsDetail?.name}
+        />
         <Change_Verify_PhoneNum
           verifyPhoneNumber={verifyPhoneNumber}
           onCancel={() => opneVerifyPhoneNumber(false)}
+          userPhoneNumber={userSettingsDetail?.phone_number}
         />
       </div>
     </>
