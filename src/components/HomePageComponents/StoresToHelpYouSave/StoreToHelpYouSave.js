@@ -4,7 +4,7 @@ import { MdElectricBolt } from "react-icons/md";
 import { brandStoresData } from "../../../BrandStoreData/brandStoreData";
 const StoreToHelpYouSave = () => {
   return (
-    <div className=" max-w-7xl mx-72">
+    <div className=" mx-72 max-lg:mx-40 max-md:mx-4 max-sm:mx-4">
       <div className="mb-8 ">
         <div className="flex items-center justify-between mb-4">
           <div>
@@ -19,7 +19,7 @@ const StoreToHelpYouSave = () => {
           </button>
         </div>
         <div>
-          <ul className="grid justify-center w-full grid-cols-2 gap-6 px-0 py-8 m-0 lg:grid-cols-3 max-w-7xl">
+          <ul className="grid justify-center w-full grid-cols-3 gap-6 px-0 py-8 m-0 max-2xl:grid-cols-2 max-xl:grid-cols-1">
             {brandStoresData.map((store) => (
               <li>
                 <div className="h-full">
@@ -32,7 +32,7 @@ const StoreToHelpYouSave = () => {
                         <img
                           src={store.img}
                           alt={store.id}
-                          className="box-border relative flex justify-center w-12 overflow-hidden border h-9"
+                          className="box-border relative flex justify-center w-16 h-12 overflow-hidden border rounded-xl"
                         ></img>
                       </div>
                       <div className="flex flex-col gap-[2px]">

@@ -41,7 +41,7 @@ export default function QuestionAnswers() {
         Common Questions
       </Typography>
       <Box sx={{ width: "100%" }}>
-        <Accordion
+        <Accordion elevation={0}
           expanded={expanded === "panel1"}
           onChange={handleChange("panel1")}
         >
@@ -81,7 +81,7 @@ export default function QuestionAnswers() {
             </Typography>
           </AccordionDetails>
         </Accordion>
-        <Accordion
+        <Accordion elevation={0}
           expanded={expanded === "panel2"}
           onChange={handleChange("panel2")}
         >
@@ -110,7 +110,7 @@ export default function QuestionAnswers() {
             </Typography>
           </AccordionDetails>
         </Accordion>
-        <Accordion
+        <Accordion elevation={0}
           expanded={expanded === "panel3"}
           onChange={handleChange("panel3")}
         >
@@ -136,7 +136,7 @@ export default function QuestionAnswers() {
             </Typography>
           </AccordionDetails>
         </Accordion>
-        <Accordion
+        <Accordion elevation={0} 
           expanded={expanded === "panel4"}
           onChange={handleChange("panel4")}
         >

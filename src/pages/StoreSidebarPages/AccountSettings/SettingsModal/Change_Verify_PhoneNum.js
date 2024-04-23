@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
+import API from "../../../../services/api";
 const Change_Verify_PhoneNum = ({
   verifyPhoneNumber,
   onCancel,
   userPhoneNumber,
 }) => {
+  const [newPhoneNumber, setNewPhoneNumber] = useState(userPhoneNumber);
   const items = [
     {
       label: (
@@ -78,6 +80,19 @@ const Change_Verify_PhoneNum = ({
       key: "1",
     },
   ];
+  const updateAccountSettingsPhoneNumber = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      let payload = {
+        phone_number: newPhoneNumber,
+        access_token: token,
+      };
+      const response = await API.UpdateUserDetails(payload);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Modal
       centered
@@ -141,7 +156,8 @@ const Change_Verify_PhoneNum = ({
                       <input
                         className="pt-[5px] px-3 pb-2 w-full h-full  rounded-xl bg-transparent outline-none"
                         placeholder="Phone number"
-                        value={userPhoneNumber}
+                        value={newPhoneNumber}
+                        onChange={(e) => setNewPhoneNumber(e.target.value)}
                       />
                     </div>
                   </div>
@@ -157,7 +173,10 @@ const Change_Verify_PhoneNum = ({
 
         <div className="flex justify-end px-4">
           <div className="flex gap-3">
-            <button className="cursor-pointer relative h-[54px] pr-6 bg-[#F6F7F8] rounded-[27px]">
+            <button
+              className="cursor-pointer relative h-[54px] pr-6 bg-[#F6F7F8] rounded-[27px]"
+              onClick={() => updateAccountSettingsPhoneNumber()}
+            >
               <span className="block px-4 ml-5 text-xl text-ellipsis">
                 Change number
               </span>

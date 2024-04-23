@@ -37,8 +37,8 @@ const Navbar = ({ onLoginButton, onSignupHandler }) => {
   // };
 
   return (
-    <div className="fixed top-0 z-20 w-full bg-white">
-      <header className="flex items-center justify-between px-4 py-6 mx-8 border-gray-300 max-h-20">
+    <div className="fixed top-0 z-20 w-full bg-white max-md:border-b max-md:border-gray-200">
+      <header className="flex items-center justify-between h-20 px-4 py-6  mx-8 max-md:mx-2 border-gray-300 max-md:h-[60px] max-md:px-0">
         <div className="flex flex-row items-center w-full ">
           <div className="flex mr-2 cursor-pointer">
             {open ? (
@@ -47,7 +47,7 @@ const Navbar = ({ onLoginButton, onSignupHandler }) => {
                 className="w-[24px] h-[24px] cursor-pointer "
               />
             ) : (
-              <span onClick={onToggleButton} className="gap-3 cursor-pointer">
+              <span onClick={onToggleButton} className="cursor-pointer ">
                 <svg
                   width="24"
                   height="24"
@@ -68,13 +68,18 @@ const Navbar = ({ onLoginButton, onSignupHandler }) => {
               <img
                 src="https://www.instacart.com/assets/beetstrap/brand/2022/instacart-logo-color-6678cb82d531f8910d5ba270a11a7e9b56fc261371bda42ea7a5abeff3492e1c.svg"
                 alt="instaCart-logo"
-                className="h-auto max-w-[245px]"
+                className="h-auto max-w-[245px] max-md:hidden"
+              />
+              <img
+                src="https://www.instacart.com/assets/beetstrap/brand/2022/carrotlogo-1286c257354036d178c09e815906198eb7f012b8cdc4f6f8ec86d3e64d799a5b.png"
+                alt="instaCart-logo"
+                className="h-auto max-w-[24px] md:hidden"
               />
             </a>
           </div>
-          <div className="relative w-full mx-8 ">
+          <div className="relative flex-grow mx-8 max-md:hidden">
             <div className="relative z-10 bg-transparent">
-              <form className="relative h-14 bg-[#F6F7F8] rounded-[5px]">
+              <form className="relative h-14 bg-[#F6F7F8] rounded-[5px] ">
                 <button className="absolute translate-y-[-50%] bg-transparent top-1/2 left-3 z-1">
                   <svg
                     width="24"
@@ -105,15 +110,15 @@ const Navbar = ({ onLoginButton, onSignupHandler }) => {
           </div>
         </div>
         <div className="flex flex-row">
-          <button className="relative px-[6px] py-[1px] mx-[22px]  font-medium text-[#343538] bg-transparent  cursor-pointer text-lg leading-5">
+          <button className="relative px-[6px] py-[1px] mx-[22px] max-md:mx-[5px] font-medium text-[#343538] bg-transparent  cursor-pointer text-lg leading-5 ">
             <span
-              className="block text-lg leading-5 cursor-pointer whitespace-nowrap overflow-ellipsis"
+              className="block text-lg leading-5 cursor-pointer whitespace-nowrap overflow-ellipsis max-md:text-sm"
               onClick={onLoginButton}
             >
               Log in
             </span>
           </button>
-          <button className="px-4 py-2 m-6 text-white bg-[#2C890F] border-none rounded-[20px] relative cursor-pointer font-semibold text-lg leading-5">
+          <button className="px-4 py-2 m-6 text-white bg-[#2C890F] border-none rounded-[20px] relative cursor-pointer font-semibold text-lg leading-5 max-md:mx-[5px] max-md:text-sm">
             <span
               className="block overflow-hidden whitespace-nowrap overflow-ellipsis"
               onClick={onSignupHandler}

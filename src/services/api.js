@@ -31,11 +31,11 @@ export const ForgotPasswordUser = (payload) => {
 };
 
 export const GetUserDetails = () => {
-  return Ajax.Request("/user-detail/", Ajax.GET, false);
+  return Ajax.Request("/user-detail/", Ajax.GET, true);
 };
 
 export const UpdateUserDetails = (payload) => {
-  return Ajax.Request("/change-details/", Ajax.PATCH, true, payload);
+  return Ajax.Request("/change-details/", Ajax.PUT, true, payload);
 };
 
 let API = {

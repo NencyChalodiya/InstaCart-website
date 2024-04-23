@@ -32,6 +32,10 @@ const AccountSettings = () => {
   }, []);
   console.log(userSettingsDetail);
 
+  // const updateName = (newName) => {
+  //   setUserSettingsDetail({ ...userSettingsDetail, name: newName });
+  // };
+
   return (
     <>
       <Navbar />

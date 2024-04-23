@@ -78,11 +78,10 @@ const Request = async (
       },
     };
   } else {
-    let token = getToken();
     config = {
       ...config,
       headers: {
-        Authorization: `${token}`,
+        // Authorization: `${token}`,
       },
     };
   }
@@ -90,8 +89,7 @@ const Request = async (
     let token = getToken();
     config.headers = {
       ...config.headers,
-      Token: `${token}`,
-      // health_secret: HEALTH_SECRET,
+      Authorization: `${token}`,
     };
   }
   let api_temp = BASE_API;

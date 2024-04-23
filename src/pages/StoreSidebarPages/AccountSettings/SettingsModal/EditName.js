@@ -1,6 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal } from "antd";
+import API from "../../../../services/api";
 const EditName = ({ editName, onCancel, userName }) => {
+  const [newName, setNewName] = useState(userName);
+
+  const updateAccountSettingsName = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      let payload = {
+        name: newName,
+        access_token: token,
+      };
+      const response = await API.UpdateUserDetails(payload);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <Modal centered open={editName} footer={false} width={540} closable={false}>
       <div>
@@ -38,7 +54,8 @@ const EditName = ({ editName, onCancel, userName }) => {
                   type="text"
                   className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
                   placeholder="Name"
-                  value={userName}
+                  value={newName}
+                  onChange={(e) => setNewName(e.target.value)}
                 />
               </div>
             </div>
@@ -47,12 +64,18 @@ const EditName = ({ editName, onCancel, userName }) => {
 
         <div className="flex justify-end px-4">
           <div className="flex gap-3">
-            <button className="cursor-pointer relative h-[54px] pr-6 bg-[#F6F7F8] rounded-[27px]">
+            <button
+              className="cursor-pointer relative h-[54px] pr-6 bg-[#F6F7F8] rounded-[27px]"
+              onClick={onCancel}
+            >
               <span className="block px-4 ml-5 text-xl text-ellipsis">
                 Cancel
               </span>
             </button>
-            <button className="cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 ">
+            <button
+              className="cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 "
+              onClick={() => updateAccountSettingsName()}
+            >
               <span className="block px-4 ml-5 text-xl text-ellipsis">
                 Save
               </span>

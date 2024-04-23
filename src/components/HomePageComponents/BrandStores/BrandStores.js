@@ -2,17 +2,34 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { brandStoresData } from "../../../BrandStoreData/brandStoreData";
 import { Link } from "react-router-dom";
+import Carousel from "@itseasy21/react-elastic-carousel"
+import useMediaQuery from '@mui/material/useMediaQuery';
+
 const BrandStores = () => {
   const { id } = useParams();
+  const isExtraSmallScreen = useMediaQuery('(max-width: 639px)'); // xs
+  const isSmallScreen = useMediaQuery('(min-width: 640px) and (max-width: 767px)'); // sm
+  const isMediumScreen = useMediaQuery('(min-width: 768px) and ( max-width: 1023px)'); // md
+  const isLargeScreen = useMediaQuery('(min-width: 1024px) and ( max-width: 1279px)'); // lg
+  const isExtraLargeScreen = useMediaQuery('( min-width: 1280px) and (max-width: 1535px) '); // xl
+  const isExtraExtraLargeScreen = useMediaQuery('(min-width: 1536px)'); // 2xl
+  const itemsToShow =
+    isExtraSmallScreen ? 3 :
+      isSmallScreen ? 4 :
+        isMediumScreen ? 6 :
+          isLargeScreen ? 5 :
+            isExtraLargeScreen ? 7:
+              isExtraExtraLargeScreen ? 9 :
+                9;
 
   return (
     <>
       <div className="mt-44">
-        <div className="px-16  max-w-7xl">
-          <div className="mb-8">
-            <ul className="flex justify-between mx-52">
+        <div className="mr-[260px] max-lg:mr-10">
+          <div className="flex mb-8">
+            <Carousel pagination={false} itemsToShow={itemsToShow} showArrows={false} className="justify-between mt-8 ml-60 max-lg:ml-0">
               {brandStoresData.map((items) => (
-                <li>
+                <div>
                   <div className="w-[116px] text-center">
                     <div className="pl-3 pr-3">
                       <Link
@@ -41,9 +58,11 @@ const BrandStores = () => {
                       </Link>
                     </div>
                   </div>
-                </li>
+                </div>
               ))}
-              <a href="/" className="text-center w-[116px] relative ml-4">
+             
+            </Carousel>
+            <a href="/" className="relative mt-8 text-center">
                 <div className="pt-3">
                   <div className="rounded-[50%] items-center justify-center flex w-12 h-12 bg-[#343538]">
                     <svg
@@ -68,7 +87,6 @@ const BrandStores = () => {
                   </span>
                 </div>
               </a>
-            </ul>
           </div>
         </div>
       </div>

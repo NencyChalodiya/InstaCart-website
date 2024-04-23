@@ -19,7 +19,7 @@ const Header = () => {
     <>
       <div className="fixed top-0 z-10 w-full bg-[#F7F5F0]">
         <div className="w-full min-w-[1024] flex justify-start items-center h-20 pl-6 box-border ">
-          <span className="ml-[-4px] mr-2 relative">
+          <span className="ml-[-4px] mr-2 relative ">
             <button
               className="cursor-pointer bg-transparent rounded-[4px] h-8 w-8 flex justify-center items-center"
               onClick={() => setopen(true)}
@@ -47,9 +47,10 @@ const Header = () => {
               className="w-auto mr-[10px]"
             />
           </a>
-          <div className="relative z-10 flex-grow flex-shrink mr-2">
+          
+          <div className="relative z-10 flex-grow mr-2 ">
             <div className="relative z-10 bg-transparent">
-              <form className="h-14 rounded-[8px] w-[1375px]  ">
+              <div className="h-14 rounded-[8px] w-[1375px]  ">
                 <button className="absolute top-[50%] z-10 left-3 transform translate-y-[-50%]">
                   <svg
                     width="24"
@@ -70,15 +71,15 @@ const Header = () => {
                 </button>
                 <div className="relative h-full">
                   <input
-                    className="flex relative items-center w-full py-3 rounded-[28px] border-2 bg-white outline-none  pr-12 h-full box-border text-[#242529] pl-10  placeholder-[#47474A] text-base shadow-md focus:border-black"
+                    className=" relative items-center w-full py-3 rounded-[28px] border-2 bg-white outline-none  pr-12 h-full box-border text-[#242529] pl-10  placeholder-[#47474A] text-base shadow-md focus:border-black  "
                     type="text"
                     placeholder="Search products,stores,and recipes"
                   />
                 </div>
-              </form>
+              </div>
             </div>
           </div>
-          <div className="flex items-center mr-16 cursor-pointer">
+          <div className="flex items-center mr-4 cursor-pointer">
             <button className="relative bg-transparent rounded-lg text-[#343538] h-14 px-3">
               <div className="grid items-center grid-cols-3">
                 <svg

@@ -3,9 +3,9 @@ import { offers } from "../../../data/offers";
 import { Link } from "react-router-dom";
 const Offers = () => {
   return (
-    <div className="mx-72 max-w-7xl">
+    <div className="mx-72 max-lg:mx-40 max-md:mx-4 max-sm:mx-4">
       <div className="mb-8 ">
-        <div className="grid grid-cols-2 gap-8 ">
+        <div className="grid grid-cols-2 gap-8 max-xl:grid-cols-1">
           {offers.map((offer) => (
             <Link
               to={`/store/${offer.brandTitle}/${offer.id}`}

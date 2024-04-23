@@ -260,12 +260,12 @@ const BrandStoreCategoryPage = () => {
               <div className="flex items-center justify-between mt-6 ">
                 <div>
                   <h2 className="flex mr-2">
-                    <div className="text-3xl font-bold leading-5 ">
+                    <div className="text-3xl font-bold leading-5 max-md:text-2xl">
                       Best Sellers
                     </div>
                   </h2>
                 </div>
-                <div className="flex items-center justify-center align-baseline">
+                <div className="flex items-center justify-center align-baseline max-md:hidden">
                   <div className="flex items-center justify-center">
                     <button className="flex w-full h-10 text-green-600 rounded-xl">
                       <span className="flex items-center gap-1 mt-2 ml-2 mr-2 overflow-hidden text-sm leading-5 text-ellipsis">
@@ -342,7 +342,7 @@ const BrandStoreCategoryPage = () => {
               <div>
                 <div className="relative flex flex-row">
                   <div className="w-full">
-                    <ul className="w-full h-full min-h-[304px] grid grid-cols-8 gap-4 justify-between mt-2">
+                    <ul className="w-full h-full min-h-[304px] grid grid-cols-8 gap-4 justify-between mt-2 max-2xl:grid-cols-6 max-lg:grid-cols-4 max-xl:grid-cols-5 max-md:grid-cols-3 max-sm:grid-cols-1">
                       {storeData ? (
                         storeData.items.map((item, index) => (
                           <li
