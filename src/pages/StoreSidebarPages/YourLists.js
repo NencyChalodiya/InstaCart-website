@@ -11,11 +11,11 @@ const YourLists = () => {
           <div className="min-h-screen bg-white">
             <div className="pt-16">
               <div className="flex items-center justify-between">
-                <div className="px-16 pt-8 pb-1 text-3xl font-bold leading-7 text-[#343538]">
+                <div className="px-16 pt-8 pb-1 text-3xl font-bold leading-7 text-[#343538] max-md:text-xl  max-md:px-5">
                   Your lists
                 </div>
-                <div className="px-16 pt-12 pb-1">
-                  <button className="ml-2  cursor-pointer relative rounded-[27px] w-[186px] h-14 px-4 pt-[14px] pb-4 bg-[#343538] text-xl text-white">
+                <div className="px-16 pt-12 pb-1 max-md:px-5">
+                  <button className="ml-2  cursor-pointer relative rounded-[27px] w-[186px] h-14 px-4 pt-[14px] pb-4 bg-[#343538] text-xl text-white max-md:w-[150px]  ">
                     <span className="">Create new</span>
                   </button>
                 </div>
@@ -36,7 +36,7 @@ const YourLists = () => {
               </div> */}
 
               <div>
-                <div className="flex px-16">
+                <div className="flex px-16 max-md:flex-col max-md:px-5">
                   <span className="">
                     <button className="box-border border-[2px] min-w-[58px] h-8 rounded-[18px] m-1 relative px-4 bg-[#E8E9EB]">
                       All

@@ -6,7 +6,7 @@ const InstaCart_Plus = () => {
       <Navbar />
       <div className="bg-white">
         <div>
-          <div className="flex justify-center items-center pt-6 mb-12 bg-[#750046]">
+          <div className="flex justify-center items-center pt-6 mb-12 bg-[#750046] max-md:hidden">
             <img
               src="https://www.instacart.com/assets/express/account/instacartplus-logo-3c73d959a972a32a13c7cb1faf3ad0618d6cf08c0059c981bacab8c6f3ea8ea2.png"
               alt="instacart_logo"
@@ -18,17 +18,17 @@ const InstaCart_Plus = () => {
               className="w-[45%]"
             />
           </div>
-          <div className="flex justify-center mx-5 my-10">
+          <div className="flex justify-center mx-5 my-10 max-md:my-20">
             <div className="max-w-[950px]">
               <h1 className="text-5xl font-bold leading-7">
                 <span className="text-5xl font-bold leading-7">
-                  <span className="text-5xl font-bold leading-7">
+                  <span className="text-5xl font-bold leading-7 max-md:text-3xl max-md:leading-5 max-lg:text-4xl max-lg:leading-5">
                     Join Instacart+ for free delivery and more
                   </span>
                 </span>
               </h1>
               <div className="my-12">
-                <ul className="grid items-center grid-cols-2 gap-10">
+                <ul className="grid items-center grid-cols-2 max-md:grid-cols-1 gap-10">
                   <li className="flex items-center">
                     <div className="p-1 mr-4 h-14 w-14">
                       <img

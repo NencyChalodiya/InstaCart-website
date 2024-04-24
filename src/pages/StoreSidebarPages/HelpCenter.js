@@ -462,7 +462,7 @@ const HelpCenter = () => {
           </section>
 
           <section>
-            <div className="flex">
+            <div className="flex max-md:flex-col">
               <div className="flex-grow flex-shrink mb-8">
                 <h2 className="mb-4 text-2xl font-bold leading-4">
                   Need to get in touch?
@@ -477,7 +477,7 @@ const HelpCenter = () => {
                   <span className="block mx-2">Get help</span>
                 </button>
               </div>
-              <div className="flex-grow flex-shrink ml-24">
+              <div className="flex-grow flex-shrink ml-24 max-md:ml-0">
                 <h2 className="mb-4 text-2xl font-bold leading-4">
                   Are you a Senior?
                 </h2>

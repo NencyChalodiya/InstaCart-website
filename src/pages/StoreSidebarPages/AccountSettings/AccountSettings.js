@@ -41,7 +41,7 @@ const AccountSettings = () => {
       <Navbar />
       <div className="h-full bg-white">
         <div
-          className="fixed z-10 w-64 overflow-y-auto bg-white border-r-2 top-20"
+          className="fixed z-10 w-64 overflow-y-auto bg-white border-r-2 top-20 max-lg:hidden "
           style={{ height: `calc(100% - 80px)` }}
         >
           <ul className="w-full px-3 py-4 list-none">
@@ -282,7 +282,7 @@ const AccountSettings = () => {
           </ul>
         </div>
 
-        <div className="ml-64 ">
+        <div className="ml-64 max-lg:ml-0">
           <div className="h-14"></div>
 
           <div className="w-full py-10 ">
@@ -299,7 +299,7 @@ const AccountSettings = () => {
               <div className="mt-5">
                 <h2 className="text-xl leading-5">Account information</h2>
                 <div className="flex flex-col gap-4">
-                  <div className="flex flex-row justify-between">
+                  <div className="flex justify-between ">
                     <div className="flex flex-col mt-4">
                       <p className="text-sm leading-4 text-[#343538] ">
                         Email address
@@ -309,20 +309,20 @@ const AccountSettings = () => {
                       </p>
                     </div>
                     <button
-                      className="pr-80 self-start cursor-pointer text-[#2C890F]"
+                      className="pr-80 self-start cursor-pointer text-[#2C890F] max-lg:pr-0 "
                       onClick={() => openEditEmailAdress(true)}
                     >
                       Change
                     </button>
                   </div>
-                  <div className="flex flex-row justify-between">
+                  <div className="flex justify-between">
                     <div className="flex flex-col">
                       <p className="text-sm leading-4 text-[#343538] ">
                         Password
                       </p>
                     </div>
                     <button
-                      className="pr-80 self-start cursor-pointer text-[#2C890F] "
+                      className="pr-80 self-start cursor-pointer text-[#2C890F] max-lg:pr-0 "
                       onClick={() => openChangePassword(true)}
                     >
                       Add Password
@@ -343,7 +343,7 @@ const AccountSettings = () => {
                       </p>
                     </div>
                     <button
-                      className="pr-80 self-start cursor-pointer text-[#2C890F] "
+                      className="pr-80 self-start cursor-pointer text-[#2C890F] max-lg:pr-0  "
                       onClick={() => openEditName(true)}
                     >
                       Change
@@ -359,7 +359,7 @@ const AccountSettings = () => {
                       </p>
                     </div>
                     <button
-                      className="pr-80 self-start cursor-pointer text-[#2C890F] "
+                      className="pr-80 self-start cursor-pointer text-[#2C890F] max-lg:pr-0  "
                       onClick={() => opneVerifyPhoneNumber(true)}
                     >
                       Change / verify
@@ -402,7 +402,7 @@ const AccountSettings = () => {
                     </label>
                   </div>
                   <div>
-                    <Form className="pr-80">
+                    <Form className="pr-80 max-lg:pr-0 ">
                       <Form.Item valuePropName="checked">
                         <Switch />
                       </Form.Item>
@@ -449,7 +449,7 @@ const AccountSettings = () => {
                     </label>
                   </div>
                   <div>
-                    <Form className="pr-80">
+                    <Form className="pr-80 max-lg:pr-0 ">
                       <Form.Item valuePropName="checked">
                         <Switch />
                       </Form.Item>
@@ -468,7 +468,7 @@ const AccountSettings = () => {
                     </label>
                   </div>
                   <div>
-                    <Form className="mb-4 pr-80">
+                    <Form className="mb-4 pr-80 max-lg:pr-0 ">
                       <Form.Item valuePropName="checked">
                         <Switch />
                       </Form.Item>

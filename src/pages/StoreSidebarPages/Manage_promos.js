@@ -9,11 +9,11 @@ const Manage_promos = () => {
         <div className="flex bg-white">
           <div className="flex-grow flex-shrink mx-8 my-20">
             <div>
-              <div className="bg-white rounded-[4px] p-12 mb-2">
-                <h2 className="mb-4 text-3xl text-[#242529] font-semibold">
+              <div className="bg-white rounded-[4px] p-12 mb-2 max-md:p-2">
+                <h2 className="mb-4 text-3xl text-[#242529] font-semibold max-md:text-2xl">
                   Add a promo code or Instacart gift
                 </h2>
-                <h3 className="mb-8 text-gray-500">
+                <h3 className="mb-8 text-gray-500 max-md:text-sm">
                   Apply Instacart promos or gift cards. Learn more about
                   <Link
                     to="/p/gift-cards"
@@ -24,20 +24,20 @@ const Manage_promos = () => {
                   </Link>
                 </h3>
                 <form>
-                  <div className="flex flex-row mb-4">
-                    <div className="flex-grow flex-shrink max-w-[343px] relative mb-4">
+                  <div className="flex  mb-4 max-md:flex-col">
+                    <div className="flex-grow flex-shrink max-w-[343px] relative mb-4 max-md:max-w-[400px]">
                       <input
                         type="text"
                         placeholder="Promos code and instacart gift card"
-                        className="w-[343px] border border-gray-500 rounded-lg outline-none h-14 px-2"
+                        className="w-full border border-gray-500 rounded-lg outline-none h-14 px-2 max-md:w-full"
                       />
                     </div>
-                    <button className="rounded-xl border block px-4 h-[55px] text-center mb-4 ml-4 bg-[#BDBDBD] text-white text-lg">
+                    <button className="rounded-xl border block px-4 h-[55px] text-center mb-4 ml-4 bg-[#BDBDBD] text-white text-lg max-md:ml-0  ">
                       Add to account
                     </button>
                   </div>
                 </form>
-                <p className="mt-4 text-[#36932B]">
+                <p className="mt-4 text-[#36932B] max-md:text-sm">
                   <a
                     href="#"
                     target="_blank"
@@ -48,14 +48,14 @@ const Manage_promos = () => {
                 </p>
               </div>
 
-              <div className="rounded-[4px] border-b mb-2 p-12">
-                <h2 className="mb-4 text-3xl text-[#242529] font-semibold ">
+              <div className="rounded-[4px] border-b mb-2 p-12 max-md:p-2">
+                <h2 className="mb-4 text-3xl text-[#242529] font-semibold max-md:text-2xl ">
                   Instacart+ and gift card credits
                 </h2>
-                <p className="mb-4 text-gray-500">
+                <p className="mb-4 text-gray-500 max-md:text-sm">
                   Your available credits can be applied to your next order.
                 </p>
-                <div className="flex p-4 bg-white shadow-md rounded-xl w-[300px] h-[78px] mb-3">
+                <div className="flex p-4 bg-white shadow-md rounded-xl w-[300px] h-[78px] mb-3 max-md:w-[300px]">
                   <div className="flex-grow ">
                     <div className="mb-1 text-gray-400">$0.00</div>
                     <div className="text-base leading-5 text-gray-600">
@@ -89,17 +89,17 @@ const Manage_promos = () => {
               </div>
 
               <div>
-                <div className="bg-white rounded-[4px] p-12 mb-2 ">
-                  <h2 className="mb-4 text-3xl text-[#242529] font-semibold ">
+                <div className="bg-white rounded-[4px] p-12 mb-2 max-md:p-2 ">
+                  <h2 className="mb-4 text-3xl text-[#242529] font-semibold  max-md:text-2xl">
                     Promotions
                   </h2>
                   <div>
-                    <div className="flex mt-10 leading-normal ">
+                    <div className="flex mt-10 leading-normal max-md:flex-col ">
                       <div className="inline-block float-left">
                         <img
                           src="https://www.instacart.com/assets/coupons/free-delivery-promo-icon-ee91fcb996a131ea8f48f4d598378c66fdc8bd18be9ad7e3b8cbc8d3996de8fe.png"
                           alt="promo-logo"
-                          className="inline-block max-w-full w-[54px] h-[54px]"
+                          className="inline-block max-w-full w-[54px] h-[54px] max-md:hidden"
                         />
                       </div>
                       <div className="ml-5 inline-block float-left min-w-[360px]">

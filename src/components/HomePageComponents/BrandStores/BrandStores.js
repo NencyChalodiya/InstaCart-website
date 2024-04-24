@@ -27,7 +27,7 @@ const BrandStores = () => {
       <div className="mt-44">
         <div className="mr-[260px] max-lg:mr-10">
           <div className="flex mb-8">
-            <Carousel pagination={false} itemsToShow={itemsToShow} showArrows={false} className="justify-between mt-8 ml-60 max-lg:ml-0">
+            <Carousel pagination={false} itemsToShow={itemsToShow} showArrows={false} className="justify-between mt-4 ml-60 max-lg:ml-0">
               {brandStoresData.map((items) => (
                 <div>
                   <div className="w-[116px] text-center">
@@ -62,7 +62,7 @@ const BrandStores = () => {
               ))}
              
             </Carousel>
-            <a href="/" className="relative mt-8 text-center">
+            <a href="/" className="relative mt-4 text-center">
                 <div className="pt-3">
                   <div className="rounded-[50%] items-center justify-center flex w-12 h-12 bg-[#343538]">
                     <svg

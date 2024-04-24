@@ -1,7 +1,22 @@
 import React from "react";
 import Navbar from "../../components/LandingPageComponents/Navbar";
-
+import Carousel from "@itseasy21/react-elastic-carousel"
+import useMediaQuery from '@mui/material/useMediaQuery';
 const YourRecipes = () => {
+  const isExtraSmallScreen = useMediaQuery('(max-width: 639px)'); // xs
+  const isSmallScreen = useMediaQuery('(min-width: 640px) and (max-width: 767px)'); // sm
+  const isMediumScreen = useMediaQuery('(min-width: 768px) and ( max-width: 1023px)'); // md
+  const isLargeScreen = useMediaQuery('(min-width: 1024px) and ( max-width: 1279px)'); // lg
+  const isExtraLargeScreen = useMediaQuery('( min-width: 1280px) and (max-width: 1535px) '); // xl
+  const isExtraExtraLargeScreen = useMediaQuery('(min-width: 1536px)'); // 2xl
+  const itemsToShow =
+    isExtraSmallScreen ? 2 :
+      isSmallScreen ? 3 :
+        isMediumScreen ? 4 :
+          isLargeScreen ? 5 :
+            isExtraLargeScreen ? 7:
+              isExtraExtraLargeScreen ? 9 :
+                9;
   return (
     <>
       <Navbar />
@@ -10,7 +25,7 @@ const YourRecipes = () => {
           <div className="min-h-screen bg-white">
             <div className="pt-16">
               <div className="flex items-center justify-between">
-                <div className="px-16 pt-8 pb-1 text-3xl font-bold leading-7 text-[#343538]">
+                <div className="px-10 pt-12 pb-1 text-3xl font-bold leading-7 text-[#343538]">
                   Recipes
                 </div>
                 <div className="flex items-center gap-1 px-16 pt-12 pb-1">
@@ -50,23 +65,23 @@ const YourRecipes = () => {
               </div> */}
 
               <div>
-                <div className="flex px-16 text-2xl font-semibold text-gray-700 py-9">
+                <div className="flex px-10 text-2xl font-semibold text-gray-700 py-9">
                   <span className="">Saved recipes</span>
                 </div>
               </div>
-              <div className="max-w-[500px] mx-auto">
-                <div className="pt-12 pb-12 text-center">
-                  <div className="text-sm leading-4 text-[#797D85] font-medium">
+              <div className="max-w-[500px] mx-auto max-md:max-w-[300px]">
+                <div className="pt-12 pb-12 text-center ">
+                  <div className="text-sm leading-4 text-[#797D85] font-medium max-md:text-xs">
                     No saved recipes yet
                   </div>
-                  <p className="text-sm leading-4 text-[#8A8D94]">
+                  <p className="text-sm leading-4 text-[#8A8D94] max-md:text-xs">
                     Keep track of what’s delicious. When you save recipes,
                     they’ll show up right here.
                   </p>
                 </div>
               </div>
               <div className="mt-12 "></div>
-              <div className="px-16 my-12">
+              <div className="px-10 my-12">
                 <div className="mb-6">
                   <h1 className="text-2xl font-bold text-[#343538] leading-6">
                     Explore main ingredients
@@ -74,10 +89,46 @@ const YourRecipes = () => {
                 </div>
               </div>
               <div>
-                <div className="relative flex flex-row">
+                <div className="relative flex ">
                   <div className="w-full ">
-                    <ul className="flex justify-around mx-12 px-14 ">
-                      <li className="inline-block ">
+                    <Carousel  className="flex  px-6 gap-6 max-md:px-2 max-lg:px-4" pagination={false} itemsToShow={itemsToShow}  >
+                      <div className="inline-block ">
+                        <a className="relative block" href="#">
+                          <div className="flex rounded-xl h-[92px] bg-[#EEF0F2]">
+                            <div className="pt-4 px-2  flex-grow flex-shrink">
+                              <span className="text-sm leading-4">
+                                Vegetables
+                              </span>
+                            </div>
+                            <div
+                              className="w-[70px] bg-no-repeat bg-cover rounded-r-lg"
+                              style={{
+                                backgroundImage:
+                                  "url(https://www.instacart.com/image-server/200x200/d2lnr5mha7bycj.cloudfront.net/collections/collection-collection/image/fd4f6b73-8929-43e9-bebe-b2c5623f01a2.png)",
+                              }}
+                            ></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div className="inline-block ">
+                        <a className="relative block" href="#">
+                          <div className="flex rounded-xl h-[92px] bg-[#EEF0F2]">
+                            <div className="pt-4 px-2 flex-grow flex-shrink">
+                              <span className="text-sm leading-4">
+                                Vegetables
+                              </span>
+                            </div>
+                            <div
+                              className="w-[70px] bg-no-repeat bg-cover rounded-r-lg"
+                              style={{
+                                backgroundImage:
+                                  "url(https://www.instacart.com/image-server/200x200/d2lnr5mha7bycj.cloudfront.net/collections/collection-collection/image/fd4f6b73-8929-43e9-bebe-b2c5623f01a2.png)",
+                              }}
+                            ></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div className="inline-block ">
                         <a className="relative block" href="#">
                           <div className="flex rounded-xl h-[92px] bg-[#EEF0F2]">
                             <div className="pt-4 px-2 min-w-[1%] flex-grow flex-shrink">
@@ -94,8 +145,8 @@ const YourRecipes = () => {
                             ></div>
                           </div>
                         </a>
-                      </li>
-                      <li className="inline-block pl-12">
+                      </div>
+                      <div className="inline-block ">
                         <a className="relative block" href="#">
                           <div className="flex rounded-xl h-[92px] bg-[#EEF0F2]">
                             <div className="pt-4 px-2 min-w-[1%] flex-grow flex-shrink">
@@ -112,8 +163,8 @@ const YourRecipes = () => {
                             ></div>
                           </div>
                         </a>
-                      </li>
-                      <li className="inline-block mr-[-10px]">
+                      </div>
+                      <div className="inline-block ">
                         <a className="relative block" href="#">
                           <div className="flex rounded-xl h-[92px] bg-[#EEF0F2]">
                             <div className="pt-4 px-2 min-w-[1%] flex-grow flex-shrink">
@@ -130,11 +181,11 @@ const YourRecipes = () => {
                             ></div>
                           </div>
                         </a>
-                      </li>
-                      <li className="inline-block mr-[-10px]">
+                      </div>
+                      <div className="inline-block ">
                         <a className="relative block" href="#">
                           <div className="flex rounded-xl h-[92px] bg-[#EEF0F2]">
-                            <div className="pt-4 px-2 min-w-[1%] flex-grow flex-shrink">
+                            <div className="pt-4 px-2  flex-grow flex-shrink">
                               <span className="text-sm leading-4">
                                 Vegetables
                               </span>
@@ -148,11 +199,11 @@ const YourRecipes = () => {
                             ></div>
                           </div>
                         </a>
-                      </li>
-                      <li className="inline-block mr-[-10px]">
+                      </div>
+                      <div className="inline-block ">
                         <a className="relative block" href="#">
                           <div className="flex rounded-xl h-[92px] bg-[#EEF0F2]">
-                            <div className="pt-4 px-2 min-w-[1%] flex-grow flex-shrink">
+                            <div className="pt-4 px-2  flex-grow flex-shrink">
                               <span className="text-sm leading-4">
                                 Vegetables
                               </span>
@@ -166,8 +217,45 @@ const YourRecipes = () => {
                             ></div>
                           </div>
                         </a>
-                      </li>
-                    </ul>
+                      </div>
+                      <div className="inline-block ">
+                        <a className="relative block" href="#">
+                          <div className="flex rounded-xl h-[92px] bg-[#EEF0F2]">
+                            <div className="pt-4 px-2  flex-grow flex-shrink">
+                              <span className="text-sm leading-4">
+                                Vegetables
+                              </span>
+                            </div>
+                            <div
+                              className="w-[70px] bg-no-repeat bg-cover rounded-r-lg"
+                              style={{
+                                backgroundImage:
+                                  "url(https://www.instacart.com/image-server/200x200/d2lnr5mha7bycj.cloudfront.net/collections/collection-collection/image/fd4f6b73-8929-43e9-bebe-b2c5623f01a2.png)",
+                              }}
+                            ></div>
+                          </div>
+                        </a>
+                      </div>
+                      <div className="inline-block ">
+                        <a className="relative block" href="#">
+                          <div className="flex rounded-xl h-[92px] bg-[#EEF0F2]">
+                            <div className="pt-4 px-2  flex-grow flex-shrink">
+                              <span className="text-sm leading-4">
+                                Vegetables
+                              </span>
+                            </div>
+                            <div
+                              className="w-[70px] bg-no-repeat bg-cover rounded-r-lg"
+                              style={{
+                                backgroundImage:
+                                  "url(https://www.instacart.com/image-server/200x200/d2lnr5mha7bycj.cloudfront.net/collections/collection-collection/image/fd4f6b73-8929-43e9-bebe-b2c5623f01a2.png)",
+                              }}
+                            ></div>
+                          </div>
+                        </a>
+                      </div>
+                      
+                    </Carousel>
                   </div>
                 </div>
               </div>
