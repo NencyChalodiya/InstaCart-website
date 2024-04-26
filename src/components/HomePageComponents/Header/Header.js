@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { CiSearch } from "react-icons/ci";
 import { IoLocationSharp } from "react-icons/io5";
@@ -9,12 +9,52 @@ import Carousel from "@itseasy21/react-elastic-carousel";
 import "./Header.css";
 import StoreSidebar from "../StoreSidebar.js/StoreSidebar";
 import { useSelector } from "react-redux";
+import StoresToHelpYouSave from "../StoresToHelpYouSave/StoreToHelpYouSave";
+import API from "../../../services/api";
+import { Tabs } from "antd";
+import { ConfigProvider } from "antd";
+
 const Header = () => {
   const [open, setopen] = useState(false);
+  const [shopListCategory, setShopListCategory] = useState([]);
+  const [shops, setShops] = useState([]);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+
+  const fetchShopListCategory = async () => {
+    try {
+      const response = await API.ShopListCategory();
+      //console.log(response.results);
+      setShopListCategory(response.results);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchShopsByCategory = async (id) => {
+    try {
+      const response = await API.getShopsByCategory({ id });
+      console.log(response.Shops);
+      setShops(response.Shops);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchShopListCategory();
+  }, []);
+  //console.log(shopListCategory);
+
+  const handleCategoryClick = (id) => {
+    setSelectedCategoryId(id);
+
+    fetchShopsByCategory(id);
+  };
 
   const onClosebutton = () => {
     setopen(false);
   };
+
   return (
     <>
       <div className="fixed top-0 z-10 w-full bg-[#F7F5F0]">
@@ -47,7 +87,7 @@ const Header = () => {
               className="w-auto mr-[10px]"
             />
           </a>
-          
+
           <div className="relative z-10 flex-grow mr-2 ">
             <div className="relative z-10 bg-transparent">
               <div className="h-14 rounded-[8px] w-[1375px]  ">
@@ -141,17 +181,65 @@ const Header = () => {
           style={{ width: "calc(1280px + 80px)" }}
         >
           <div className="relative pt-1 bg-[#F7F5F0]">
-            <div className="overflow-y-hidden overflow-x-auto flex justify-between max-h-[68px] box-content px-2">
-              {storeDetailLogo.map((itemsSvg) => (
-                <button className="min-h-11 cursor-pointer bg-transparent relative rounded-[8px] max-w-32 pt-1 pr-2 pb-3 pl-3 text-[#242529] flex flex-col items-center justify-center">
+            <div className=" flex justify-between max-h-[68px] box-content px-2">
+              <ConfigProvider
+                theme={{
+                  components: {
+                    Tabs: {
+                      inkBarColor: "rgb(0,0,0)",
+                      itemActiveColor: "rgb(0,0,0)",
+                      itemHoverColor: "rgb(0,0,0)",
+                      itemSelectedColor: "rgb(0,0,0)",
+                    },
+                  },
+                }}
+              >
+                <Tabs defaultActiveKey="1" centered>
+                  {shopListCategory.map((itemsSvg) => (
+                    <Tabs.TabPane
+                      tab={
+                        <button
+                          className="min-h-[15px] cursor-pointer bg-transparent relative rounded-[8px] max-w-32  pr-1  pl-3 text-[#242529] flex flex-col items-center justify-center
+                          hover:black"
+                          key={itemsSvg.id}
+                          onClick={() => handleCategoryClick(itemsSvg.id)}
+                        >
+                          <span className="flex items-center justify-center mb-2 max-h-6">
+                            <img
+                              src={itemsSvg.logo}
+                              alt={itemsSvg.id}
+                              className="w-[30px] h-[30px]"
+                            />
+                          </span>
+                          <span className="text-base leading-5 text-center">
+                            {itemsSvg.title}
+                          </span>
+                        </button>
+                      }
+                      key={itemsSvg.id}
+                    />
+                  ))}
+                </Tabs>
+              </ConfigProvider>
+
+              {/* {shopListCategory.map((itemsSvg) => (
+                <button
+                  className="min-h-11 cursor-pointer bg-transparent relative rounded-[8px] max-w-32 pt-1 pr-2 pb-3 pl-5 text-[#242529] flex flex-col items-center justify-center"
+                  key={itemsSvg.id}
+                  onClick={() => handleCategoryClick(itemsSvg.id)}
+                >
                   <span className="flex items-center justify-center mb-2 max-h-6">
-                    {itemsSvg.unColoredSvgImg}
+                    <img
+                      src={itemsSvg.logo}
+                      alt={itemsSvg.id}
+                      className="w-[30px] h-[30px]"
+                    />
                   </span>
                   <span className="text-base leading-5 text-center">
                     {itemsSvg.title}
                   </span>
                 </button>
-              ))}
+              ))} */}
             </div>
           </div>
         </div>
@@ -249,7 +337,17 @@ const Header = () => {
           </div>
         </header> */}
         {open && <StoreSidebar open={open} onCancel={onClosebutton} />}
+        {/* {<StoresToHelpYouSave shops={shops} />} */}
+        {/* <div>
+          <h2>Shops</h2>
+          <ul>
+            {shops.map((shop) => (
+              <li key={shop.id}>{shop.title}</li>
+            ))}
+          </ul>
+        </div> */}
       </div>
+      {/* <StoresToHelpYouSave selectedCategoryId={selectedCategoryId} /> */}
     </>
   );
 };

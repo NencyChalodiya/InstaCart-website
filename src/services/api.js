@@ -27,7 +27,7 @@ export const ResetPasswordUser = (payload) => {
 };
 
 export const ForgotPasswordUser = (payload) => {
-  return Ajax.Request("/change_password/", Ajax.POST, false, payload);
+  return Ajax.Request("/change-password/", Ajax.POST, false, payload);
 };
 
 export const GetUserDetails = () => {
@@ -38,6 +38,18 @@ export const UpdateUserDetails = (payload) => {
   return Ajax.Request("/change-details/", Ajax.PUT, true, payload);
 };
 
+export const CreateNewPassword = (payload) => {
+  return Ajax.Request("/change_password/", Ajax.POST, true, payload);
+};
+
+export const ShopListCategory = () => {
+  return Ajax.Request(`/shop/list-category/`, Ajax.GET, true);
+};
+
+export const getShopsByCategory = (payload) => {
+  return Ajax.Request(`/shop/list-shop/`, Ajax.POST, true, payload);
+};
+
 let API = {
   RegisterUser,
   LoginUser,
@@ -46,6 +58,9 @@ let API = {
   ForgotPasswordUser,
   GetUserDetails,
   UpdateUserDetails,
+  CreateNewPassword,
+  ShopListCategory,
+  getShopsByCategory,
 };
 
 export default API;

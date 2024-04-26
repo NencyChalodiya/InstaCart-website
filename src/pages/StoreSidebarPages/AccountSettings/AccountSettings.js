@@ -30,6 +30,7 @@ const AccountSettings = () => {
   useEffect(() => {
     getAccountSettingsDetails();
   }, []);
+
   console.log(userSettingsDetail);
 
   // const updateName = (newName) => {
@@ -479,6 +480,7 @@ const AccountSettings = () => {
             </div>
           </div>
         </div>
+        
         <EditEmailAddress
           editEmailAddress={editEmailAddress}
           onCancel={() => openEditEmailAdress(false)}

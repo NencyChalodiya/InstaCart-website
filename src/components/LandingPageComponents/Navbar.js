@@ -4,10 +4,12 @@ import { CiSearch } from "react-icons/ci";
 import Sidebar from "./Sidebar";
 import { RxCross2 } from "react-icons/rx";
 import { useLocation } from "react-router-dom";
+import StoreSidebar from "../HomePageComponents/StoreSidebar.js/StoreSidebar";
 const Navbar = ({ onLoginButton, onSignupHandler }) => {
-  const { pathname } = useLocation();
+  const location = useLocation();
 
   const [open, isOpen] = useState(false);
+  const [sideOpen, setsideOpen] = useState(false);
   // const [login, isLogin] = useState(false);
   // const [signup, isSignup] = useState(false);
   // const [resetPassword, isResetpassword] = useState(false);
@@ -109,26 +111,77 @@ const Navbar = ({ onLoginButton, onSignupHandler }) => {
             </div>
           </div>
         </div>
-        <div className="flex flex-row">
-          <button className="relative px-[6px] py-[1px] mx-[22px] max-md:mx-[5px] font-medium text-[#343538] bg-transparent  cursor-pointer text-lg leading-5 ">
-            <span
-              className="block text-lg leading-5 cursor-pointer whitespace-nowrap overflow-ellipsis max-md:text-sm"
-              onClick={onLoginButton}
-            >
-              Log in
-            </span>
-          </button>
-          <button className="px-4 py-2 m-6 text-white bg-[#2C890F] border-none rounded-[20px] relative cursor-pointer font-semibold text-lg leading-5 max-md:mx-[5px] max-md:text-sm">
-            <span
-              className="block overflow-hidden whitespace-nowrap overflow-ellipsis"
-              onClick={onSignupHandler}
-            >
-              Sign Up
-            </span>
-          </button>
-        </div>
+        {location.pathname.includes("/") &&
+        !location.pathname.includes("/store") ? (
+          <div className="flex flex-row">
+            <button className="relative px-[6px] py-[1px] mx-[22px] max-md:mx-[5px] font-medium text-[#343538] bg-transparent  cursor-pointer text-lg leading-5 ">
+              <span
+                className="block text-lg leading-5 cursor-pointer whitespace-nowrap overflow-ellipsis max-md:text-sm"
+                onClick={onLoginButton}
+              >
+                Log in
+              </span>
+            </button>
+            <button className="px-4 py-2 m-6 text-white bg-[#2C890F] border-none rounded-[20px] relative cursor-pointer font-semibold text-lg leading-5 max-md:mx-[5px] max-md:text-sm">
+              <span
+                className="block overflow-hidden whitespace-nowrap overflow-ellipsis"
+                onClick={onSignupHandler}
+              >
+                Sign Up
+              </span>
+            </button>
+          </div>
+        ) : (
+          <div className="relative flex">
+            <button className="relative bg-transparent text-[#343538] rounded-[8px] h-14 min-w-[120px] max-w-full mx-4">
+              <span className="text-ellipsis flex  items-center justify-start w-full">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                  size="24"
+                  class="e-ozd7xs"
+                  aria-hidden="true"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M5.714 12.561a7.1 7.1 0 0 1-.86-3.659 7.152 7.152 0 1 1 13.242 3.994L12.84 22h-1.679l-5.265-9.121a7 7 0 0 1-.183-.318m9.266-3.305a2.98 2.98 0 1 1-5.956-.208 2.98 2.98 0 0 1 5.956.208"
+                  ></path>
+                </svg>
+                <span className="pl-2 max-w-full text-ellipsis">94105</span>
+              </span>
+            </button>
+            <button className="relative flex items-center bg-transparent rounded-full h-14">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="#343538"
+                xmlns="http://www.w3.org/2000/svg"
+                className="flex-shrink-0 w-6 h-6 mr-1"
+                aria-hidden="true"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="m6.84 2.68-1.27-.19-.17-.03L2.29 2 2 3.93l3.16.47 2.2 12.84h14.18v-1.95H9l-.34-2 11.92-1.58L22 4.99 6.84 2.69zm1.14 19.27a1.62 1.62 0 1 0 0-3.24 1.62 1.62 0 0 0 0 3.24m11.94 0a1.62 1.62 0 1 0 0-3.24 1.62 1.62 0 0 0 0 3.24"
+                ></path>
+              </svg>
+              <span>0</span>
+            </button>
+          </div>
+        )}
       </header>
-      <Sidebar open={open} onToggleButton={onToggleButton} />
+      {location.pathname.includes("/") &&
+      !location.pathname.includes("/store") ? (
+        <Sidebar open={open} onToggleButton={onToggleButton} />
+      ) : (
+        open && <StoreSidebar open={open} onCancel={onToggleButton}/>
+      )}
+
       {/* {login && (
         <Login
           login={login}

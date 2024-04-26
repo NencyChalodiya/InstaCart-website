@@ -1,32 +1,21 @@
 import React, { useState } from "react";
 import { message } from "antd";
 import API from "../services/api";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { IoEye } from "react-icons/io5";
 import { IoMdEyeOff } from "react-icons/io";
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const [forgetPasswordDetails, setForgetPasswordDetails] = useState({
-    email: "",
-    oldPassword: "",
-    newPassword: "",
-    confirmPassword: "",
-  });
+  const params = useParams();
+  console.log(params);
+  const [newPassword, setNewPassword] = useState("");
   const [screen, setScreen] = useState(false);
 
   const forgetPasswordUser = async () => {
-    if (
-      forgetPasswordDetails.newPassword !==
-      forgetPasswordDetails.confirmPassword
-    ) {
-      message.error("Password does not match");
-    }
     try {
       let payload = {
-        email: forgetPasswordDetails.email,
-        old_password: forgetPasswordDetails.oldPassword,
-        new_password: forgetPasswordDetails.newPassword,
-        confirm_password: forgetPasswordDetails.confirmPassword,
+        password: newPassword,
+        token: params.token,
       };
       const response = await API.ForgotPasswordUser(payload);
       if (response.status) {
@@ -64,74 +53,16 @@ const ForgotPassword = () => {
                 <div className="box-border flex flex-row items-center border flex-nowrap h-14 rounded-xl">
                   <div className="relative flex-grow h-full">
                     <input
-                      type="email"
-                      name="email"
-                      placeholder="Email"
-                      className="w-full h-full p-5 text-base leading-6 bg-transparent border-none rounded-lg outline-none focus:outline-black"
-                      onChange={(e) =>
-                        setForgetPasswordDetails({
-                          ...forgetPasswordDetails,
-                          email: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="relative mt-3 mb-3">
-                <div className="box-border flex flex-row items-center border flex-nowrap h-14 rounded-xl">
-                  <div className="relative flex-grow h-full">
-                    <input
                       type="password"
-                      name="oldPassword"
-                      placeholder="Enter Old Password"
+                      name="password"
+                      placeholder="Enter your new Password"
                       className="w-full h-full p-5 text-base leading-6 bg-transparent border-none rounded-lg outline-none focus:outline-black"
-                      onChange={(e) =>
-                        setForgetPasswordDetails({
-                          ...forgetPasswordDetails,
-                          oldPassword: e.target.value,
-                        })
-                      }
+                      onChange={(e) => setNewPassword(e.target.value)}
                     />
                   </div>
                 </div>
               </div>
-              <div className="relative mt-3 mb-3">
-                <div className="box-border flex flex-row items-center border flex-nowrap h-14 rounded-xl">
-                  <div className="relative flex-grow h-full">
-                    <input
-                      type="password"
-                      name="newPassword"
-                      placeholder="Enter New Password"
-                      className="w-full h-full p-5 text-base leading-6 bg-transparent border-none rounded-lg outline-none focus:outline-black"
-                      onChange={(e) =>
-                        setForgetPasswordDetails({
-                          ...forgetPasswordDetails,
-                          newPassword: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-              <div className="relative mt-3 mb-3">
-                <div className="box-border flex flex-row items-center border flex-nowrap h-14 rounded-xl">
-                  <div className="relative flex-grow h-full">
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      placeholder="Confirm New Password"
-                      className="relative w-full h-full p-5 text-base leading-6 bg-transparent border-none rounded-lg outline-none focus:outline-black"
-                      onChange={(e) =>
-                        setForgetPasswordDetails({
-                          ...forgetPasswordDetails,
-                          confirmPassword: e.target.value,
-                        })
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
+
               <div className="mt-3 mb-3">
                 <button
                   type="submit"

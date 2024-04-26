@@ -1,8 +1,12 @@
-import React, { useState } from "react";
-import { Modal } from "antd";
+import React, { useState, useEffect } from "react";
+import { Modal, message } from "antd";
 import API from "../../../../services/api";
 const EditName = ({ editName, onCancel, userName }) => {
   const [newName, setNewName] = useState(userName);
+
+  useEffect(() => {
+    setNewName(userName);
+  }, [userName]);
 
   const updateAccountSettingsName = async () => {
     const token = localStorage.getItem("token");
@@ -13,8 +17,12 @@ const EditName = ({ editName, onCancel, userName }) => {
       };
       const response = await API.UpdateUserDetails(payload);
       console.log(response);
+      message.success("Name is successfully updated");
+
+      onCancel();
     } catch (error) {
       console.log(error);
+      message.error("Could not able to update name");
     }
   };
   return (

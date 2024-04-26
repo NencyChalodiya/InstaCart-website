@@ -1,7 +1,32 @@
-import React from "react";
-import { Modal } from "antd";
+import React, { useState, useEffect } from "react";
+import { Modal, message } from "antd";
+import API from "../../../../services/api";
 
 const EditEmailAddress = ({ editEmailAddress, onCancel, userEmail }) => {
+  const [newEmailAddress, setNewEmailAdddress] = useState(userEmail);
+
+  useEffect(() => {
+    setNewEmailAdddress(userEmail);
+  }, [userEmail]);
+
+  const updateAccountSettingsEmail = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      let payload = {
+        email: newEmailAddress,
+        access_token: token,
+      };
+      const response = await API.UpdateUserDetails(payload);
+      console.log(response);
+      message.success("Email is successfully updated");
+
+      onCancel();
+    } catch (error) {
+      console.log(error);
+      message.error("Could not able to update email");
+    }
+  };
+
   return (
     <Modal
       centered
@@ -45,7 +70,8 @@ const EditEmailAddress = ({ editEmailAddress, onCancel, userEmail }) => {
                   type="email"
                   className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
                   placeholder="Email Address"
-                  value={userEmail}
+                  value={newEmailAddress}
+                  onChange={(e) => setNewEmailAdddress(e.target.value)}
                 />
               </div>
             </div>
@@ -77,7 +103,10 @@ const EditEmailAddress = ({ editEmailAddress, onCancel, userEmail }) => {
                 Cancel
               </span>
             </button>
-            <button className="cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 ">
+            <button
+              className="cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 "
+              onClick={() => updateAccountSettingsEmail()}
+            >
               <span className="block px-4 ml-5 text-xl text-ellipsis">
                 Save
               </span>

@@ -1,6 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { Modal } from "antd";
+import API from "../../../../services/api";
 const CreatePassword = ({ changePassword, onCancel }) => {
+  const [createNewPasswordDetails, setcreateNewPasswordDetails] = useState({
+    email: "",
+    oldPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
+
+  const createNewpassword = async () => {
+    //const token = localStorage.getItem("token");
+    try {
+      let payload = {
+        email: createNewPasswordDetails.email,
+        old_password: createNewPasswordDetails.oldPassword,
+        new_password: createNewPasswordDetails.newPassword,
+        confirm_password: createNewPasswordDetails.confirmPassword,
+      };
+      const response = await API.CreateNewPassword(payload);
+      console.log(response);
+      //message.success("Name is successfully updated");
+
+      onCancel();
+    } catch (error) {
+      console.log(error);
+      //message.error("Could not able to update name");
+    }
+  };
   return (
     <Modal
       centered
@@ -41,9 +68,15 @@ const CreatePassword = ({ changePassword, onCancel }) => {
             <div className="flex flex-row flex-nowrap items-center rounded-xl h-[55px] box-border max-w-[600px]">
               <div className="relative flex-grow h-full">
                 <input
-                  type="password"
+                  type="email"
                   className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
-                  placeholder="New Password"
+                  placeholder="Enter your Email"
+                  onChange={(e) =>
+                    setcreateNewPasswordDetails({
+                      ...createNewPasswordDetails,
+                      email: e.target.value,
+                    })
+                  }
                 />
               </div>
             </div>
@@ -52,7 +85,43 @@ const CreatePassword = ({ changePassword, onCancel }) => {
                 <input
                   type="password"
                   className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
-                  placeholder="Confirm New Password"
+                  placeholder="Enter your old password"
+                  onChange={(e) =>
+                    setcreateNewPasswordDetails({
+                      ...createNewPasswordDetails,
+                      oldPassword: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </div>
+            <div className="flex flex-row flex-nowrap items-center rounded-xl h-[55px] box-border max-w-[600px]">
+              <div className="relative flex-grow h-full">
+                <input
+                  type="password"
+                  className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
+                  placeholder="Enter New Password"
+                  onChange={(e) =>
+                    setcreateNewPasswordDetails({
+                      ...createNewPasswordDetails,
+                      newPassword: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </div>
+            <div className="flex flex-row flex-nowrap items-center rounded-xl h-[55px] box-border max-w-[600px]">
+              <div className="relative flex-grow h-full">
+                <input
+                  type="password"
+                  className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
+                  placeholder="Confirm password"
+                  onChange={(e) =>
+                    setcreateNewPasswordDetails({
+                      ...createNewPasswordDetails,
+                      confirmPassword: e.target.value,
+                    })
+                  }
                 />
               </div>
             </div>
@@ -66,7 +135,10 @@ const CreatePassword = ({ changePassword, onCancel }) => {
                 Cancel
               </span>
             </button>
-            <button className="cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 ">
+            <button
+              className="cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 "
+              onClick={() => createNewpassword()}
+            >
               <span className="block px-4 ml-5 text-xl text-ellipsis">
                 Save
               </span>

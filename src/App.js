@@ -16,6 +16,7 @@ import HelpCenter from "./pages/StoreSidebarPages/HelpCenter";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import ForgotPassword from "./pages/ForgotPassword";
+import StoreToHelpYouSave from "./components/HomePageComponents/StoresToHelpYouSave/StoreToHelpYouSave";
 function App() {
   const location = useLocation();
   console.log(location);

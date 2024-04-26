@@ -84,10 +84,12 @@ const Change_Verify_PhoneNum = ({
     const token = localStorage.getItem("token");
     try {
       let payload = {
-        phone_number: newPhoneNumber,
+        phone: newPhoneNumber,
         access_token: token,
       };
+
       const response = await API.UpdateUserDetails(payload);
+
       console.log(response);
     } catch (error) {
       console.log(error);
