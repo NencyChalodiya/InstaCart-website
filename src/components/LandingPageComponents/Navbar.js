@@ -79,7 +79,7 @@ const Navbar = ({ onLoginButton, onSignupHandler }) => {
               />
             </a>
           </div>
-          <div className="relative flex-grow mx-8 max-md:hidden">
+          <div className="relative flex-grow mx-8 max-md:hidden ">
             <div className="relative z-10 bg-transparent">
               <form className="relative h-14 bg-[#F6F7F8] rounded-[5px] ">
                 <button className="absolute translate-y-[-50%] bg-transparent top-1/2 left-3 z-1">
@@ -179,7 +179,7 @@ const Navbar = ({ onLoginButton, onSignupHandler }) => {
       !location.pathname.includes("/store") ? (
         <Sidebar open={open} onToggleButton={onToggleButton} />
       ) : (
-        open && <StoreSidebar open={open} onCancel={onToggleButton}/>
+        open && <StoreSidebar open={open} onCancel={onToggleButton} />
       )}
 
       {/* {login && (

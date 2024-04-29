@@ -1,45 +1,96 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { brandStoresData } from "../../BrandStoreData/brandStoreData";
-import AddToCart from "../AddToCart/AddToCart";
-import Navbar from "../../components/LandingPageComponents/Navbar";
-
-const BrandStoreCategoryPage = () => {
-  const recipes = [
-    "Recipes",
-    "Snacks & Candy",
-    "Meat & Seafood",
-    "Produce",
-    "Beverages",
-    "Dairy & Eggs",
-    "Frozen",
-    "Wine",
-    "Prepared Foods",
-    "Bakery",
-    "Household",
-    "Deli",
-    "Beer & Cider",
-    "Liquor",
-    "Canned Goods & Soups",
-    "Floral",
-    "Personal Care",
-    "BreakFast",
-    "Pets",
-    "Dry Goods & Pasta",
-  ];
+import { Navigate, useParams } from "react-router-dom";
+import { brandStoresData } from "../../../BrandStoreData/brandStoreData";
+import AddToCart from "../../../pages/AddToCart/AddToCart";
+import Navbar from "../../LandingPageComponents/Navbar";
+import API from "../../../services/api";
+import { useNavigate } from "react-router-dom";
+const GetProductsBasedOnShops = () => {
+  const navigate = useNavigate();
+  // const recipes = [
+  //   "Recipes",
+  //   "Snacks & Candy",
+  //   "Meat & Seafood",
+  //   "Produce",
+  //   "Beverages",
+  //   "Dairy & Eggs",
+  //   "Frozen",
+  //   "Wine",
+  //   "Prepared Foods",
+  //   "Bakery",
+  //   "Household",
+  //   "Deli",
+  //   "Beer & Cider",
+  //   "Liquor",
+  //   "Canned Goods & Soups",
+  //   "Floral",
+  //   "Personal Care",
+  //   "BreakFast",
+  //   "Pets",
+  //   "Dry Goods & Pasta",
+  // ];
   const [addToCartModal, setaddToCartModal] = useState(false);
-  const [storeData, setstoreData] = useState(null);
-  const [brandsStoreLogo, setbrandsStoreLogo] = useState(null);
-  const params = useParams();
+  //const [storeData, setstoreData] = useState(null);
+  //const [brandsStoreLogo, setbrandsStoreLogo] = useState(null);
+  const [productsWithImages, setProductsWithImages] = useState([]);
+  const [shopsSubCategory, setShopsSubCategory] = useState([]);
+  const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+
+  //const [shopData, setShopData] = useState(null);
+  //const params = useParams();
+  const { shopId } = useParams();
+  console.log(shopId);
 
   useEffect(() => {
-    brandStoresData.map((d) => {
-      if (d.id == params.storeId) {
-        setstoreData(d);
-        setbrandsStoreLogo(d);
+    const fetchProductsForShop = async () => {
+      try {
+        const response = await API.getProductsBasedShops(shopId);
+        const productsWithImages = response.products.map((product) => ({
+          ...product,
+          images: response.images[product.id] || [], // Get images for the current product
+        }));
+        setProductsWithImages(productsWithImages);
+      } catch (error) {
+        console.log(error);
       }
-    });
-  }, [params]);
+    };
+
+    fetchProductsForShop();
+  }, [shopId]);
+
+  const fetchSubCategory = async () => {
+    try {
+      const response = await API.getSubCategoryList();
+      setShopsSubCategory(response.results);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchSubCategory();
+  }, []);
+
+  const handleSubCatClick = async (subCatId) => {
+    setSelectedSubCategory(subCatId);
+    try {
+      const response = await API.getProductsOfSubCategory(subCatId);
+      const productsWithImages = response.products.map((product) => ({
+        ...product,
+        images: response.images[product.id] || [], // Get images for the current product
+      }));
+      setProductsWithImages(productsWithImages);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // useEffect(() => {
+  //   brandStoresData.map((d) => {
+  //     if (d.id == params.storeId) {
+  //       setstoreData(d);
+  //       setbrandsStoreLogo(d);
+  //     }
+  //   });
+  // }, [params]);
   // console.log(storeData);
 
   return (
@@ -51,7 +102,7 @@ const BrandStoreCategoryPage = () => {
           style={{ height: `calc(100% - 80px)` }}
         >
           <div className="sticky bg-white z-1 will-change-transform backdrop-blur-sm">
-            <div className="flex flex-col items-center px-1 pt-6 pb-4 text-center flex-nowrap">
+            {/* <div className="flex flex-col items-center px-1 pt-6 pb-4 text-center flex-nowrap">
               {brandsStoreLogo ? (
                 <div className="relative">
                   <a
@@ -160,7 +211,7 @@ const BrandStoreCategoryPage = () => {
                   </svg>
                 </a>
               </span>
-            </div>
+            </div> */}
           </div>
           <hr />
           <ul className="w-full px-3 py-4 list-none">
@@ -239,14 +290,17 @@ const BrandStoreCategoryPage = () => {
           </ul>
           <hr />
           <ul className="px-3 pt-4 pb-3">
-            {recipes.map((recipe) => (
-              <li>
-                <a
-                  href="/"
-                  className="box-border relative flex items-center w-full pb-4 pl-3 pr-3 text-sm leading-5 text-gray-700 rounded-lg cursor-pointer flex-nowrap "
-                >
-                  <span>{recipe}</span>
-                </a>
+            {shopsSubCategory.map((subCategory) => (
+              <li
+                key={subCategory.id}
+                onClick={() => handleSubCatClick(subCategory.id)}
+                className={`${
+                  selectedSubCategory === subCategory.id
+                    ? "bg-[#242529] text-white"
+                    : "bg-white hover:bg-gray-100 text-gray-700"
+                } px-3 py-2 cursor-pointer rounded-lg`}
+              >
+                {subCategory.title}
               </li>
             ))}
           </ul>
@@ -260,9 +314,14 @@ const BrandStoreCategoryPage = () => {
               <div className="flex items-center justify-between mt-6 ">
                 <div>
                   <h2 className="flex mr-2">
-                    <div className="text-3xl font-bold leading-5 max-md:text-2xl">
-                      Best Sellers
-                    </div>
+                    {productsWithImages.length > 0 && (
+                      <div
+                        className="text-3xl font-bold leading-5 max-md:text-2xl"
+                        key={productsWithImages[0].category.id}
+                      >
+                        {productsWithImages[0].category.title}
+                      </div>
+                    )}
                   </h2>
                 </div>
                 <div className="flex items-center justify-center align-baseline max-md:hidden">
@@ -342,78 +401,104 @@ const BrandStoreCategoryPage = () => {
               <div>
                 <div className="relative flex flex-row">
                   <div className="w-full">
-                    <ul className="w-full h-full min-h-[304px] grid grid-cols-8 gap-4 justify-between mt-2 max-2xl:grid-cols-6 max-lg:grid-cols-4 max-xl:grid-cols-5 max-md:grid-cols-3 max-sm:grid-cols-1">
-                      {storeData ? (
-                        storeData.items.map((item, index) => (
-                          <li
-                            key={index}
-                            className="relative flex flex-col cursor-pointer"
-                            onClick={() => setaddToCartModal(true)}
-                          >
-                            <div className="absolute z-10 top-1 right-1">
-                              {" "}
-                              {/* Move absolute positioning here */}
-                              <div className="inline-block rounded-[20px] p-[2px] bg-[#2C890F]">
-                                <button className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 bg-[#2C890F]">
+                    <ul className="w-full h-full min-h-[304px] grid grid-cols-5 gap-6 justify-between mt-2 max-2xl:grid-cols-6 max-lg:grid-cols-4 max-xl:grid-cols-5 max-md:grid-cols-3 max-sm:grid-cols-1">
+                      {
+                        <>
+                          {productsWithImages.map((product) => (
+                            // <li key={product.id}>
+                            //   <h3>{product.title}</h3>
+                            //   <p>{product.details}</p>
+                            //   <ul>
+                            //     {product.images.map((image) => (
+                            //       <li key={image.id}>
+                            //         <img
+                            //           src={image.image}
+                            //           alt={`Product ${product.id}`}
+                            //         />
+                            //       </li>
+                            //     ))}
+                            //   </ul>
+                            // </li>
+                            <li
+                              key={product.id}
+                              className="relative flex flex-col cursor-pointer"
+                              onClick={() => setaddToCartModal(true)}
+                            >
+                              <div className="absolute z-10 top-1 right-1">
+                                {" "}
+                                {/* Move absolute positioning here */}
+                                <div className="inline-block rounded-[20px] p-[2px] bg-[#2C890F]">
+                                  <button className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 bg-[#2C890F]">
+                                    <div>
+                                      <div className="flex items-center px-2">
+                                        <svg
+                                          width="24"
+                                          height="24"
+                                          viewBox="0 0 24 24"
+                                          fill="#FFFFFF"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          size="24"
+                                          color="systemGrayscale00"
+                                          aria-hidden="true"
+                                        >
+                                          <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
+                                        </svg>
+                                        <span className="pl-1 text-white">
+                                          Add
+                                        </span>
+                                      </div>
+                                    </div>
+                                  </button>
+                                </div>
+                              </div>
+                              <div>
+                                <div className="relative overflow-hidden rounded-xl">
+                                  <div className="w-full h-[200px] object-cover">
+                                    <ul>
+                                      {product.images.map((image) => (
+                                        <li key={image.id}>
+                                          <img
+                                            src={image.image}
+                                            alt={`Product ${product.id}`}
+                                          />
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                </div>
+                                <div className="px-2 mt-2">
+                                  <div className="py-[1px] px-1 ">
+                                    <span className="text-sm font-bold text-gray-700 align-super">
+                                      $
+                                    </span>
+                                    <span className="mr-[2px] font-bold text-2xl leading-5 text-gray-700">
+                                      {product.price}
+                                    </span>
+                                    <span className="text-sm font-bold text-gray-700 align-super">
+                                      49
+                                    </span>
+                                  </div>
+                                  <div className="">
+                                    <span className="text-gray-500">
+                                      {product.title}
+                                    </span>
+                                  </div>
                                   <div>
-                                    <div className="flex items-center px-2">
-                                      <svg
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="#FFFFFF"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        size="24"
-                                        color="systemGrayscale00"
-                                        aria-hidden="true"
-                                      >
-                                        <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
-                                      </svg>
-                                      <span className="pl-1 text-white">
-                                        Add
-                                      </span>
+                                    <p className="mt-[6px] text-gray-400">
+                                      {product.details.length > 100
+                                        ? product.details.substring(0, 100) +
+                                          "..."
+                                        : product.details}
+                                    </p>
+                                  </div>
+                                  <div className="flex">
+                                    <div className="text-gray-400">
+                                      {product?.m_qty} {product?.measurement}
                                     </div>
                                   </div>
-                                </button>
-                              </div>
-                            </div>
-                            <div>
-                              <div className="relative overflow-hidden rounded-xl">
-                                <div className="w-full h-[200px] object-cover">
-                                  {" "}
-                                  {item.itemsImg}
                                 </div>
                               </div>
-                              <div className="px-2 mt-2">
-                                <div className="py-[1px] px-1 ">
-                                  <span className="text-sm font-bold text-gray-700 align-super">
-                                    $
-                                  </span>
-                                  <span className="mr-[2px] font-bold text-2xl leading-5 text-gray-700">
-                                    {item.itemsPrice}
-                                  </span>
-                                  <span className="text-sm font-bold text-gray-700 align-super">
-                                    49
-                                  </span>
-                                </div>
-                                <div className="">
-                                  <span className="text-gray-500">
-                                    {item.itemName}
-                                  </span>
-                                </div>
-                                <div>
-                                  <p className="mt-[6px] text-gray-400">
-                                    {item.itemsDesc}
-                                  </p>
-                                </div>
-                                <div className="flex">
-                                  <div className="text-gray-400">
-                                    {item.itemWeight}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                            {/* <div className="absolute z-10 top-1 right-1">
+                              {/* <div className="absolute z-10 top-1 right-1">
                               <div className="inline-block rounded-[20px] p-[2px] bg-[#2C890F]">
                                 <button className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 bg-[#2C890F]">
                                   <div>
@@ -438,12 +523,30 @@ const BrandStoreCategoryPage = () => {
                                 </button>
                               </div>
                             </div> */}
-                          </li>
-                        ))
-                      ) : (
-                        <div>Loading...</div>
-                      )}
+                            </li>
+                          ))}
+                        </>
+                      }
                     </ul>
+                    {/* <h2>Products</h2>
+                    <ul>
+                      {productsWithImages.map((product) => (
+                        <li key={product.id}>
+                          <h3>{product.title}</h3>
+                          <p>{product.details}</p>
+                          <ul>
+                            {product.images.map((image) => (
+                              <li key={image.id}>
+                                <img
+                                  src={image.image}
+                                  alt={`Product ${product.id}`}
+                                />
+                              </li>
+                            ))}
+                          </ul>
+                        </li>
+                      ))}
+                    </ul> */}
                   </div>
                 </div>
               </div>
@@ -459,4 +562,4 @@ const BrandStoreCategoryPage = () => {
   );
 };
 
-export default BrandStoreCategoryPage;
+export default GetProductsBasedOnShops;

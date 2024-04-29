@@ -13,11 +13,13 @@ import StoresToHelpYouSave from "../StoresToHelpYouSave/StoreToHelpYouSave";
 import API from "../../../services/api";
 import { Tabs } from "antd";
 import { ConfigProvider } from "antd";
+import ShopListing from "../ShopListing/ShopListing";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Header = () => {
   const [open, setopen] = useState(false);
   const [shopListCategory, setShopListCategory] = useState([]);
-  const [shops, setShops] = useState([]);
+  //const [shops, setShops] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
   const fetchShopListCategory = async () => {
@@ -30,15 +32,15 @@ const Header = () => {
     }
   };
 
-  const fetchShopsByCategory = async (id) => {
-    try {
-      const response = await API.getShopsByCategory({ id });
-      console.log(response.Shops);
-      setShops(response.Shops);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const fetchShopsByCategory = async (id) => {
+  //   try {
+  //     const response = await API.getShopsByCategory({ id });
+  //     console.log(response.Shops);
+  //     setShops(response.Shops);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   useEffect(() => {
     fetchShopListCategory();
@@ -48,48 +50,78 @@ const Header = () => {
   const handleCategoryClick = (id) => {
     setSelectedCategoryId(id);
 
-    fetchShopsByCategory(id);
+    //fetchShopsByCategory(id);
   };
 
   const onClosebutton = () => {
     setopen(false);
   };
 
+  const isExtraSmallScreen = useMediaQuery("(max-width: 639px)"); // xs
+  const isSmallScreen = useMediaQuery(
+    "(min-width: 640px) and (max-width: 767px)"
+  ); // sm
+  const isMediumScreen = useMediaQuery(
+    "(min-width: 768px) and ( max-width: 1023px)"
+  ); // md
+  const isLargeScreen = useMediaQuery(
+    "(min-width: 1024px) and ( max-width: 1279px)"
+  ); // lg
+  const isExtraLargeScreen = useMediaQuery(
+    "( min-width: 1280px) and (max-width: 1535px) "
+  ); // xl
+  const isExtraExtraLargeScreen = useMediaQuery("(min-width: 1536px)"); // 2xl
+  const itemsToShow = isExtraSmallScreen
+    ? 3
+    : isSmallScreen
+    ? 4
+    : isMediumScreen
+    ? 6
+    : isLargeScreen
+    ? 5
+    : isExtraLargeScreen
+    ? 7
+    : isExtraExtraLargeScreen
+    ? 9
+    : 9;
+
   return (
     <>
       <div className="fixed top-0 z-10 w-full bg-[#F7F5F0]">
-        <div className="w-full min-w-[1024] flex justify-start items-center h-20 pl-6 box-border ">
-          <span className="ml-[-4px] mr-2 relative ">
-            <button
-              className="cursor-pointer bg-transparent rounded-[4px] h-8 w-8 flex justify-center items-center"
-              onClick={() => setopen(true)}
-            >
-              <span className="cursor-pointer">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="#343538"
-                  xmlns="http://www.w3.org/2000/svg"
-                  size="24"
-                  color="systemGrayscale70"
-                  aria-hidden="true"
-                >
-                  <path d="M20 6H4v2h16zM4 11h16v2H4zM4 16h16v2H4z"></path>
-                </svg>
-              </span>
-            </button>
-          </span>
-          <a className="h-14 min-w-[196px] ml-2 mr-6 flex items-center rounded-[12px] relative">
-            <img
-              src="https://www.instacart.com/image-server/x24/www.instacart.com/assets/beetstrap/brand/2023/logo@2x-8f1d0b7139d724b69d6563dde696887478257f5f741cfc4da7e2c42b49635bd7.png"
-              alt="instacart-logo"
-              className="w-auto mr-[10px]"
-            />
-          </a>
+        <div className="w-full min-w-[1024] flex justify-start items-center h-20 pl-6 box-border  ">
+          <div className="flex items-center">
+            <span className="ml-[-4px] mr-2 relative ">
+              <button
+                className="cursor-pointer bg-transparent rounded-[4px] h-8 w-8 flex justify-center items-center"
+                onClick={() => setopen(true)}
+              >
+                <span className="cursor-pointer">
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="#343538"
+                    xmlns="http://www.w3.org/2000/svg"
+                    size="24"
+                    color="systemGrayscale70"
+                    aria-hidden="true"
+                  >
+                    <path d="M20 6H4v2h16zM4 11h16v2H4zM4 16h16v2H4z"></path>
+                  </svg>
+                </span>
+              </button>
+            </span>
+            <a className="h-14 min-w-[196px] ml-2 mr-6 flex items-center rounded-[12px] relative">
+              <img
+                src="https://www.instacart.com/image-server/x24/www.instacart.com/assets/beetstrap/brand/2023/logo@2x-8f1d0b7139d724b69d6563dde696887478257f5f741cfc4da7e2c42b49635bd7.png"
+                alt="instacart-logo"
+                className="w-auto mr-[10px]"
+              />
+            </a>
+          </div>
 
-          <div className="relative z-10 flex-grow mr-2 ">
-            <div className="relative z-10 bg-transparent">
+          <div className="relative z-10 mr-2 flex-grow ">
+            <div className="relative z-10 bg-transparent ">
               <div className="h-14 rounded-[8px] w-[1375px]  ">
                 <button className="absolute top-[50%] z-10 left-3 transform translate-y-[-50%]">
                   <svg
@@ -109,7 +141,7 @@ const Header = () => {
                     ></path>
                   </svg>
                 </button>
-                <div className="relative h-full">
+                <div className="relative h-full flex-grow">
                   <input
                     className=" relative items-center w-full py-3 rounded-[28px] border-2 bg-white outline-none  pr-12 h-full box-border text-[#242529] pl-10  placeholder-[#47474A] text-base shadow-md focus:border-black  "
                     type="text"
@@ -177,11 +209,11 @@ const Header = () => {
           </div>
         </div>
         <div
-          className="m-auto pb-[1px]"
+          className="m-auto pb-[1px] max-2xl:m-0"
           style={{ width: "calc(1280px + 80px)" }}
         >
-          <div className="relative pt-1 bg-[#F7F5F0]">
-            <div className=" flex justify-between max-h-[68px] box-content px-2">
+          <div className="relative pt-1 bg-[#F7F5F0] ">
+            <div className=" flex justify-between max-h-[75px] box-content px-2">
               <ConfigProvider
                 theme={{
                   components: {
@@ -199,8 +231,14 @@ const Header = () => {
                     <Tabs.TabPane
                       tab={
                         <button
-                          className="min-h-[15px] cursor-pointer bg-transparent relative rounded-[8px] max-w-32  pr-1  pl-3 text-[#242529] flex flex-col items-center justify-center
-                          hover:black"
+                          className=" cursor-pointer bg-transparent relative rounded-[8px] max-w-32  pr-1  pl-3 text-[#242529] flex flex-col items-center justify-center
+                          hover:black max-2xl:pl-3 
+                          max-xl:pl-2
+                          max-lg:pl-1
+                          max-md:pl-0
+                          max-2xl:pr-0 max-2xl:max-w-24
+                          max-xl:max-w-16
+                          max-lg:max-w-10"
                           key={itemsSvg.id}
                           onClick={() => handleCategoryClick(itemsSvg.id)}
                         >
@@ -337,16 +375,9 @@ const Header = () => {
           </div>
         </header> */}
         {open && <StoreSidebar open={open} onCancel={onClosebutton} />}
-        {/* {<StoresToHelpYouSave shops={shops} />} */}
-        {/* <div>
-          <h2>Shops</h2>
-          <ul>
-            {shops.map((shop) => (
-              <li key={shop.id}>{shop.title}</li>
-            ))}
-          </ul>
-        </div> */}
       </div>
+      <ShopListing selectedCategoryId={selectedCategoryId} />
+
       {/* <StoresToHelpYouSave selectedCategoryId={selectedCategoryId} /> */}
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
@@ -95,6 +95,9 @@ const Change_Verify_PhoneNum = ({
       console.log(error);
     }
   };
+  useEffect(() => {
+    setNewPhoneNumber(userPhoneNumber);
+  }, [userPhoneNumber]);
   return (
     <Modal
       centered

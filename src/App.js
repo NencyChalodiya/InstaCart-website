@@ -16,7 +16,9 @@ import HelpCenter from "./pages/StoreSidebarPages/HelpCenter";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import ForgotPassword from "./pages/ForgotPassword";
-import StoreToHelpYouSave from "./components/HomePageComponents/StoresToHelpYouSave/StoreToHelpYouSave";
+
+import GetProductsBasedOnShops from "./components/HomePageComponents/ShopListing/GetProductsBasedOnShops";
+
 function App() {
   const location = useLocation();
   console.log(location);
@@ -57,6 +59,10 @@ function App() {
             <Route path="/store/gift-cards" element={<Gift_Cards />} />
             <Route path="/store/manage_promos" element={<Manage_promos />} />
             <Route path="/help" element={<HelpCenter />} />
+            <Route
+              path="/products/:shopId"
+              element={<GetProductsBasedOnShops />}
+            />
           </>
         ) : (
           <>

@@ -50,6 +50,18 @@ export const getShopsByCategory = (payload) => {
   return Ajax.Request(`/shop/list-shop/`, Ajax.POST, true, payload);
 };
 
+export const getProductsBasedShops = (id) => {
+  return Ajax.Request(`/product/ListProduct/?id=${id}`, Ajax.GET, true);
+};
+
+export const getSubCategoryList = () => {
+  return Ajax.Request(`/product/List-Subcat/`, Ajax.GET, true);
+};
+
+export const getProductsOfSubCategory = (id) => {
+  return Ajax.Request(`/product/subcategory/${id}/`, Ajax.GET, true);
+};
+
 let API = {
   RegisterUser,
   LoginUser,
@@ -61,6 +73,9 @@ let API = {
   CreateNewPassword,
   ShopListCategory,
   getShopsByCategory,
+  getProductsBasedShops,
+  getSubCategoryList,
+  getProductsOfSubCategory,
 };
 
 export default API;
