@@ -8,6 +8,7 @@ import CreatePassword from "./SettingsModal/CreatePassword";
 import EditName from "./SettingsModal/EditName";
 import Change_Verify_PhoneNum from "./SettingsModal/Change_Verify_PhoneNum";
 import API from "../../../services/api";
+import InnerSideBarData from "../InnerSideBarData";
 const AccountSettings = () => {
   const [editEmailAddress, openEditEmailAdress] = useState(false);
   const [changePassword, openChangePassword] = useState(false);
@@ -41,7 +42,8 @@ const AccountSettings = () => {
     <>
       <Navbar />
       <div className="h-full bg-white">
-        <div
+        <InnerSideBarData />
+        {/* <div
           className="fixed z-10 w-64 overflow-y-auto bg-white border-r-2 top-20 max-lg:hidden "
           style={{ height: `calc(100% - 80px)` }}
         >
@@ -281,7 +283,7 @@ const AccountSettings = () => {
               </a>
             </li>
           </ul>
-        </div>
+        </div> */}
 
         <div className="ml-64 max-lg:ml-0">
           <div className="h-14"></div>
@@ -480,7 +482,7 @@ const AccountSettings = () => {
             </div>
           </div>
         </div>
-        
+
         <EditEmailAddress
           editEmailAddress={editEmailAddress}
           onCancel={() => openEditEmailAdress(false)}

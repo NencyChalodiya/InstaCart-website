@@ -42,7 +42,12 @@ const StoreSidebar = ({ open, onCancel }) => {
 
   return (
     <>
-      <Drawer placement="left" visible={open} onClose={onCancel}>
+      <Drawer
+        placement="left"
+        visible={open}
+        onClose={onCancel}
+        closable={false}
+      >
         <nav>
           <ul className="list-none ">
             <div className="relative mb-3">

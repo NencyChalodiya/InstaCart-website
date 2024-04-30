@@ -62,6 +62,18 @@ export const getProductsOfSubCategory = (id) => {
   return Ajax.Request(`/product/subcategory/${id}/`, Ajax.GET, true);
 };
 
+export const RegisterAddress = (payload) => {
+  return Ajax.Request(`/register-address/`, Ajax.POST, true, payload);
+};
+
+export const getUserAddress = () => {
+  return Ajax.Request(`/address/`, Ajax.GET, true);
+};
+
+export const editUserAddress = (payload) => {
+  return Ajax.Request(`/edit-address/`, Ajax.POST, true, payload);
+};
+
 let API = {
   RegisterUser,
   LoginUser,
@@ -76,6 +88,9 @@ let API = {
   getProductsBasedShops,
   getSubCategoryList,
   getProductsOfSubCategory,
+  RegisterAddress,
+  getUserAddress,
+  editUserAddress,
 };
 
 export default API;

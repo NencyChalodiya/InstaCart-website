@@ -18,10 +18,11 @@ import { useEffect } from "react";
 import ForgotPassword from "./pages/ForgotPassword";
 
 import GetProductsBasedOnShops from "./components/HomePageComponents/ShopListing/GetProductsBasedOnShops";
+import Addresses from "./pages/StoreSidebarPages/Address/Addresses";
 
 function App() {
   const location = useLocation();
-  console.log(location);
+  //console.log(location);
   const userData = JSON.parse(localStorage.getItem("userData"));
   //console.log(userData);
   const navigate = useNavigate();
@@ -63,6 +64,7 @@ function App() {
               path="/products/:shopId"
               element={<GetProductsBasedOnShops />}
             />
+            <Route path="/store/addresses" element={<Addresses />} />
           </>
         ) : (
           <>

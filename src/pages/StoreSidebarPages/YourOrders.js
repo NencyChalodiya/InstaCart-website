@@ -1,23 +1,15 @@
-import React, { useState }  from "react";
+import React from "react";
 import Navbar from "../../components/LandingPageComponents/Navbar";
 import BrandStoreCategoryPage from "../BrandStoreCategoryPages/BrandStoreCategoryPage";
-import { Link } from "react-router-dom";
-import { yourOrderSidebarData } from "../../data/yourOrdersSidebarData";
-const YourOrders = () => {
-  const [hoveredItem, setHoveredItem] = useState(null);
-  
-  const handleMouseEnter = (index) => {
-    setHoveredItem(index);
-  };
 
-  const handleMouseLeave = () => {
-    setHoveredItem(null);
-  };
+import InnerSideBarData from "./InnerSideBarData";
+const YourOrders = () => {
   return (
     <>
       <Navbar />
       <div className="h-full bg-white">
-        <div
+        <InnerSideBarData />
+        {/* <div
           className="fixed z-10 w-64 overflow-y-auto bg-white border-r-2 top-20 max-md:hidden"
           style={{ height: `calc(100% - 80px)` }} 
         >
@@ -109,7 +101,7 @@ const YourOrders = () => {
               </a>
             </li>
           </ul>
-        </div>
+        </div> */}
 
         <div className="ml-64 max-md:ml-0 ">
           <div className="h-14"></div>
@@ -129,10 +121,15 @@ const YourOrders = () => {
               <div className="text-center py-12">
                 <img
                   src="https://d2guulkeunn7d8.cloudfront.net/assets/EmptyStateGroceries-1b9e4c0a4d8cefff697c0eb7d50f82ad.svg"
-                  alt="order-history" className="block mx-auto mb-3 max-w-[235px] max-h-[132px] w-full h-full"
+                  alt="order-history"
+                  className="block mx-auto mb-3 max-w-[235px] max-h-[132px] w-full h-full"
                 />
-                <h1 className="text-[#72767E]">Empty Fridge? Start your first ordet</h1>
-                <p className="text-[#7B7F87]">Current and past orders will appear here.</p>
+                <h1 className="text-[#72767E]">
+                  Empty Fridge? Start your first ordet
+                </h1>
+                <p className="text-[#7B7F87]">
+                  Current and past orders will appear here.
+                </p>
               </div>
             </div>
           </div>

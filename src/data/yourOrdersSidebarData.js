@@ -65,21 +65,21 @@ export const yourOrderSidebarData = [
     ),
     selectedLogo: (
       <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="#ffffff"
-      xmlns="http://www.w3.org/2000/svg"
-      size="24"
-      class="e-6su6fj"
-      aria-hidden="true"
-    >
-      <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
-        d="m21.1 6.95-2.165.418a8.4 8.4 0 0 0-2.304-2.3L17.05 2.9q-1.035-.57-2.19-.9l-1.235 1.826a8.4 8.4 0 0 0-3.248.004L9.14 2c-.77.21-1.5.52-2.19.9l.421 2.18a8.4 8.4 0 0 0-2.288 2.292L2.9 6.95Q2.33 7.985 2 9.14l1.837 1.242a8.4 8.4 0 0 0 0 3.236L2 14.86c.21.77.52 1.5.9 2.19l2.183-.422a8.4 8.4 0 0 0 2.288 2.292L6.95 21.1q1.035.57 2.19.9l1.237-1.83a8.4 8.4 0 0 0 3.248.003L14.86 22c.77-.21 1.5-.52 2.19-.9l-.419-2.168a8.4 8.4 0 0 0 2.304-2.3l2.165.418q.57-1.035.9-2.19l-1.82-1.23a8.4 8.4 0 0 0 0-3.26L22 9.14c-.21-.77-.52-1.5-.9-2.19M15.34 12a3.33 3.33 0 1 1-6.66 0 3.33 3.33 0 0 1 6.66 0"
-      ></path>
-    </svg>
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="#ffffff"
+        xmlns="http://www.w3.org/2000/svg"
+        size="24"
+        class="e-6su6fj"
+        aria-hidden="true"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="m21.1 6.95-2.165.418a8.4 8.4 0 0 0-2.304-2.3L17.05 2.9q-1.035-.57-2.19-.9l-1.235 1.826a8.4 8.4 0 0 0-3.248.004L9.14 2c-.77.21-1.5.52-2.19.9l.421 2.18a8.4 8.4 0 0 0-2.288 2.292L2.9 6.95Q2.33 7.985 2 9.14l1.837 1.242a8.4 8.4 0 0 0 0 3.236L2 14.86c.21.77.52 1.5.9 2.19l2.183-.422a8.4 8.4 0 0 0 2.288 2.292L6.95 21.1q1.035.57 2.19.9l1.237-1.83a8.4 8.4 0 0 0 3.248.003L14.86 22c.77-.21 1.5-.52 2.19-.9l-.419-2.168a8.4 8.4 0 0 0 2.304-2.3l2.165.418q.57-1.035.9-2.19l-1.82-1.23a8.4 8.4 0 0 0 0-3.26L22 9.14c-.21-.77-.52-1.5-.9-2.19M15.34 12a3.33 3.33 0 1 1-6.66 0 3.33 3.33 0 0 1 6.66 0"
+        ></path>
+      </svg>
     ),
   },
   {
@@ -133,7 +133,7 @@ export const yourOrderSidebarData = [
   {
     id: 4,
     title: "Addresses",
-    route: "address",
+    route: "addresses",
     unselectedLogo: (
       <svg
         width="24"
@@ -196,22 +196,22 @@ export const yourOrderSidebarData = [
     ),
     selectedLogo: (
       <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="#ffffff"
-      xmlns="http://www.w3.org/2000/svg"
-      size="24"
-      class="e-6su6fj"
-      aria-hidden="true"
-    >
-      <path d="M2 6a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v2H2z"></path>
-      <path
-        fill-rule="evenodd"
-        clip-rule="evenodd"
-        d="M2 10h20v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zm9 4H5v2h6z"
-      ></path>
-    </svg>
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="#ffffff"
+        xmlns="http://www.w3.org/2000/svg"
+        size="24"
+        class="e-6su6fj"
+        aria-hidden="true"
+      >
+        <path d="M2 6a1 1 0 0 1 1-1h18a1 1 0 0 1 1 1v2H2z"></path>
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M2 10h20v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1zm9 4H5v2h6z"
+        ></path>
+      </svg>
     ),
   },
   {
@@ -234,17 +234,17 @@ export const yourOrderSidebarData = [
     ),
     selectedLogo: (
       <svg
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="#ffffff"
-      xmlns="http://www.w3.org/2000/svg"
-      size="24"
-      class="e-6su6fj"
-      aria-hidden="true"
-    >
-      <path d="M11 2h2v2.083c2.838.476 5 2.944 5 5.917v4c0 1 1 2 2 2v2H4v-2c1 0 2-1 2-2v-4a6 6 0 0 1 5-5.917zM12 22a3 3 0 0 1-2.83-2h5.66A3 3 0 0 1 12 22"></path>
-    </svg>
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="#ffffff"
+        xmlns="http://www.w3.org/2000/svg"
+        size="24"
+        class="e-6su6fj"
+        aria-hidden="true"
+      >
+        <path d="M11 2h2v2.083c2.838.476 5 2.944 5 5.917v4c0 1 1 2 2 2v2H4v-2c1 0 2-1 2-2v-4a6 6 0 0 1 5-5.917zM12 22a3 3 0 0 1-2.83-2h5.66A3 3 0 0 1 12 22"></path>
+      </svg>
     ),
   },
   {
