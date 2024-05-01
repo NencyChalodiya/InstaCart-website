@@ -5,7 +5,7 @@ import { Form } from "antd";
 import { Switch } from "antd";
 import { DeleteParticularItemFromCart } from "../../utils/Reducers/CartSlice";
 import { DeleteTotalItems } from "../../utils/Reducers/ItemSlice";
-
+import { Link } from "react-router-dom";
 const TotalCartItems = ({ totalCartItemsModal, onCancel }) => {
   const { cartItems } = useSelector((state) => state.cartItems);
   const dispatch = useDispatch();
@@ -104,6 +104,16 @@ const TotalCartItems = ({ totalCartItemsModal, onCancel }) => {
                 </div>
               </div>
             </button>
+          </div>
+          <div className="mt-2">
+            <div className="h-[54px] w-full rounded-[27px] relative text-black bg-[#F6F7F8]">
+              <span className="mx-2 pt-2 flex justify-between items-center">
+                <div className="pl-40">Go to checkout</div>
+                <div className=" bg-[#E8E9EB] rounded-[27px] w-16 h-10 flex items-center pl-2  ">
+                  $00.00
+                </div>
+              </span>
+            </div>
           </div>
         </div>
       ) : (
@@ -454,6 +464,23 @@ const TotalCartItems = ({ totalCartItemsModal, onCancel }) => {
               </div>
             </div>
           </div>
+
+          <footer className="p-2 w-full">
+            <div className="text-center mb-2">
+              <span>
+                {" "}
+                <span>Free Delivery</span> on this order
+              </span>
+            </div>
+            <Link to="/store/checkout">
+              <span className=" flex justify-between items-center bg-[#277D0F] rounded-[27px] h-[54px] w-full relative text-white">
+                <div className="pl-40">Go to checkout</div>
+                <div className=" bg-[#23720C] rounded-[27px] w-16 h-10 flex items-center pl-2 ">
+                  $24.99
+                </div>
+              </span>
+            </Link>
+          </footer>
         </div>
       )}
     </Drawer>

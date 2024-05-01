@@ -16,9 +16,9 @@ import HelpCenter from "./pages/StoreSidebarPages/HelpCenter";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import ForgotPassword from "./pages/ForgotPassword";
-
 import GetProductsBasedOnShops from "./components/HomePageComponents/ShopListing/GetProductsBasedOnShops";
 import Addresses from "./pages/StoreSidebarPages/Address/Addresses";
+import Checkout from "./pages/CheckoutPage/Checkout";
 
 function App() {
   const location = useLocation();
@@ -65,6 +65,7 @@ function App() {
               element={<GetProductsBasedOnShops />}
             />
             <Route path="/store/addresses" element={<Addresses />} />
+            <Route path="/store/checkout" element={<Checkout />} />
           </>
         ) : (
           <>
