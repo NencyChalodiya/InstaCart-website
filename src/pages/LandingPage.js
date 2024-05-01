@@ -10,12 +10,16 @@ import Footer from "../components/LandingPageComponents/Footer";
 import Login from "./Login";
 import ResetPassword from "./ResetPassword";
 import Signup from "./Signup";
+import CreatePassword from "./CreatePassword";
+import GetRegisterOtp from "./GetRegisterOtp";
 const LandingPage = () => {
   const [loginModal, setLoginModal] = useState(false);
   const [resetPasswordModal, setResetPasswordModal] = useState(false);
   const [signUpModal, setSignUpModal] = useState(false);
-
-  console.log("dsdsd");
+  const [createPasswordModal, setCreatePasswordModal] = useState(false);
+  const [getRegisterOtpModal, setRegisterOtpModal] = useState(false);
+  //console.log(createPasswordModal);
+  //console.log("dsdsd");
 
   return (
     <>
@@ -68,6 +72,34 @@ const LandingPage = () => {
           onClickLogin={() => {
             setSignUpModal(false);
             setLoginModal(true);
+          }}
+          onClickContinue={() => {
+            setSignUpModal(false);
+            setCreatePasswordModal(true);
+          }}
+        />
+      )}
+
+      {createPasswordModal && (
+        <CreatePassword
+          createPasswordModal={createPasswordModal}
+          onClickBack={() => {
+            setCreatePasswordModal(false);
+            setSignUpModal(true);
+          }}
+          onClickContinue={() => {
+            setCreatePasswordModal(false);
+            setRegisterOtpModal(true);
+          }}
+        />
+      )}
+
+      {getRegisterOtpModal && (
+        <GetRegisterOtp
+          getRegisterOtpModal={getRegisterOtpModal}
+          onClickBack={() => {
+            setRegisterOtpModal(false);
+            setCreatePasswordModal(true);
           }}
         />
       )}

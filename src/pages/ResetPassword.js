@@ -69,7 +69,7 @@ const ResetPassword = ({ resetPassword, onClickSignup, onClickBack }) => {
               <div className="mt-3 mb-3">
                 <button
                   type="submit"
-                  className="box-border relative flex items-center justify-center w-full bg-green-600 border cursor-pointer h-14 rounded-xl"
+                  className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-xl"
                   onClick={() => handleResetPassword()}
                 >
                   <span className="block text-xl font-semibold leading-5 text-white">

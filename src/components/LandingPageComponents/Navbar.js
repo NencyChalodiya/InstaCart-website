@@ -122,7 +122,7 @@ const Navbar = ({ onLoginButton, onSignupHandler }) => {
                 Log in
               </span>
             </button>
-            <button className="px-4 py-2 m-6 text-white bg-[#2C890F] border-none rounded-[20px] relative cursor-pointer font-semibold text-lg leading-5 max-md:mx-[5px] max-md:text-sm">
+            <button className="px-4 py-2 m-6 text-white bg-[#2C890F] border-none rounded-[20px] relative cursor-pointer font-semibold text-lg leading-5 max-md:mx-[12px] max-md:text-sm">
               <span
                 className="block overflow-hidden whitespace-nowrap overflow-ellipsis"
                 onClick={onSignupHandler}

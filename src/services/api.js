@@ -10,8 +10,12 @@ import Ajax from "./base";
 //   );
 // };
 
+// export const RegisterUser = (payload) => {
+//   return Ajax.Request(`/register/`, Ajax.POST, false, payload);
+// };
+
 export const RegisterUser = (payload) => {
-  return Ajax.Request(`/register/`, Ajax.POST, false, payload);
+  return Ajax.Request(`/register`, Ajax.POST, false, payload);
 };
 
 export const LoginUser = (payload) => {

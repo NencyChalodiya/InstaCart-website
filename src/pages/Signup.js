@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { BsTelephoneForwardFill } from "react-icons/bs";
 import API from "../services/api";
 
-const Signup = ({ signup, onCancel, onClickLogin }) => {
+const Signup = ({ signup, onCancel, onClickLogin, onClickContinue }) => {
   const [userDetails, setUserDetails] = useState({ email: "", password: "" });
 
   const validateEmail = (email) => {
@@ -74,7 +74,7 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
       footer={null}
       width={416}
     >
-      <div className="h-[555px]">
+      <div className="h-[525px]">
         <div className="min-h-[515px] static">
           <div className="w-full h-48 ">
             <div className="w-full h-52">
@@ -128,22 +128,6 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
                       />
                     </div>
                   </div>
-                  <div className="box-border flex flex-row items-center mt-4 border flex-nowrap h-14 rounded-xl">
-                    <div className="relative flex-grow h-full">
-                      <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        className="w-full h-full p-5 text-base leading-6 bg-transparent border-none rounded-lg"
-                        onChange={(e) =>
-                          setUserDetails({
-                            ...userDetails,
-                            password: e.target.value,
-                          })
-                        }
-                      />
-                    </div>
-                  </div>
                 </div>
 
                 <div className="mt-3 mb-3">
@@ -159,10 +143,10 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
                   <button
                     type="submit"
                     className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-xl"
-                    onClick={() => registerUser()}
+                    onClick={onClickContinue}
                   >
                     <span className="block text-xl font-semibold leading-5 text-white">
-                      Sign up
+                      Continue
                     </span>
                   </button>
                 </div>
