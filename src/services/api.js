@@ -14,13 +14,25 @@ import Ajax from "./base";
 //   return Ajax.Request(`/register/`, Ajax.POST, false, payload);
 // };
 
-export const RegisterUser = (payload) => {
+export const SendOtpToRegister = (payload) => {
   return Ajax.Request(`/register`, Ajax.POST, false, payload);
 };
 
-export const LoginUser = (payload) => {
-  return Ajax.Request(`/login/`, Ajax.POST, false, payload);
+export const VerifyOtpToRegister = (payload) => {
+  return Ajax.Request(`/register/verify`, Ajax.POST, false, payload);
 };
+
+export const LoginUser = (payload) => {
+  return Ajax.Request(`/login`, Ajax.POST, false, payload);
+};
+
+export const VerifyOtpToLogin = (payload) => {
+  return Ajax.Request(`/login/login/verify`, Ajax.POST, false, payload);
+};
+
+// export const LoginUser = (payload) => {
+//   return Ajax.Request(`/login/`, Ajax.POST, false, payload);
+// };
 
 export const refreshToken = (payload) => {
   return Ajax.Request("/refresh-token/", Ajax.POST, true, payload);
@@ -79,8 +91,10 @@ export const editUserAddress = (payload) => {
 };
 
 let API = {
-  RegisterUser,
+  SendOtpToRegister,
+  VerifyOtpToRegister,
   LoginUser,
+  VerifyOtpToLogin,
   refreshToken,
   ResetPasswordUser,
   ForgotPasswordUser,
