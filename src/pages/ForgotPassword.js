@@ -4,22 +4,25 @@ import API from "../services/api";
 import { useNavigate, useParams } from "react-router-dom";
 import { IoEye } from "react-icons/io5";
 import { IoMdEyeOff } from "react-icons/io";
+import Loader from "react-js-loader";
+import "./Loading.css";
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const params = useParams();
   console.log(params);
   const [newPassword, setNewPassword] = useState("");
   const [screen, setScreen] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const forgetPasswordUser = async () => {
     try {
+      setLoading(true);
       let payload = {
-        password: newPassword,
-        token: params.token,
+        newPassword: newPassword,
       };
-      const response = await API.ForgotPasswordUser(payload);
-      if (response.status) {
-        console.log("Password reset successfully");
+      const response = await API.changePasswordUser(params.resettoken, payload);
+      if (response.status === "success") {
+        //console.log("Password reset successfully");
         message.success("Password reset successfully");
         setScreen(true);
       } else {
@@ -27,6 +30,8 @@ const ForgotPassword = () => {
       }
     } catch (error) {
       message.error("Password reset failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -66,12 +71,22 @@ const ForgotPassword = () => {
               <div className="mt-3 mb-3">
                 <button
                   type="submit"
-                  className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-xl"
+                  className={`box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-xl ${
+                    isLoading ? "opacity-50" : ""
+                  }`}
                   onClick={() => forgetPasswordUser()}
+                  disabled={isLoading}
                 >
-                  <span className="block text-xl font-semibold leading-5 text-white">
-                    Reset & log in
-                  </span>
+                  <div className="flex items-center justify-center">
+                    <span className="block text-xl font-semibold leading-5 text-white">
+                      Reset & Log in
+                    </span>
+                    {isLoading && (
+                      <div className="ml-2 h-5 w-5 mt-[-20px]">
+                        <Loader size={20} />
+                      </div>
+                    )}
+                  </div>
                 </button>
               </div>
             </div>

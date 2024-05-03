@@ -19,28 +19,42 @@ import ForgotPassword from "./pages/ForgotPassword";
 import GetProductsBasedOnShops from "./components/HomePageComponents/ShopListing/GetProductsBasedOnShops";
 import Addresses from "./pages/StoreSidebarPages/Address/Addresses";
 import Checkout from "./pages/CheckoutPage/Checkout";
-
+import StoreSidebar from "./components/HomePageComponents/StoreSidebar.js/StoreSidebar";
 function App() {
   const location = useLocation();
-  //console.log(location);
-  const userData = JSON.parse(localStorage.getItem("userData"));
-  //console.log(userData);
   const navigate = useNavigate();
-
+  const accessToken = localStorage.getItem("accessToken") ?? null;
   useEffect(() => {
     if (!location.pathname.includes("/change-password")) {
-      if (!userData || !userData?.id) {
-        navigate("/"); // Redirect to login if userData is not present
-      } else {
-        navigate("/store");
+      if (!accessToken) {
+        navigate("/");
       }
+    } else {
+      navigate("/store");
     }
-  }, []);
+  }, [accessToken]);
+  console.log(accessToken);
+
+  // const location = useLocation();
+  // //console.log(location);
+  // const userData = JSON.parse(localStorage.getItem("userData"));
+  // //console.log(userData);
+  //const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   if (!location.pathname.includes("/change-password")) {
+  //     if (!userData || !userData?.id) {
+  //       navigate("/"); // Redirect to login if userData is not present
+  //     } else {
+  //       navigate("/store");
+  //     }
+  //   }
+  // }, []);
 
   return (
     <>
       <Routes>
-        {userData ? (
+        {accessToken ? (
           <>
             <Route path="/store" element={<Home />} />
             <Route
@@ -71,7 +85,7 @@ function App() {
           <>
             <Route path="/" element={<LandingPage />} />
             <Route
-              path="/change-password/:token"
+              path="/change-password/:resettoken"
               element={<ForgotPassword />}
             />
           </>

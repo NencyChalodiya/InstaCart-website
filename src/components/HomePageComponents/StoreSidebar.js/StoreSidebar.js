@@ -1,15 +1,18 @@
 import { Drawer } from "antd";
 import React, { useState } from "react";
 import { storeSidbarData } from "../../../data/StoreSidebardata";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { creditsAndPromos } from "../../../data/StoreSidebardata";
 import { support } from "../../../data/StoreSidebardata";
 import { ourApps } from "../../../data/StoreSidebardata";
+import { useNavigate } from "react-router-dom";
 const StoreSidebar = ({ open, onCancel }) => {
+  const navigate = useNavigate();
   const [hoveredFirstItem, setHoveredFirstItem] = useState(null);
   const [hoveredSecondItem, setHoveredSecondItem] = useState(null);
   const [hoveredThirdItem, setHoveredThirdItem] = useState(null);
   const [hoveredFourthItem, setHoveredFourthItem] = useState(null);
+  const [hoveredFifthItem, setHoveredFifthItem] = useState(null);
   const handleMouseFirstEnter = (index) => {
     setHoveredFirstItem(index);
   };
@@ -38,6 +41,11 @@ const StoreSidebar = ({ open, onCancel }) => {
 
   const handleMouseFourthLeave = () => {
     setHoveredFourthItem(null);
+  };
+
+  const onClickLogOut = () => {
+    localStorage.clear();
+    navigate("/");
   };
 
   return (
@@ -405,9 +413,9 @@ const StoreSidebar = ({ open, onCancel }) => {
 
               <ul className="flex flex-col list-none">
                 <li>
-                  <a
-                    href="/"
+                  <button
                     className="box-border flex items-center w-full pl-3 pr-3 rounded-lg cursor-pointer flex-nowrap"
+                    onClick={() => onClickLogOut()}
                   >
                     <span className="flex items-center h-10 ">
                       <svg
@@ -424,7 +432,7 @@ const StoreSidebar = ({ open, onCancel }) => {
                       </svg>
                     </span>
                     <span className="pt-2 pb-2 ml-8">Log out</span>
-                  </a>
+                  </button>
                 </li>
                 <div></div>
                 <hr />

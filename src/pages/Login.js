@@ -5,9 +5,15 @@ import API from "../services/api";
 import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
 import { IoArrowBackOutline } from "react-icons/io5";
+import Loader from "react-js-loader";
+import "./Loading.css";
+import { useNavigate } from "react-router-dom";
 
+import StoreSidebar from "../components/HomePageComponents/StoreSidebar.js/StoreSidebar";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
-  //const navigate = useNavigate();
+  const navigate = useNavigate();
   const [loginUserDetails, setLoginUserDetails] = useState({
     email: "",
     password: "",
@@ -21,6 +27,7 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
   const [timer, setTimer] = useState(600);
   const inputRefs = useRef([]);
   const [screen, setscreen] = useState(1);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     // Start the timer when the component mounts
@@ -55,18 +62,11 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
       enteredotp: enteredotp,
     });
     console.log(enteredotp);
-
-    // Construct the entered OTP from the newOTP array
-    // const enteredOtp = newOTP.join("");
-    // setUserDetails({
-    //   ...userDetails,
-    //   enterdotp: enteredOtp,
-    // });
-    // console.log(enteredOtp);
   };
 
   const loginUser = async () => {
     try {
+      setLoading(true);
       let payload = {};
       if (isEmailLogin) {
         payload = {
@@ -85,21 +85,25 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
         ...loginUserDetails,
         otpid: response.data.otpid,
       });
-      localStorage.setItem(
-        "LoginAccessToken",
-        response.data.JWTToken.accessToken
-      );
-      localStorage.setItem(
-        "LoginRefreshToken",
-        response.data.JWTToken.refreshToken
-      );
+      if (response.status === "success") {
+        localStorage.setItem("accessToken", response.data.JWTToken.accessToken);
+        localStorage.setItem(
+          "refreshToken",
+          response.data.JWTToken.refreshToken
+        );
+        message.success("Logged in Successfully");
+        navigate("/store");
+      }
     } catch (error) {
-      console.log(error);
+      message.error("Unable to Log in.Email not found");
+    } finally {
+      setLoading(false);
     }
   };
 
   const VerifyUserOnLogin = async () => {
     try {
+      setLoading(true);
       let payload = {
         phoneno: loginUserDetails.phoneno,
         country_code: loginUserDetails.countryCode,
@@ -111,6 +115,8 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
       console.log(response);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -123,6 +129,23 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
   const handleBack = () => {
     // Decrement screen state on "Back" click
     setscreen(screen - 1);
+  };
+
+  const ResendOtp = async () => {
+    try {
+      let payload = {
+        otpid: loginUserDetails.otpid,
+      };
+      const response = await API.resendOtp(payload);
+      console.log(response);
+      if (response.status === "success") {
+        message.success("Resend Otp send successfully");
+      } else {
+        message.error("Unable to Sent OTP");
+      }
+    } catch (error) {
+      message.error("Unable to Sent OTP");
+    }
   };
 
   // const loginUser = async () => {
@@ -364,6 +387,7 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                                   <div className="relative flex-grow w-full h-full">
                                     <input
                                       className="pt-[5px] px-3 pb-2 w-full h-full  rounded-xl bg-transparent outline-none"
+                                      name="phonenumber"
                                       placeholder="Phone number"
                                       value={loginUserDetails.phoneno}
                                       onChange={(e) =>
@@ -390,12 +414,22 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                       <div className="mb-3">
                         <button
                           type="submit"
-                          className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-xl"
+                          className={`box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-xl ${
+                            isLoading ? "opacity-50" : ""
+                          }`}
                           onClick={() => loginUser()}
+                          disabled={isLoading}
                         >
-                          <span className="block text-xl font-semibold leading-5 text-white">
-                            Log in
-                          </span>
+                          <div className="flex items-center justify-center">
+                            <span className="block text-xl font-semibold leading-5 text-white">
+                              Log in
+                            </span>
+                            {isLoading && (
+                              <div className="ml-2 h-5 w-5 mt-[-20px]">
+                                <Loader size={20} />
+                              </div>
+                            )}
+                          </div>
                         </button>
                       </div>
                     ) : (
@@ -464,12 +498,22 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                   <div className="mt-3 mb-3">
                     <button
                       type="submit"
-                      className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-xl"
+                      className={`box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-xl ${
+                        isLoading ? "opacity-50" : ""
+                      }`}
                       onClick={handleContinue}
+                      disabled={isLoading}
                     >
-                      <span className="block text-xl font-semibold leading-5 text-white">
-                        Continue
-                      </span>
+                      <div className="flex items-center justify-center">
+                        <span className="block text-xl font-semibold leading-5 text-white">
+                          Continue
+                        </span>
+                        {isLoading && (
+                          <div className="ml-2 h-5 w-5 mt-[-20px]">
+                            <Loader size={20} />
+                          </div>
+                        )}
+                      </div>
                     </button>
                   </div>
                 </div>
@@ -492,6 +536,7 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                       {otp.map((digit, index) => (
                         <input
                           key={index}
+                          name="otp"
                           ref={(el) => (inputRefs.current[index] = el)}
                           type="text"
                           maxLength="1"
@@ -514,7 +559,10 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                       {timer > 0 ? (
                         `Resend code in ${Math.floor(timer / 60)}:${timer % 60}`
                       ) : (
-                        <div className="mt-2  font-bold py-2 px-2 text-[#2C890F] text-lg ">
+                        <div
+                          className="mt-2  font-bold py-2 px-2 text-[#2C890F] text-lg cursor-pointer "
+                          onClick={() => ResendOtp()}
+                        >
                           Resend code
                         </div>
                       )}
@@ -526,9 +574,16 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                       className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-xl"
                       onClick={() => VerifyUserOnLogin()}
                     >
-                      <span className="block text-xl font-semibold leading-5 text-white">
-                        Log In
-                      </span>
+                      <div className="flex items-center justify-center">
+                        <span className="block text-xl font-semibold leading-5 text-white">
+                          Log in
+                        </span>
+                        {isLoading && (
+                          <div className="ml-2 h-5 w-5 mt-[-20px]">
+                            <Loader size={20} />
+                          </div>
+                        )}
+                      </div>
                     </button>
                   </div>
                 </div>

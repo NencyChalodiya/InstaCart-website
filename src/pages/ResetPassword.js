@@ -2,26 +2,34 @@ import React, { useState } from "react";
 import { Modal, message } from "antd";
 import { IoArrowBackOutline } from "react-icons/io5";
 import API from "../services/api";
+import Loader from "react-js-loader";
+import "./Loading.css";
 
 const ResetPassword = ({ resetPassword, onClickSignup, onClickBack }) => {
   const [resetPasswordDetails, setResetPasswordDetals] = useState({
     email: "",
   });
+  const [isLoading, setLoading] = useState(false);
 
   const handleResetPassword = async () => {
     try {
+      setLoading(true);
       let payload = {
         email: resetPasswordDetails.email,
       };
-      const response = await API.ResetPasswordUser(payload);
+      const response = await API.resetPasswordUser(payload);
       console.log(response);
-      if (response.status) {
+      if (response.status === "success") {
         //console.log("mail sent successfully");
         message.success("Mail sent Successfully");
       }
+      setLoading(false);
+      onClickBack();
     } catch (error) {
       //console.log("login failed", error);
       message.error("Failed to sent mail");
+    } finally {
+      setLoading(false);
     }
   };
   return (
@@ -69,12 +77,22 @@ const ResetPassword = ({ resetPassword, onClickSignup, onClickBack }) => {
               <div className="mt-3 mb-3">
                 <button
                   type="submit"
-                  className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-xl"
+                  className={`box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-xl ${
+                    isLoading ? "opacity-50" : ""
+                  }`}
                   onClick={() => handleResetPassword()}
+                  disabled={isLoading}
                 >
-                  <span className="block text-xl font-semibold leading-5 text-white">
-                    Reset Password
-                  </span>
+                  <div className="flex items-center justify-center">
+                    <span className="block text-xl font-semibold leading-5 text-white">
+                      Reset Password
+                    </span>
+                    {isLoading && (
+                      <div className="ml-2 h-5 w-5 mt-[-20px]">
+                        <Loader size={20} />
+                      </div>
+                    )}
+                  </div>
                 </button>
               </div>
               <div className="mt-12">

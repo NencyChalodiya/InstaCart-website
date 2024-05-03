@@ -6,7 +6,10 @@ import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
 import { IoArrowBackOutline } from "react-icons/io5";
 import Loader from "react-js-loader";
+import "./Loading.css";
+import { useNavigate } from "react-router-dom";
 const Signup = ({ signup, onCancel, onClickLogin }) => {
+  const navigate = useNavigate();
   const [userDetails, setUserDetails] = useState({
     email: "",
     password: "",
@@ -76,12 +79,20 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
       }
       const response = await API.SendOtpToRegister(payload);
       console.log(response);
+
       setUserDetails({
         ...userDetails,
         otpid: response.data.otpid,
       });
+      if (response.status === "success") {
+        message.success("Otp sent Successfully");
+      } else {
+        message.error(
+          "Unable to sent OTP. Check the your credentials correctly"
+        );
+      }
     } catch (error) {
-      console.log(error);
+      message.error("Unable to sent OTP. Check your credentials correctly");
     } finally {
       setLoading(false);
     }
@@ -90,6 +101,7 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
 
   const verifyOtpOfUser = async () => {
     try {
+      setLoading(true);
       let payload = {};
       if (isEmailSignup) {
         payload = {
@@ -109,17 +121,23 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
       }
       const response = await API.VerifyOtpToRegister(payload);
       console.log(response);
-      localStorage.setItem(
-        "RegisterAccessToken",
-        response.data.JWTToken.accessToken
-      );
-      localStorage.setItem(
-        "RegisterRefreshToken",
-        response.data.JWTToken.refreshToken
-      );
+      if (response.status === "success") {
+        localStorage.setItem("accessToken", response.data.JWTToken.accessToken);
+        localStorage.setItem(
+          "refreshToken",
+          response.data.JWTToken.refreshToken
+        );
+        message.success("Registered Successfully");
+        navigate("/store");
+      } else {
+        message.error("This account already Exist!");
+      }
+
       onCancel();
     } catch (error) {
-      console.log(error);
+      message.error("This account already Exist!");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -134,6 +152,23 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
   const handleBack = () => {
     // Decrement screen state on "Back" click
     setscreen(screen - 1);
+  };
+
+  const ResendOtp = async () => {
+    try {
+      let payload = {
+        otpid: userDetails.otpid,
+      };
+      const response = await API.resendOtp(payload);
+      console.log(response);
+      if (response.status === "success") {
+        message.success("Resend Otp send successfully");
+      } else {
+        message.error("Unable to Sent OTP");
+      }
+    } catch (error) {
+      message.error("Unable to Sent OTP");
+    }
   };
 
   // const validateEmail = (email) => {
@@ -460,8 +495,11 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
                 <div className="mt-3 mb-3">
                   <button
                     type="submit"
-                    className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-xl"
+                    className={`box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-xl ${
+                      isLoading ? "opacity-50" : ""
+                    }`}
                     onClick={handleContinue}
+                    disabled={isLoading}
                   >
                     <div className="flex items-center justify-center">
                       <span className="block text-xl font-semibold leading-5 text-white">
@@ -522,7 +560,10 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
                     {timer > 0 ? (
                       `Resend code in ${Math.floor(timer / 60)}:${timer % 60}`
                     ) : (
-                      <div className="mt-2  font-bold py-2 px-2 text-[#2C890F] text-lg ">
+                      <div
+                        className="mt-2  font-bold py-2 px-2 text-[#2C890F] text-lg cursor-pointer "
+                        onClick={() => ResendOtp()}
+                      >
                         Resend code
                       </div>
                     )}
@@ -531,12 +572,22 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
                 <div className="mt-3 mb-3">
                   <button
                     type="submit"
-                    className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-xl"
+                    className={`box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-xl ${
+                      isLoading ? "opacity-50" : ""
+                    }`}
                     onClick={() => verifyOtpOfUser()}
+                    disabled={isLoading}
                   >
-                    <span className="block text-xl font-semibold leading-5 text-white">
-                      Sign Up
-                    </span>
+                    <div className="flex items-center justify-center">
+                      <span className="block text-xl font-semibold leading-5 text-white">
+                        Sign up
+                      </span>
+                      {isLoading && (
+                        <div className="ml-2 h-5 w-5 mt-[-20px]">
+                          <Loader size={20} />
+                        </div>
+                      )}
+                    </div>
                   </button>
                 </div>
               </div>

@@ -35,15 +35,24 @@ export const VerifyOtpToLogin = (payload) => {
 // };
 
 export const refreshToken = (payload) => {
-  return Ajax.Request("/refresh-token/", Ajax.POST, true, payload);
+  return Ajax.Request("/refreshAccessToken", Ajax.POST, true, payload);
 };
 
-export const ResetPasswordUser = (payload) => {
-  return Ajax.Request("/forgot_password/", Ajax.POST, false, payload);
+export const resendOtp = (payload) => {
+  return Ajax.Request(`/resendOtp`, Ajax.POST, false, payload);
 };
 
-export const ForgotPasswordUser = (payload) => {
-  return Ajax.Request("/change-password/", Ajax.POST, false, payload);
+export const resetPasswordUser = (payload) => {
+  return Ajax.Request(`/resetpassword`, Ajax.POST, false, payload);
+};
+
+export const changePasswordUser = (resetToken, payload) => {
+  return Ajax.Request(
+    `/change-password/${resetToken}`,
+    Ajax.POST,
+    false,
+    payload
+  );
 };
 
 export const GetUserDetails = () => {
@@ -96,8 +105,9 @@ let API = {
   LoginUser,
   VerifyOtpToLogin,
   refreshToken,
-  ResetPasswordUser,
-  ForgotPasswordUser,
+  resendOtp,
+  resetPasswordUser,
+  changePasswordUser,
   GetUserDetails,
   UpdateUserDetails,
   CreateNewPassword,

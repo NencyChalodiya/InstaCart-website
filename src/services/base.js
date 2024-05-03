@@ -27,18 +27,23 @@ const refreshToken = async () => {
     throw new Error("No refresh token available.");
   }
   const payload = {
-    refresh_token: localStorage.getItem("refreshToken"),
+    refreshToken: refreshToken,
   };
 
-  const response = API.refreshToken(payload);
-  console.log(response);
+  try {
+    const response = API.refreshToken(payload);
+    console.log(response);
 
-  if (!response.ok) {
-    throw new Error("Failed to refresh token.");
+    if (!response.ok) {
+      throw new Error("Failed to refresh token.");
+    }
+
+    const data = await response.json();
+    localStorage.setItem("accessToken", data.accessToken);
+  } catch (error) {
+    console.error("Error refreshing token:", error.message);
+    // Handle error as needed
   }
-
-  const data = await response.json();
-  localStorage.setItem("token", data.accessToken);
 };
 
 const handleResponse = async (response) => {
