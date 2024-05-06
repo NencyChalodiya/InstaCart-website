@@ -28,6 +28,9 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
   const inputRefs = useRef([]);
   const [screen, setscreen] = useState(1);
   const [isLoading, setLoading] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   useEffect(() => {
     // Start the timer when the component mounts
@@ -64,20 +67,60 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
     console.log(enteredotp);
   };
 
+  const validateEmail = (email) => {
+    if (!email) {
+      setEmailError("Email required");
+      return false;
+    } else {
+      setEmailError("");
+      return true;
+    }
+  };
+
+  // Function to validate password
+  const validatePassword = (password) => {
+    if (!password) {
+      setPasswordError("Password required");
+      return false;
+    } else {
+      setPasswordError("");
+      return true;
+    }
+  };
+
+  // Function to validate phone number
+  const validatePhoneNumber = (phone) => {
+    if (!phone) {
+      setPhoneError("Phone number required");
+      return false;
+    } else {
+      setPhoneError("");
+      return true;
+    }
+  };
+
   const loginUser = async () => {
     try {
       setLoading(true);
+      const emailValid = validateEmail(loginUserDetails.email);
+      const passwordValid = validatePassword(loginUserDetails.password);
       let payload = {};
-      if (isEmailLogin) {
+      if (isEmailLogin && emailValid && passwordValid) {
         payload = {
           email: loginUserDetails.email,
           password: loginUserDetails.password,
         };
       } else {
-        payload = {
-          phoneno: loginUserDetails.phoneno,
-          country_code: loginUserDetails.countryCode,
-        };
+        //const phoneValid = validatePhoneNumber(loginUserDetails.phoneno);
+        if (!isEmailLogin) {
+          payload = {
+            phoneno: loginUserDetails.phoneno,
+            country_code: loginUserDetails.countryCode,
+          };
+        } else {
+          setLoading(false);
+          return;
+        }
       }
       const response = await API.LoginUser(payload);
       console.log(response);
@@ -113,6 +156,15 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
       };
       const response = await API.VerifyOtpToRegister(payload);
       console.log(response);
+      if (response.status === "success") {
+        localStorage.setItem("accessToken", response.data.JWTToken.accessToken);
+        localStorage.setItem(
+          "refreshToken",
+          response.data.JWTToken.refreshToken
+        );
+        message.success("Logged in Successfully");
+        navigate("/store");
+      }
     } catch (error) {
       console.log(error);
     } finally {
@@ -121,10 +173,15 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
   };
 
   const handleContinue = async () => {
+    const phoneValid = validatePhoneNumber(loginUserDetails.phoneno);
+    const passwordValid = validatePassword(loginUserDetails.password);
+    if (screen === 1 && !isEmailLogin && phoneValid) {
+      setscreen(screen + 1);
+    }
     if (!isEmailLogin && screen === 2) {
       await loginUser();
+      setscreen(screen + 1);
     }
-    setscreen(screen + 1);
   };
   const handleBack = () => {
     // Decrement screen state on "Back" click
@@ -256,7 +313,12 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                   <div>
                     <button
                       className="flex items-center w-full mt-3 mb-4 border rounded-full cursor-pointer h-11 gap-11"
-                      onClick={() => setIsEmailLogin(!isEmailLogin)}
+                      onClick={() => {
+                        setIsEmailLogin(!isEmailLogin);
+                        setEmailError("");
+                        setPasswordError("");
+                        setPhoneError("");
+                      }}
                     >
                       {!isEmailLogin ? (
                         <span className="ml-2 rounded-full">
@@ -315,7 +377,11 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                                 type="email"
                                 name="email"
                                 placeholder="Email"
-                                className="w-full h-full p-5 text-base leading-6 bg-transparent border-none rounded-lg outline-none focus:outline-black"
+                                className={`w-full h-full p-5 text-base leading-6 bg-transparent  rounded-lg outline-none   ${
+                                  emailError
+                                    ? "border-2 border-rose-600 focus:outline-none"
+                                    : "border-none focus:outline-black"
+                                }`}
                                 onChange={(e) =>
                                   setLoginUserDetails({
                                     ...loginUserDetails,
@@ -325,6 +391,11 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                               />
                             </div>
                           </div>
+                          {emailError && (
+                            <span className="text-red-500 text-sm">
+                              {emailError}
+                            </span>
+                          )}
                         </div>
                         <div className="relative mt-3 mb-3">
                           <div className="box-border flex flex-row items-center border flex-nowrap h-14 rounded-xl">
@@ -333,7 +404,11 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                                 type="password"
                                 name="password"
                                 placeholder="Password"
-                                className="w-full h-full p-5 text-base leading-6 bg-transparent border-none rounded-lg outline-none focus:outline-black"
+                                className={`w-full h-full p-5 text-base leading-6 bg-transparent  rounded-lg outline-none   ${
+                                  passwordError
+                                    ? "border-2 border-rose-600 focus:outline-none"
+                                    : "border-none focus:outline-black"
+                                }`}
                                 onChange={(e) =>
                                   setLoginUserDetails({
                                     ...loginUserDetails,
@@ -343,6 +418,11 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                               />
                             </div>
                           </div>
+                          {passwordError && (
+                            <span className="text-red-500 text-sm">
+                              {passwordError}
+                            </span>
+                          )}
                         </div>
                         <div>
                           <p className="">
@@ -401,6 +481,11 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                                 </div>
                               </div>
                             </div>
+                            {phoneError && (
+                              <span className="text-red-500 text-sm">
+                                {phoneError}
+                              </span>
+                            )}
                           </form>
                           <span className="text-xs font-medium ">
                             We will send a text with a verification code.
@@ -482,7 +567,11 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                           type="password"
                           name="password"
                           placeholder="Enter a password"
-                          className="w-full h-full p-5 text-base leading-6 bg-transparent border-none rounded-lg outline-none focus:outline-black"
+                          className={`w-full h-full p-5 text-base leading-6 bg-transparent  rounded-lg outline-none   ${
+                            passwordError
+                              ? "border-2 border-rose-600 focus:outline-none"
+                              : "border-none focus:outline-black"
+                          }`}
                           value={setLoginUserDetails.password}
                           onChange={(e) =>
                             setLoginUserDetails({
@@ -493,6 +582,11 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                         />
                       </div>
                     </div>
+                    {passwordError && (
+                      <span className="text-red-500 text-sm">
+                        {passwordError}
+                      </span>
+                    )}
                   </div>
 
                   <div className="mt-3 mb-3">

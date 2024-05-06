@@ -24,6 +24,9 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
   const [timer, setTimer] = useState(600);
   const [isLoading, setLoading] = useState(false);
   const inputRefs = useRef([]);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   useEffect(() => {
     // Start the timer when the component mounts
@@ -58,7 +61,7 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
       ...userDetails,
       enterdotp: enteredOtp,
     });
-    console.log(enteredOtp);
+    //console.log(enteredOtp);
   };
 
   const sendOtpToUser = async () => {
@@ -86,13 +89,13 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
       });
       if (response.status === "success") {
         message.success("Otp sent Successfully");
+        setscreen(screen + 1);
       } else {
-        message.error(
-          "Unable to sent OTP. Check the your credentials correctly"
-        );
+        message.error("Unable to sent OTP. User already registered");
+        onCancel();
       }
     } catch (error) {
-      message.error("Unable to sent OTP. Check your credentials correctly");
+      message.error("Unable to sent OTP. User already registered", error);
     } finally {
       setLoading(false);
     }
@@ -141,14 +144,66 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
     }
   };
 
-  const handleContinue = async () => {
-    if (screen === 2) {
-      // Send OTP when transitioning from phone number input screen (screen 2)
-      await sendOtpToUser();
-    } // Exit early to prevent further execution of the function
-
-    setscreen(screen + 1);
+  const validateEmail = (email) => {
+    // Regular expression for email validation
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
   };
+
+  const handleContinue = async () => {
+    if (screen === 1) {
+      // Validation for email signup
+      if (isEmailSignup) {
+        if (!userDetails.email) {
+          setEmailError("Email is required");
+          return;
+        } else if (!validateEmail(userDetails.email)) {
+          setEmailError("Invalid email format");
+          return;
+        }
+        setscreen(screen + 1);
+        //setEmailError('')
+        // You can add more complex email validation if needed
+      } else {
+        // Validation for phone signup
+        if (!userDetails.phoneno) {
+          setPhoneError("Phone number is required");
+          return;
+        } else if (userDetails.phoneno.length !== 10) {
+          setPhoneError("Phone number must be 10 characters long");
+          return;
+        }
+        setscreen(screen + 1);
+        //setPhoneError('')
+        // You can add more complex phone number validation if needed
+      }
+    } else if (screen === 2) {
+      // Validation for password
+      if (!userDetails.password) {
+        setPasswordError("Password is required");
+        return;
+      } else if (userDetails.password.length <= 8) {
+        setPasswordError("Password must be at least 8 characters long");
+        return;
+      }
+
+      // You can add more complex password validation if needed
+
+      await sendOtpToUser();
+      //setPasswordError('')
+    } else if (screen === 3) {
+      // Validation for OTP
+      const enteredOtp = userDetails.enterdotp;
+      if (!enteredOtp || enteredOtp.length !== 6 || !/^\d+$/.test(enteredOtp)) {
+        // Basic validation for OTP length and format
+        message.error("Please enter a valid OTP");
+        return;
+      }
+    }
+
+    // If all validations pass, proceed to the next screen
+  };
+
   const handleBack = () => {
     // Decrement screen state on "Back" click
     setscreen(screen - 1);
@@ -269,7 +324,7 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
       {/* Sign up */}
 
       {screen === 1 && (
-        <div className="h-[525px]">
+        <div className="h-[535px]">
           <div className="min-h-[515px] static">
             <div className="w-full h-48 ">
               <div className="w-full h-52">
@@ -356,17 +411,27 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
                             type="email"
                             name="email"
                             placeholder="Email"
-                            className="w-full h-full p-5 text-base leading-6 bg-transparent border-none rounded-lg outline-none focus:outline-black"
+                            className={`w-full h-full p-5 text-base leading-6 bg-transparent  rounded-lg outline-none   ${
+                              emailError
+                                ? "border-2 border-rose-600 focus:outline-none"
+                                : "border-none focus:outline-black"
+                            }`}
                             value={userDetails.email}
-                            onChange={(e) =>
+                            onChange={(e) => {
                               setUserDetails({
                                 ...userDetails,
                                 email: e.target.value,
-                              })
-                            }
+                              });
+                              setEmailError(""); // Clear email error message
+                            }}
                           />
                         </div>
                       </div>
+                      {emailError && (
+                        <span className="text-red-500 text-sm">
+                          {emailError}
+                        </span>
+                      )}
 
                       <p className=" mt-1 text-xs font-medium ">
                         By continuing,you agree to our
@@ -403,20 +468,26 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
                               <div className="flex flex-row flex-nowrap items-center h-14 box-border max-w-[600px] rounded-r-lg border w-full  outline-black">
                                 <div className="relative flex-grow w-full h-full">
                                   <input
-                                    className="pt-[5px] px-3 pb-2 w-full h-full  rounded-xl bg-transparent outline-none"
+                                    className={`w-full h-full p-5 text-base leading-6 bg-transparent  rounded-lg outline-none  `}
                                     placeholder="Phone number"
                                     value={userDetails.phoneno}
-                                    onChange={(e) =>
+                                    onChange={(e) => {
                                       setUserDetails({
                                         ...userDetails,
                                         phoneno: e.target.value,
-                                      })
-                                    }
+                                      });
+                                      setPhoneError(""); // Clear phone number error message
+                                    }}
                                   />
                                 </div>
                               </div>
                             </div>
                           </div>
+                          {phoneError && (
+                            <span className="text-red-500 text-sm">
+                              {phoneError}
+                            </span>
+                          )}
                         </form>
                         <span className="text-xs font-medium ">
                           We will send a text with a verification code.Message
@@ -479,17 +550,27 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
                         type="password"
                         name="password"
                         placeholder="Enter a password"
-                        className="w-full h-full p-5 text-base leading-6 bg-transparent border-none rounded-lg outline-none focus:outline-black"
+                        className={`w-full h-full p-5 text-base leading-6 bg-transparent  rounded-lg outline-none   ${
+                          passwordError
+                            ? "border-2 border-rose-600 focus:outline-none"
+                            : "border-none focus:outline-black"
+                        }`}
                         value={userDetails.password}
-                        onChange={(e) =>
+                        onChange={(e) => {
                           setUserDetails({
                             ...userDetails,
                             password: e.target.value,
-                          })
-                        }
+                          });
+                          setPasswordError(""); // Clear password error message
+                        }}
                       />
                     </div>
                   </div>
+                  {passwordError && (
+                    <span className="text-red-500 text-sm">
+                      {passwordError}
+                    </span>
+                  )}
                 </div>
 
                 <div className="mt-3 mb-3">

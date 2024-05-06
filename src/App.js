@@ -33,7 +33,7 @@ function App() {
       navigate("/store");
     }
   }, [accessToken]);
-  console.log(accessToken);
+  //console.log(accessToken);
 
   // const location = useLocation();
   // //console.log(location);

@@ -13,7 +13,7 @@ const INVALID_TOKEN = "invalid or expired jwt";
 // const HEALTH_SECRET = "SfUyfAztruqg92sbm30rEIyHLNV7f5";
 
 const getToken = () => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem("accessToken");
   if (token !== null) {
     // token previously stored
     return token;
@@ -21,28 +21,48 @@ const getToken = () => {
   return "";
 };
 
+let isRefreshing = false;
+let refreshQueue = [];
+
 const refreshToken = async () => {
-  const refreshToken = localStorage.getItem("refreshToken");
-  if (!refreshToken) {
-    throw new Error("No refresh token available.");
+  // Check if already refreshing
+  if (isRefreshing) {
+    // Queue the request
+    return new Promise((resolve, reject) => {
+      refreshQueue.push({ resolve, reject });
+    });
   }
-  const payload = {
-    refreshToken: refreshToken,
-  };
+
+  isRefreshing = true;
 
   try {
-    const response = API.refreshToken(payload);
-    console.log(response);
-
-    if (!response.ok) {
-      throw new Error("Failed to refresh token.");
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (!refreshToken) {
+      throw new Error("No refresh token available.");
     }
+    const payload = {
+      refreshToken: refreshToken,
+    };
 
-    const data = await response.json();
-    localStorage.setItem("accessToken", data.accessToken);
+    const response = await API.refreshToken(payload);
+    localStorage.setItem("accessToken", response?.data?.accessToken);
+
+    // Process queued requests
+    refreshQueue.forEach((req) => req.resolve(response));
+
+    refreshQueue = [];
+    isRefreshing = false;
+
+    return response;
   } catch (error) {
-    console.error("Error refreshing token:", error.message);
-    // Handle error as needed
+    console.error("Error refreshing token:", error);
+    isRefreshing = false;
+
+    // Reject queued requests
+    refreshQueue.forEach((req) => req.reject(error));
+
+    refreshQueue = [];
+    throw error;
   }
 };
 
@@ -94,7 +114,7 @@ const Request = async (
     let token = getToken();
     config.headers = {
       ...config.headers,
-      Authorization: `${token}`,
+      Authorization: `Bearer ${token}`,
     };
   }
   let api_temp = BASE_API;
@@ -111,14 +131,14 @@ const Request = async (
     });
 };
 
-const handleTokenError = (err) => {
+const handleTokenError = async (err) => {
   if (
     err?.status == 401 ||
     err?.message == INVALID_TOKEN ||
     err?.statusText == INVALID_TOKEN
   ) {
     console.log(err);
-    refreshToken();
+    await refreshToken();
   }
   return err;
 };

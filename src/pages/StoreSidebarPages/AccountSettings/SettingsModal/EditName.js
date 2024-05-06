@@ -2,29 +2,29 @@ import React, { useState, useEffect } from "react";
 import { Modal, message } from "antd";
 import API from "../../../../services/api";
 const EditName = ({ editName, onCancel, userName }) => {
-  const [newName, setNewName] = useState(userName);
+  // const [newName, setNewName] = useState(userName);
 
-  useEffect(() => {
-    setNewName(userName);
-  }, [userName]);
+  // useEffect(() => {
+  //   setNewName(userName);
+  // }, [userName]);
 
-  const updateAccountSettingsName = async () => {
-    const token = localStorage.getItem("token");
-    try {
-      let payload = {
-        name: newName,
-        access_token: token,
-      };
-      const response = await API.UpdateUserDetails(payload);
-      console.log(response);
-      message.success("Name is successfully updated");
+  // const updateAccountSettingsName = async () => {
+  //   const token = localStorage.getItem("token");
+  //   try {
+  //     let payload = {
+  //       name: newName,
+  //       access_token: token,
+  //     };
+  //     const response = await API.UpdateUserDetails(payload);
+  //     console.log(response);
+  //     message.success("Name is successfully updated");
 
-      onCancel();
-    } catch (error) {
-      console.log(error);
-      message.error("Could not able to update name");
-    }
-  };
+  //     onCancel();
+  //   } catch (error) {
+  //     console.log(error);
+  //     message.error("Could not able to update name");
+  //   }
+  // };
   return (
     <Modal centered open={editName} footer={false} width={540} closable={false}>
       <div>
@@ -62,8 +62,9 @@ const EditName = ({ editName, onCancel, userName }) => {
                   type="text"
                   className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
                   placeholder="Name"
-                  value={newName}
-                  onChange={(e) => setNewName(e.target.value)}
+                  // value={newName}
+                  value={userName}
+                  //onChange={(e) => setNewName(e.target.value)}
                 />
               </div>
             </div>
@@ -82,7 +83,7 @@ const EditName = ({ editName, onCancel, userName }) => {
             </button>
             <button
               className="cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 "
-              onClick={() => updateAccountSettingsName()}
+              //onClick={() => updateAccountSettingsName()}
             >
               <span className="block px-4 ml-5 text-xl text-ellipsis">
                 Save

@@ -56,7 +56,7 @@ export const changePasswordUser = (resetToken, payload) => {
 };
 
 export const GetUserDetails = () => {
-  return Ajax.Request("/user-detail/", Ajax.GET, true);
+  return Ajax.Request("/userprofile/information", Ajax.GET, true);
 };
 
 export const UpdateUserDetails = (payload) => {

@@ -8,7 +8,7 @@ const Change_Verify_PhoneNum = ({
   onCancel,
   userPhoneNumber,
 }) => {
-  const [newPhoneNumber, setNewPhoneNumber] = useState(userPhoneNumber);
+  // const [newPhoneNumber, setNewPhoneNumber] = useState(userPhoneNumber);
   const items = [
     {
       label: (
@@ -80,24 +80,24 @@ const Change_Verify_PhoneNum = ({
       key: "1",
     },
   ];
-  const updateAccountSettingsPhoneNumber = async () => {
-    const token = localStorage.getItem("token");
-    try {
-      let payload = {
-        phone: newPhoneNumber,
-        access_token: token,
-      };
+  // const updateAccountSettingsPhoneNumber = async () => {
+  //   const token = localStorage.getItem("token");
+  //   try {
+  //     let payload = {
+  //       phone: newPhoneNumber,
+  //       access_token: token,
+  //     };
 
-      const response = await API.UpdateUserDetails(payload);
+  //     const response = await API.UpdateUserDetails(payload);
 
-      console.log(response);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    setNewPhoneNumber(userPhoneNumber);
-  }, [userPhoneNumber]);
+  //     console.log(response);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // useEffect(() => {
+  //   setNewPhoneNumber(userPhoneNumber);
+  // }, [userPhoneNumber]);
   return (
     <Modal
       centered
@@ -161,8 +161,9 @@ const Change_Verify_PhoneNum = ({
                       <input
                         className="pt-[5px] px-3 pb-2 w-full h-full  rounded-xl bg-transparent outline-none"
                         placeholder="Phone number"
-                        value={newPhoneNumber}
-                        onChange={(e) => setNewPhoneNumber(e.target.value)}
+                        // value={newPhoneNumber}
+                        value={userPhoneNumber}
+                        // onChange={(e) => setNewPhoneNumber(e.target.value)}
                       />
                     </div>
                   </div>
@@ -180,7 +181,7 @@ const Change_Verify_PhoneNum = ({
           <div className="flex gap-3">
             <button
               className="cursor-pointer relative h-[54px] pr-6 bg-[#F6F7F8] rounded-[27px]"
-              onClick={() => updateAccountSettingsPhoneNumber()}
+              //onClick={() => updateAccountSettingsPhoneNumber()}
             >
               <span className="block px-4 ml-5 text-xl text-ellipsis">
                 Change number

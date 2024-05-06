@@ -15,14 +15,15 @@ const AccountSettings = () => {
   const [editName, openEditName] = useState(false);
   const [verifyPhoneNumber, opneVerifyPhoneNumber] = useState(false);
   const [userSettingsDetail, setUserSettingsDetail] = useState(null);
+
   const getAccountSettingsDetails = async () => {
     try {
       //console.log("dkjasnd");
       const response = await API.GetUserDetails();
-      //console.log(response);
-      if (response.status) {
+      console.log(response);
+      if (response.status === "success") {
         //console.log(response.user);
-        setUserSettingsDetail(response.user);
+        setUserSettingsDetail(response.data.userData);
       }
     } catch (error) {
       console.log(error);
@@ -32,7 +33,7 @@ const AccountSettings = () => {
     getAccountSettingsDetails();
   }, []);
 
-  console.log(userSettingsDetail);
+  //console.log(userSettingsDetail);
 
   // const updateName = (newName) => {
   //   setUserSettingsDetail({ ...userSettingsDetail, name: newName });
@@ -342,7 +343,7 @@ const AccountSettings = () => {
                     <div className="flex flex-col mt-4">
                       <p className="text-sm leading-4 text-[#343538] ">Name</p>
                       <p className="mt-1 text-sm leading-4 text-[#83878E]">
-                        {userSettingsDetail?.name || "-"}
+                        {userSettingsDetail?.firstName || "-"}
                       </p>
                     </div>
                     <button
@@ -358,7 +359,7 @@ const AccountSettings = () => {
                         Phone number
                       </p>
                       <p className="mt-1 text-sm leading-4 text-[#83878E]">
-                        {userSettingsDetail?.phone_number || "--"}
+                        {userSettingsDetail?.phoneno || "--"}
                       </p>
                     </div>
                     <button
