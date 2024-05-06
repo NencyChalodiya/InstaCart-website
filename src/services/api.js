@@ -59,13 +59,30 @@ export const GetUserDetails = () => {
   return Ajax.Request("/userprofile/information", Ajax.GET, true);
 };
 
-export const UpdateUserDetails = (payload) => {
-  return Ajax.Request("/change-details/", Ajax.PUT, true, payload);
+export const changeName = (payload) => {
+  return Ajax.Request("/userprofile/changename", Ajax.POST, true, payload);
 };
 
-export const CreateNewPassword = (payload) => {
-  return Ajax.Request("/change_password/", Ajax.POST, true, payload);
+export const changeEmail = (payload) => {
+  return Ajax.Request(`/userprofile/changeemail`, Ajax.POST, true, payload);
 };
+
+export const changePasswordOfUser = (payload) => {
+  return Ajax.Request(`/userprofile/changepassword`, Ajax.POST, true, payload);
+};
+
+export const changePhoneno = (payload) => {
+  return Ajax.Request(
+    `/userprofile/changephonenumber`,
+    Ajax.POST,
+    true,
+    payload
+  );
+};
+
+// export const CreateNewPassword = (payload) => {
+//   return Ajax.Request("/change_password/", Ajax.POST, true, payload);
+// };
 
 export const ShopListCategory = () => {
   return Ajax.Request(`/shop/list-category/`, Ajax.GET, true);
@@ -109,8 +126,10 @@ let API = {
   resetPasswordUser,
   changePasswordUser,
   GetUserDetails,
-  UpdateUserDetails,
-  CreateNewPassword,
+  changeName,
+  changeEmail,
+  changePasswordOfUser,
+  changePhoneno,
   ShopListCategory,
   getShopsByCategory,
   getProductsBasedShops,

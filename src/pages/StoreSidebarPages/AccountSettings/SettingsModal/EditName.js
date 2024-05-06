@@ -1,8 +1,45 @@
 import React, { useState, useEffect } from "react";
 import { Modal, message } from "antd";
 import API from "../../../../services/api";
-const EditName = ({ editName, onCancel, userName }) => {
+const EditName = ({
+  editName,
+  onCancel,
+  userFirstName,
+  userLastName,
+  getAccountSettingsDetails,
+}) => {
   // const [newName, setNewName] = useState(userName);
+  const [userNewName, setUserNewName] = useState({
+    firstName: userFirstName,
+    lastName: userLastName,
+  });
+
+  useEffect(() => {
+    setUserNewName({
+      firstName: userFirstName,
+      lastName: userLastName,
+    });
+  }, [userFirstName, userLastName]);
+
+  const ChangeNameOfUser = async () => {
+    try {
+      let payload = {
+        firstName: userNewName.firstName,
+        lastName: userNewName.lastName,
+      };
+      const response = await API.changeName(payload);
+      console.log(response);
+      if (response.status === "success") {
+        message.success("Your name has been saved");
+        onCancel();
+        getAccountSettingsDetails();
+      } else {
+        message.error("Not able to change your Name");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // useEffect(() => {
   //   setNewName(userName);
@@ -61,10 +98,31 @@ const EditName = ({ editName, onCancel, userName }) => {
                 <input
                   type="text"
                   className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
-                  placeholder="Name"
-                  // value={newName}
-                  value={userName}
-                  //onChange={(e) => setNewName(e.target.value)}
+                  placeholder="First Name"
+                  value={userNewName?.firstName}
+                  //value={userFirstName}
+                  onChange={(e) =>
+                    setUserNewName({
+                      ...userNewName,
+                      firstName: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex flex-col gap-4 py-4">
+            <div className="flex flex-row flex-nowrap items-center rounded-xl h-[55px] box-border max-w-[600px]">
+              <div className="relative flex-grow h-full">
+                <input
+                  type="text"
+                  className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
+                  placeholder="Last Name"
+                  value={userNewName?.lastName}
+                  //value={userLastName}
+                  onChange={(e) =>
+                    setUserNewName({ ...userNewName, lastName: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -84,6 +142,7 @@ const EditName = ({ editName, onCancel, userName }) => {
             <button
               className="cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 "
               //onClick={() => updateAccountSettingsName()}
+              onClick={() => ChangeNameOfUser()}
             >
               <span className="block px-4 ml-5 text-xl text-ellipsis">
                 Save

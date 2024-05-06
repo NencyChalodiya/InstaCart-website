@@ -343,7 +343,8 @@ const AccountSettings = () => {
                     <div className="flex flex-col mt-4">
                       <p className="text-sm leading-4 text-[#343538] ">Name</p>
                       <p className="mt-1 text-sm leading-4 text-[#83878E]">
-                        {userSettingsDetail?.firstName || "-"}
+                        {userSettingsDetail?.firstName}{" "}
+                        {userSettingsDetail?.lastName || "-"}
                       </p>
                     </div>
                     <button
@@ -488,6 +489,7 @@ const AccountSettings = () => {
           editEmailAddress={editEmailAddress}
           onCancel={() => openEditEmailAdress(false)}
           userEmail={userSettingsDetail?.email}
+          getAccountSettingsDetails={getAccountSettingsDetails}
         />
         <CreatePassword
           changePassword={changePassword}
@@ -496,12 +498,14 @@ const AccountSettings = () => {
         <EditName
           editName={editName}
           onCancel={() => openEditName(false)}
-          userName={userSettingsDetail?.name}
+          userFirstName={userSettingsDetail?.firstName}
+          userLastName={userSettingsDetail?.lastName}
+          getAccountSettingsDetails={getAccountSettingsDetails}
         />
         <Change_Verify_PhoneNum
           verifyPhoneNumber={verifyPhoneNumber}
           onCancel={() => opneVerifyPhoneNumber(false)}
-          userPhoneNumber={userSettingsDetail?.phone_number}
+          userPhoneNumber={userSettingsDetail?.phoneno}
         />
       </div>
     </>

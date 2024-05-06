@@ -1,10 +1,8 @@
 import React, { useState } from "react";
-import { Modal } from "antd";
+import { message, Modal } from "antd";
 import API from "../../../../services/api";
 const CreatePassword = ({ changePassword, onCancel }) => {
   const [createNewPasswordDetails, setcreateNewPasswordDetails] = useState({
-    email: "",
-    oldPassword: "",
     newPassword: "",
     confirmPassword: "",
   });
@@ -12,17 +10,24 @@ const CreatePassword = ({ changePassword, onCancel }) => {
   const createNewpassword = async () => {
     //const token = localStorage.getItem("token");
     try {
+      if (
+        createNewPasswordDetails.newPassword !==
+        createNewPasswordDetails.confirmPassword
+      ) {
+        message.error("Passwords do not match");
+        return;
+      }
       let payload = {
-        email: createNewPasswordDetails.email,
-        old_password: createNewPasswordDetails.oldPassword,
-        new_password: createNewPasswordDetails.newPassword,
-        confirm_password: createNewPasswordDetails.confirmPassword,
+        newPassword: createNewPasswordDetails.newPassword,
+        confirmNewPassword: createNewPasswordDetails.confirmPassword,
       };
-      const response = await API.CreateNewPassword(payload);
+      const response = await API.changePasswordOfUser(payload);
       console.log(response);
+      if (response.status === "success") {
+        message.success("Your Password has been changed");
+        onCancel();
+      }
       //message.success("Name is successfully updated");
-
-      onCancel();
     } catch (error) {
       console.log(error);
       //message.error("Could not able to update name");
@@ -65,36 +70,6 @@ const CreatePassword = ({ changePassword, onCancel }) => {
 
         <div className="flex-grow flex-shrink px-1 pb-8">
           <div className="flex flex-col gap-4 py-4">
-            <div className="flex flex-row flex-nowrap items-center rounded-xl h-[55px] box-border max-w-[600px]">
-              <div className="relative flex-grow h-full">
-                <input
-                  type="email"
-                  className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
-                  placeholder="Enter your Email"
-                  onChange={(e) =>
-                    setcreateNewPasswordDetails({
-                      ...createNewPasswordDetails,
-                      email: e.target.value,
-                    })
-                  }
-                />
-              </div>
-            </div>
-            <div className="flex flex-row flex-nowrap items-center rounded-xl h-[55px] box-border max-w-[600px]">
-              <div className="relative flex-grow h-full">
-                <input
-                  type="password"
-                  className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
-                  placeholder="Enter your old password"
-                  onChange={(e) =>
-                    setcreateNewPasswordDetails({
-                      ...createNewPasswordDetails,
-                      oldPassword: e.target.value,
-                    })
-                  }
-                />
-              </div>
-            </div>
             <div className="flex flex-row flex-nowrap items-center rounded-xl h-[55px] box-border max-w-[600px]">
               <div className="relative flex-grow h-full">
                 <input

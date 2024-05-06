@@ -9,7 +9,7 @@ import TotalCartItems from "../pages/TotalCartItems/TotalCartItems";
 const HeaderAddToCart = () => {
   const [totalCartItemsModal, setTotalCartItemsModal] = useState(false);
   const { cartItems } = useSelector((state) => state.cartItems);
-  //console.log(cartItems);
+  console.log("caerdasw", cartItems);
   return (
     <header className="fixed z-20 flex items-center justify-between pt-1 pb-1 bg-white border-gray-300 px-25">
       <div className="flex flex-row items-center w-full ">

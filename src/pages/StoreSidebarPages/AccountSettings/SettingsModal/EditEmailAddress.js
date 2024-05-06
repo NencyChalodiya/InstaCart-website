@@ -2,8 +2,48 @@ import React, { useState, useEffect } from "react";
 import { Modal, message } from "antd";
 import API from "../../../../services/api";
 
-const EditEmailAddress = ({ editEmailAddress, onCancel, userEmail }) => {
-  // const [newEmailAddress, setNewEmailAdddress] = useState(userEmail);
+const EditEmailAddress = ({
+  editEmailAddress,
+  onCancel,
+  userEmail,
+  getAccountSettingsDetails,
+}) => {
+  const [newEmailAddress, setNewEmailAdddress] = useState({
+    updatedEmail: userEmail,
+    confirmEmail: "",
+    password: "",
+  });
+
+  useEffect(() => {
+    setNewEmailAdddress({
+      updatedEmail: userEmail,
+      confirmEmail: "",
+      password: "",
+    });
+  }, [userEmail]);
+
+  const ChangeEmailOfUser = async () => {
+    try {
+      if (newEmailAddress.updatedEmail !== newEmailAddress.confirmEmail) {
+        message.error("Emails do not match");
+        return;
+      }
+      let payload = {
+        updatedEmail: newEmailAddress.updatedEmail,
+        confirmEmail: newEmailAddress.confirmEmail,
+        password: newEmailAddress.password,
+      };
+      const response = await API.changeEmail(payload);
+      console.log(response);
+      if (response.status === "success") {
+        message.success("Email updated");
+        onCancel();
+        getAccountSettingsDetails();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // useEffect(() => {
   //   setNewEmailAdddress(userEmail);
@@ -71,7 +111,13 @@ const EditEmailAddress = ({ editEmailAddress, onCancel, userEmail }) => {
                   className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
                   placeholder="Email Address"
                   // value={newEmailAddress}
-                  value={userEmail}
+                  value={newEmailAddress?.updatedEmail}
+                  onChange={(e) =>
+                    setNewEmailAdddress({
+                      ...newEmailAddress,
+                      updatedEmail: e.target.value,
+                    })
+                  }
                   //onChange={(e) => setNewEmailAdddress(e.target.value)}
                 />
               </div>
@@ -82,6 +128,13 @@ const EditEmailAddress = ({ editEmailAddress, onCancel, userEmail }) => {
                   type="email"
                   className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
                   placeholder="Email confirmation"
+                  value={newEmailAddress?.confirmEmail}
+                  onChange={(e) =>
+                    setNewEmailAdddress({
+                      ...newEmailAddress,
+                      confirmEmail: e.target.value,
+                    })
+                  }
                 />
               </div>
             </div>
@@ -91,6 +144,13 @@ const EditEmailAddress = ({ editEmailAddress, onCancel, userEmail }) => {
                   type="password"
                   className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
                   placeholder="Password"
+                  value={newEmailAddress.password}
+                  onChange={(e) =>
+                    setNewEmailAdddress({
+                      ...newEmailAddress,
+                      password: e.target.value,
+                    })
+                  }
                 />
               </div>
             </div>
@@ -107,6 +167,7 @@ const EditEmailAddress = ({ editEmailAddress, onCancel, userEmail }) => {
             <button
               className="cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 "
               //onClick={() => updateAccountSettingsEmail()}
+              onClick={() => ChangeEmailOfUser()}
             >
               <span className="block px-4 ml-5 text-xl text-ellipsis">
                 Save
