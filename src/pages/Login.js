@@ -110,6 +110,20 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
           email: loginUserDetails.email,
           password: loginUserDetails.password,
         };
+        const response = await API.LoginUser(payload);
+        console.log(response);
+        if (response.status === "success") {
+          localStorage.setItem(
+            "accessToken",
+            response.data.JWTToken.accessToken
+          );
+          localStorage.setItem(
+            "refreshToken",
+            response.data.JWTToken.refreshToken
+          );
+          message.success("Logged in Successfully");
+          navigate("/store");
+        }
       } else {
         //const phoneValid = validatePhoneNumber(loginUserDetails.phoneno);
         if (!isEmailLogin) {
@@ -117,28 +131,22 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
             phoneno: loginUserDetails.phoneno,
             country_code: loginUserDetails.countryCode,
           };
+          const response = await API.LoginUser(payload);
+          console.log(response);
+          setLoginUserDetails({
+            ...loginUserDetails,
+            otpid: response.data.otpid,
+          });
         } else {
           setLoading(false);
           return;
         }
       }
-      const response = await API.LoginUser(payload);
-      console.log(response);
-      setLoginUserDetails({
-        ...loginUserDetails,
-        otpid: response.data.otpid,
-      });
-      if (response.status === "success") {
-        localStorage.setItem("accessToken", response.data.JWTToken.accessToken);
-        localStorage.setItem(
-          "refreshToken",
-          response.data.JWTToken.refreshToken
-        );
-        message.success("Logged in Successfully");
-        navigate("/store");
-      }
+      //const response = await API.LoginUser(payload);
+      //console.log(response);
     } catch (error) {
-      message.error("Unable to Log in.Email not found");
+      // message.error("Unable to Log in.Email not found");
+      console.log("error1", error);
     } finally {
       setLoading(false);
     }
@@ -150,11 +158,11 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
       let payload = {
         phoneno: loginUserDetails.phoneno,
         country_code: loginUserDetails.countryCode,
-        password: loginUserDetails.password,
+        //password: loginUserDetails.password,
         otpid: loginUserDetails.otpid,
         enteredotp: loginUserDetails.enteredotp,
       };
-      const response = await API.VerifyOtpToRegister(payload);
+      const response = await API.VerifyOtpToLogin(payload);
       console.log(response);
       if (response.status === "success") {
         localStorage.setItem("accessToken", response.data.JWTToken.accessToken);
@@ -166,7 +174,7 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
         navigate("/store");
       }
     } catch (error) {
-      console.log(error);
+      console.log("error2", error);
     } finally {
       setLoading(false);
     }
@@ -175,13 +183,13 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
   const handleContinue = async () => {
     const phoneValid = validatePhoneNumber(loginUserDetails.phoneno);
     const passwordValid = validatePassword(loginUserDetails.password);
-    if (screen === 1 && !isEmailLogin && phoneValid) {
-      setscreen(screen + 1);
-    }
+    // if (screen === 1 && !isEmailLogin) {
+    //   setscreen(screen + 1);
+    // }
     if (!isEmailLogin && screen === 2) {
       await loginUser();
-      setscreen(screen + 1);
     }
+    setscreen(screen + 1);
   };
   const handleBack = () => {
     // Decrement screen state on "Back" click
@@ -567,11 +575,7 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                           type="password"
                           name="password"
                           placeholder="Enter a password"
-                          className={`w-full h-full p-5 text-base leading-6 bg-transparent  rounded-lg outline-none   ${
-                            passwordError
-                              ? "border-2 border-rose-600 focus:outline-none"
-                              : "border-none focus:outline-black"
-                          }`}
+                          className={`w-full h-full p-5 text-base leading-6 bg-transparent  rounded-lg outline-none `}
                           value={setLoginUserDetails.password}
                           onChange={(e) =>
                             setLoginUserDetails({
@@ -582,11 +586,6 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                         />
                       </div>
                     </div>
-                    {passwordError && (
-                      <span className="text-red-500 text-sm">
-                        {passwordError}
-                      </span>
-                    )}
                   </div>
 
                   <div className="mt-3 mb-3">

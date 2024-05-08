@@ -9,7 +9,7 @@ const Navbar = ({ onLoginButton, onSignupHandler }) => {
   const location = useLocation();
 
   const [open, isOpen] = useState(false);
-  const [sideOpen, setsideOpen] = useState(false);
+  //const [sideOpen, setsideOpen] = useState(false);
   // const [login, isLogin] = useState(false);
   // const [signup, isSignup] = useState(false);
   // const [resetPassword, isResetpassword] = useState(false);

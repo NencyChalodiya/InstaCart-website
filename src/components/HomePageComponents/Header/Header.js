@@ -17,20 +17,25 @@ import ShopListing from "../ShopListing/ShopListing";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const Header = () => {
+  const styles = {
+    display: "grid",
+    gridTemplateColumns: "auto 1fr auto",
+  };
   const [open, setopen] = useState(false);
-  const [shopListCategory, setShopListCategory] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
   //const [shops, setShops] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
 
-  const fetchShopListCategory = async () => {
+  const fetchCategoryFilter = async () => {
     try {
-      const response = await API.ShopListCategory();
-      //console.log(response.results);
-      setShopListCategory(response.results);
+      const response = await API.getCategoryFilter();
+      console.log(response);
+      setCategoryList(response.data.categoryList);
     } catch (error) {
       console.log(error);
     }
   };
+  //console.log(categoryList);
 
   // const fetchShopsByCategory = async (id) => {
   //   try {
@@ -43,7 +48,7 @@ const Header = () => {
   // };
 
   useEffect(() => {
-    fetchShopListCategory();
+    fetchCategoryFilter();
   }, []);
   //console.log(shopListCategory);
 
@@ -89,40 +94,38 @@ const Header = () => {
     <>
       <div className="fixed top-0 z-10 w-full bg-[#F7F5F0]">
         <div className="w-full min-w-[1024] flex justify-start items-center h-20 pl-6 box-border  ">
-          <div className="flex items-center">
-            <span className="ml-[-4px] mr-2 relative ">
-              <button
-                className="cursor-pointer bg-transparent rounded-[4px] h-8 w-8 flex justify-center items-center"
-                onClick={() => setopen(true)}
-              >
-                <span className="cursor-pointer">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="#343538"
-                    xmlns="http://www.w3.org/2000/svg"
-                    size="24"
-                    color="systemGrayscale70"
-                    aria-hidden="true"
-                  >
-                    <path d="M20 6H4v2h16zM4 11h16v2H4zM4 16h16v2H4z"></path>
-                  </svg>
-                </span>
-              </button>
-            </span>
-            <a className="h-14 min-w-[196px] ml-2 mr-6 flex items-center rounded-[12px] relative">
-              <img
-                src="https://www.instacart.com/image-server/x24/www.instacart.com/assets/beetstrap/brand/2023/logo@2x-8f1d0b7139d724b69d6563dde696887478257f5f741cfc4da7e2c42b49635bd7.png"
-                alt="instacart-logo"
-                className="w-auto mr-[10px]"
-              />
-            </a>
-          </div>
+          <span className="ml-[-4px] mr-2 relative ">
+            <button
+              className="cursor-pointer bg-transparent rounded-[4px] h-8 w-8 flex justify-center items-center "
+              onClick={() => setopen(true)}
+            >
+              <span className="cursor-pointer flex">
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="#343538"
+                  xmlns="http://www.w3.org/2000/svg"
+                  size="24"
+                  color="systemGrayscale70"
+                  aria-hidden="true"
+                >
+                  <path d="M20 6H4v2h16zM4 11h16v2H4zM4 16h16v2H4z"></path>
+                </svg>
+              </span>
+            </button>
+          </span>
+          <a className="h-14 min-w-[196px] ml-2 mr-6 flex items-center rounded-[12px] relative">
+            <img
+              src="https://www.instacart.com/image-server/x24/www.instacart.com/assets/beetstrap/brand/2023/logo@2x-8f1d0b7139d724b69d6563dde696887478257f5f741cfc4da7e2c42b49635bd7.png"
+              alt="instacart-logo"
+              className="w-auto mr-[10px]"
+            />
+          </a>
 
-          <div className="relative z-10 mr-2 flex-grow ">
+          <div className="relative z-10 mr-2 flex-grow flex-shrink max-md:hidden">
             <div className="relative z-10 bg-transparent ">
-              <div className="h-14 rounded-[8px] w-[1375px]  ">
+              <div className="h-14 rounded-[8px]">
                 <button className="absolute top-[50%] z-10 left-3 transform translate-y-[-50%]">
                   <svg
                     width="24"
@@ -141,9 +144,9 @@ const Header = () => {
                     ></path>
                   </svg>
                 </button>
-                <div className="relative h-full flex-grow">
+                <div className="relative h-full">
                   <input
-                    className=" relative items-center w-full py-3 rounded-[28px] border-2 bg-white outline-none  pr-12 h-full box-border text-[#242529] pl-10  placeholder-[#47474A] text-base shadow-md focus:border-black  "
+                    className=" flex relative items-center w-full py-3 rounded-[28px] border border-[#C7C8CD] bg-white outline-none  pr-[47.5px] h-full box-border text-[#242529] pl-[34.5px]  placeholder-[#47474A] text-base shadow-md focus:border-black  "
                     type="text"
                     placeholder="Search products,stores,and recipes"
                   />
@@ -151,7 +154,73 @@ const Header = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center mr-4 cursor-pointer">
+
+          <div>
+            <div className="relative">
+              <button className="cursor-pointer relative  bg-transparent rounded-[8px] h-14 min-w-[120px] max-w-full mx-3 max-md:mx-0 max-lg:mx-0">
+                <span
+                  className=" justify-start items-center w-full"
+                  style={styles}
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                    size="24"
+                    class="e-ozd7xs"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M5.714 12.561a7.1 7.1 0 0 1-.86-3.659 7.152 7.152 0 1 1 13.242 3.994L12.84 22h-1.679l-5.265-9.121a7 7 0 0 1-.183-.318m9.266-3.305a2.98 2.98 0 1 1-5.956-.208 2.98 2.98 0 0 1 5.956.208"
+                    ></path>
+                  </svg>
+                  <span>09134</span>
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="#343538"
+                    xmlns="http://www.w3.org/2000/svg"
+                    size="14"
+                    color="systemGrayscale70"
+                    class="e-s079uh"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="M12 12.52 7.792 8.314 6.208 9.896 12 15.688l5.792-5.792-1.584-1.584z"
+                    ></path>
+                  </svg>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <button className="rounded-[24px] flex relative h-8 min-w-14 py-1 px-2 justify-evenly items-center max-md:px-0 max-lg:px-0">
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="#343538"
+              xmlns="http://www.w3.org/2000/svg"
+              size="24"
+              color="systemGrayscale70"
+              aria-hidden="true"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="m6.84 2.68-1.27-.19-.17-.03L2.29 2 2 3.93l3.16.47 2.2 12.84h14.18v-1.95H9l-.34-2 11.92-1.58L22 4.99 6.84 2.69zm1.14 19.27a1.62 1.62 0 1 0 0-3.24 1.62 1.62 0 0 0 0 3.24m11.94 0a1.62 1.62 0 1 0 0-3.24 1.62 1.62 0 0 0 0 3.24"
+              ></path>
+            </svg>
+            <span className="px-2">0</span>
+          </button>
+          {/* <div className="flex items-center mr-4 cursor-pointer">
             <button className="relative bg-transparent rounded-lg text-[#343538] h-14 px-3">
               <div className="grid items-center grid-cols-3">
                 <svg
@@ -206,8 +275,9 @@ const Header = () => {
               </svg>
               <span>1</span>
             </button>
-          </div>
+          </div> */}
         </div>
+
         <div
           className="m-auto pb-[1px] max-2xl:m-0"
           style={{ width: "calc(1280px + 80px)" }}
@@ -227,7 +297,7 @@ const Header = () => {
                 }}
               >
                 <Tabs defaultActiveKey="1" centered>
-                  {shopListCategory.map((itemsSvg) => (
+                  {categoryList.map((itemsSvg) => (
                     <Tabs.TabPane
                       tab={
                         <button
@@ -244,13 +314,13 @@ const Header = () => {
                         >
                           <span className="flex items-center justify-center mb-2 max-h-6">
                             <img
-                              src={itemsSvg.logo}
+                              src={itemsSvg.imageUrl}
                               alt={itemsSvg.id}
                               className="w-[30px] h-[30px]"
                             />
                           </span>
                           <span className="text-base leading-5 text-center">
-                            {itemsSvg.title}
+                            {itemsSvg.name}
                           </span>
                         </button>
                       }

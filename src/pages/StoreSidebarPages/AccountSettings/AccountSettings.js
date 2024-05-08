@@ -15,6 +15,7 @@ const AccountSettings = () => {
   const [editName, openEditName] = useState(false);
   const [verifyPhoneNumber, opneVerifyPhoneNumber] = useState(false);
   const [userSettingsDetail, setUserSettingsDetail] = useState(null);
+  const [phoneNumberVerified, setPhoneNumberVerified] = useState(false);
 
   const getAccountSettingsDetails = async () => {
     try {
@@ -32,6 +33,10 @@ const AccountSettings = () => {
   useEffect(() => {
     getAccountSettingsDetails();
   }, []);
+
+  const handleVerificationStatusChange = (status) => {
+    setPhoneNumberVerified(status);
+  };
 
   //console.log(userSettingsDetail);
 
@@ -361,6 +366,37 @@ const AccountSettings = () => {
                       </p>
                       <p className="mt-1 text-sm leading-4 text-[#83878E]">
                         {userSettingsDetail?.phoneno || "--"}
+                        {phoneNumberVerified ? (
+                          "(Verified)"
+                        ) : (
+                          <>
+                            <span className="flex items-center ">
+                              <svg
+                                width="16"
+                                height="16"
+                                viewBox="0 0 24 24"
+                                fill="#DE3534"
+                                xmlns="http://www.w3.org/2000/svg"
+                                color="systemDetrimentalRegular"
+                                size="16"
+                                aria-hidden="true"
+                                className="mr-1"
+                              >
+                                <path
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
+                                  d="M22 21 12 3 2 21zm-9.137-5.42h-1.73c-.158-2.4-.262-4.378-.262-6.043V9h2.254v.537c0 1.658-.117 3.614-.26 6.012zm.432 2.32c0 .654-.498 1.1-1.284 1.1-.8 0-1.31-.42-1.31-1.114 0-.642.537-1.1 1.31-1.1s1.284.432 1.284 1.113"
+                                ></path>
+                              </svg>
+                              <span>Unverified</span>
+                            </span>
+                            <span>
+                              <span className="ml-1">
+                                Verify your number to secure your account
+                              </span>
+                            </span>
+                          </>
+                        )}
                       </p>
                     </div>
                     <button
@@ -506,6 +542,8 @@ const AccountSettings = () => {
           verifyPhoneNumber={verifyPhoneNumber}
           onCancel={() => opneVerifyPhoneNumber(false)}
           userPhoneNumber={userSettingsDetail?.phoneno}
+          getAccountSettingsDetails={getAccountSettingsDetails}
+          handleVerificationStatusChange={handleVerificationStatusChange}
         />
       </div>
     </>

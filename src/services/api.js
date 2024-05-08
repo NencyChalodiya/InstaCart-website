@@ -27,7 +27,7 @@ export const LoginUser = (payload) => {
 };
 
 export const VerifyOtpToLogin = (payload) => {
-  return Ajax.Request(`/login/login/verify`, Ajax.POST, false, payload);
+  return Ajax.Request(`/login/verify`, Ajax.POST, false, payload);
 };
 
 // export const LoginUser = (payload) => {
@@ -80,16 +80,29 @@ export const changePhoneno = (payload) => {
   );
 };
 
+export const verifyChangedPhoneNumber = (payload) => {
+  return Ajax.Request(
+    `/userprofile/verifychangedphonenumber`,
+    Ajax.POST,
+    true,
+    payload
+  );
+};
+
 // export const CreateNewPassword = (payload) => {
 //   return Ajax.Request("/change_password/", Ajax.POST, true, payload);
 // };
 
-export const ShopListCategory = () => {
-  return Ajax.Request(`/shop/list-category/`, Ajax.GET, true);
+// export const ShopListCategory = () => {
+//   return Ajax.Request(`/shop/list-category/`, Ajax.GET, true);
+// };
+
+export const getCategoryFilter = () => {
+  return Ajax.Request(`/store/categorylist`, Ajax.GET, true);
 };
 
-export const getShopsByCategory = (payload) => {
-  return Ajax.Request(`/shop/list-shop/`, Ajax.POST, true, payload);
+export const getShopsByCategory = (id) => {
+  return Ajax.Request(`/store/category?main_category_id=${id}`, Ajax.GET, true);
 };
 
 export const getProductsBasedShops = (id) => {
@@ -130,7 +143,8 @@ let API = {
   changeEmail,
   changePasswordOfUser,
   changePhoneno,
-  ShopListCategory,
+  verifyChangedPhoneNumber,
+  getCategoryFilter,
   getShopsByCategory,
   getProductsBasedShops,
   getSubCategoryList,

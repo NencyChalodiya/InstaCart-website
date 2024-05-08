@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { brandStoresData } from "../../BrandStoreData/brandStoreData";
 import AddToCart from "../AddToCart/AddToCart";
 import Navbar from "../../components/LandingPageComponents/Navbar";
-
+import HeaderProducts from "../../components/HomePageComponents/HeaderOfProducts/HeaderProducts";
 const BrandStoreCategoryPage = () => {
   const recipes = [
     "Recipes",
@@ -44,14 +44,14 @@ const BrandStoreCategoryPage = () => {
 
   return (
     <>
-      <Navbar />
+      <HeaderProducts />
       <div className="h-full bg-white">
         <div
           className="fixed z-10 w-64 overflow-y-auto bg-white border-r-2 top-20"
           style={{ height: `calc(100% - 80px)` }}
         >
           <div className="sticky bg-white z-1 will-change-transform backdrop-blur-sm">
-            <div className="flex flex-col items-center px-1 pt-6 pb-4 text-center flex-nowrap">
+            <div className="flex flex-col items-center px-1 pt-6 pb-4 text-center flex-nowrap ">
               {brandsStoreLogo ? (
                 <div className="relative">
                   <a
@@ -253,9 +253,9 @@ const BrandStoreCategoryPage = () => {
         </div>
 
         <div className="ml-64 ">
-          <div className="h-14"></div>
+          {/* <div className="h-14"></div> */}
 
-          <div className="w-full py-6 ">
+          <div className="w-full ">
             <div className="w-full px-8 mb-6">
               <div className="flex items-center justify-between mt-6 ">
                 <div>

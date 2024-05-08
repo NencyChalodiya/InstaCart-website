@@ -9,20 +9,23 @@ const ShopListing = ({ selectedCategoryId }) => {
   // const [productsWithImages, setProductsWithImages] = useState([]);
 
   useEffect(() => {
-    const fetchShopsByCategory = async (id) => {
+    const fetchShopsByCategory = async (categoryId) => {
       try {
-        const response = await API.getShopsByCategory({ id });
-        setShops(response.Shops);
+        const response = await API.getShopsByCategory(categoryId); // Pass category ID directly
+        setShops(response.data);
       } catch (error) {
         console.log(error);
       }
     };
 
     if (selectedCategoryId !== null) {
-      fetchShopsByCategory(selectedCategoryId);
+      // Ensure selectedCategoryId is a number before passing it to fetchShopsByCategory
+      if (!isNaN(selectedCategoryId)) {
+        fetchShopsByCategory(selectedCategoryId);
+      }
     }
   }, [selectedCategoryId]);
-
+  console.log(shops);
   const handleShopClick = async (shopId) => {
     // try {
     //   const response = await API.getProductsBasedShops(shopId);
@@ -50,14 +53,14 @@ const ShopListing = ({ selectedCategoryId }) => {
                       <button className="relative flex items-center justify-start w-full h-full gap-3 m-0 opacity-100 cursor-pointer ">
                         <div className="flex max-w-full max-h-full mr-3">
                           <img
-                            src={shop.logo}
-                            alt={shop.id}
+                            src={shop.image_url}
+                            alt={shop.store_id}
                             className="box-border relative flex justify-center w-16 h-12 overflow-hidden border rounded-xl"
                           ></img>
                         </div>
                         <div className="flex flex-col gap-[2px]">
                           <span className="block text-base font-semibold leading-6">
-                            {shop.title}
+                            {shop.store_name}
                           </span>
                           {/* <div className="flex items-center text-[#3E9A39] text-xs gap-1 font-semibold">
                           <span>

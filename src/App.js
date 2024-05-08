@@ -28,12 +28,12 @@ function App() {
     if (!location.pathname.includes("/change-password")) {
       if (!accessToken) {
         navigate("/");
+      } else {
+        navigate("/store");
       }
-    } else {
-      navigate("/store");
     }
   }, [accessToken]);
-  //console.log(accessToken);
+  console.log(accessToken);
 
   // const location = useLocation();
   // //console.log(location);
