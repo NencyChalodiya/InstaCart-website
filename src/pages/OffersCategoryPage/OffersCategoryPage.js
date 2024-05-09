@@ -4,7 +4,8 @@ import Navbar from "../../components/LandingPageComponents/Navbar";
 import { offers } from "../../data/offers";
 import { offersCategory } from "../../data/offers";
 import ItemsCategory from "../../components/ItemsCategory";
-import HeaderAddToCart from "../../components/HeaderAddToCart";
+//import HeaderAddToCart from "../../components/HeaderAddToCart";
+import HeaderProducts from "../../components/HomePageComponents/HeaderOfProducts/HeaderProducts";
 import { useSelector } from "react-redux";
 import AddToCart from "../AddToCart/AddToCart";
 const OffersCategoryPage = () => {
@@ -12,7 +13,7 @@ const OffersCategoryPage = () => {
   const [itemsAdd, setItemsAdd] = useState(null);
 
   const { Items } = useSelector((state) => state);
-  console.log(Items.items);
+  //console.log(Items.items);
   const recipes = [
     "Recipes",
     "Snacks & Candy",
@@ -53,7 +54,8 @@ const OffersCategoryPage = () => {
 
   return (
     <>
-      <HeaderAddToCart />
+      {/* <HeaderAddToCart /> */}
+      <HeaderProducts />
       <div className="h-full bg-white">
         <div
           className="fixed z-10 w-64 overflow-y-auto bg-white border-r-2 top-20"

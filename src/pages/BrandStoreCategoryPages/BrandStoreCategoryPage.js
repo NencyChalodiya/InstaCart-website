@@ -4,6 +4,7 @@ import { brandStoresData } from "../../BrandStoreData/brandStoreData";
 import AddToCart from "../AddToCart/AddToCart";
 import Navbar from "../../components/LandingPageComponents/Navbar";
 import HeaderProducts from "../../components/HomePageComponents/HeaderOfProducts/HeaderProducts";
+import { useSelector } from "react-redux";
 const BrandStoreCategoryPage = () => {
   const recipes = [
     "Recipes",
@@ -31,6 +32,8 @@ const BrandStoreCategoryPage = () => {
   const [storeData, setstoreData] = useState(null);
   const [brandsStoreLogo, setbrandsStoreLogo] = useState(null);
   const params = useParams();
+  const { Items } = useSelector((state) => state);
+  console.log(Items);
 
   useEffect(() => {
     brandStoresData.map((d) => {
@@ -257,7 +260,7 @@ const BrandStoreCategoryPage = () => {
 
           <div className="w-full ">
             <div className="w-full px-8 mb-6">
-              <div className="flex items-center justify-between mt-6 ">
+              <div className="flex items-center justify-between mt-24 ">
                 <div>
                   <h2 className="flex mr-2">
                     <div className="text-3xl font-bold leading-5 max-md:text-2xl">

@@ -1,14 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import { Avatar, Flex, Segmented } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import TotalCartItems from "../../../pages/TotalCartItems/TotalCartItems";
+import { useSelector } from "react-redux";
 const HeaderProducts = () => {
+  const [totalCartItemsModal, setTotalCartItemsModal] = useState(false);
+  const { cartItems } = useSelector((state) => state.cartItems);
   const styles = {
     display: "grid",
     gridTemplateColumns: "auto 1fr auto",
   };
   return (
     <>
-      <header className="z-10 sticky border-b">
+      <header className="fixed top-0 z-20 w-full bg-white border-b">
         <div className="bg-white">
           <div className="w-full min-w-[1024px] flex items-center h-20 pl-6 box-border justify-start">
             <span className="ml-[-4px] mr-2 relative">
@@ -238,7 +242,10 @@ const HeaderProducts = () => {
               </div>
             </div>
 
-            <button className="rounded-[24px] flex relative h-8 min-w-14 py-1 px-2 justify-evenly items-center">
+            <button
+              className="rounded-[24px] flex relative h-8 min-w-14 py-1 px-2 justify-evenly items-center"
+              onClick={() => setTotalCartItemsModal(true)}
+            >
               <svg
                 width="24"
                 height="24"
@@ -255,10 +262,14 @@ const HeaderProducts = () => {
                   d="m6.84 2.68-1.27-.19-.17-.03L2.29 2 2 3.93l3.16.47 2.2 12.84h14.18v-1.95H9l-.34-2 11.92-1.58L22 4.99 6.84 2.69zm1.14 19.27a1.62 1.62 0 1 0 0-3.24 1.62 1.62 0 0 0 0 3.24m11.94 0a1.62 1.62 0 1 0 0-3.24 1.62 1.62 0 0 0 0 3.24"
                 ></path>
               </svg>
-              <span className="px-2">0</span>
+              <span className="px-2">{cartItems?.length || 0}</span>
             </button>
           </div>
         </div>
+        <TotalCartItems
+          totalCartItemsModal={totalCartItemsModal}
+          onCancel={() => setTotalCartItemsModal(false)}
+        />
       </header>
     </>
   );
