@@ -1,5 +1,6 @@
 import React from "react";
-
+import { Avatar, Flex, Segmented } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 const HeaderProducts = () => {
   const styles = {
     display: "grid",
@@ -90,6 +91,64 @@ const HeaderProducts = () => {
               </div>
             </div>
             <div className="flex-shrink flex rounded-[20px]">
+              <Segmented
+                options={[
+                  {
+                    label: (
+                      <div>
+                        <span className="text-ellipsis flex items-center h-10 px-4 mt-[-2px]">
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg"
+                            size="24"
+                            class="e-1upkuwl"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M18.5 3.5v2h3v16h-16v-3h8v-2h-10v-2h10v-2h-12v-2h4v-5h3v-2l2-2h6zm-2 0h-6v2h6z"
+                            ></path>
+                          </svg>
+                          <div>Delivery</div>
+                        </span>
+                      </div>
+                    ),
+                    value: "Delivery",
+                  },
+                  {
+                    label: (
+                      <div>
+                        <span className="text-ellipsis flex items-center h-10 px-4 mt-[-2px]">
+                          <svg
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="currentColor"
+                            xmlns="http://www.w3.org/2000/svg"
+                            size="24"
+                            class="e-1upkuwl"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M20 3H4v2c.801 0 1.281.32 1.698.706L3 12v8a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2h10v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-8l-2.698-6.294C18.72 5.32 19.2 5 20 5zM7.319 7 6 10.077V15h3V9h6v6h3v-4.923L16.681 7z"
+                            ></path>
+                          </svg>
+                          <div>Pickup</div>
+                        </span>
+                      </div>
+                    ),
+                    value: "Pickup",
+                  },
+                ]}
+              />
+            </div>
+            {/* <div className="flex-shrink flex rounded-[20px]">
               <button className="cursor-pointer relative box-border rounded-[20px] h-10 border-2">
                 <span className="text-ellipsis flex items-center h-10 px-4 mt-[-2px]">
                   <svg
@@ -132,7 +191,7 @@ const HeaderProducts = () => {
                   <span>Pickup</span>
                 </span>
               </button>
-            </div>
+            </div> */}
             <div>
               <div className="relative">
                 <button className="cursor-pointer relative  bg-transparent rounded-[8px] h-14 min-w-[120px] max-w-full mx-3">
