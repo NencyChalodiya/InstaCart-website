@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/instaCart-website-2/static/css/main.5b8a324c.css",
+    "main.js": "/instaCart-website-2/static/js/main.f12b6499.js",
+    "index.html": "/instaCart-website-2/index.html",
+    "main.5b8a324c.css.map": "/instaCart-website-2/static/css/main.5b8a324c.css.map",
+    "main.f12b6499.js.map": "/instaCart-website-2/static/js/main.f12b6499.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.5b8a324c.css",
+    "static/js/main.f12b6499.js"
+  ]
+}
