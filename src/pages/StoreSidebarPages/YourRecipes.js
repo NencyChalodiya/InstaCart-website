@@ -104,7 +104,7 @@ const YourRecipes = () => {
               <div>
                 <div className="relative flex ">
                   <div className="w-full ">
-                    {/* <Carousel  className="flex  px-6 gap-6 max-md:px-2 max-lg:px-4" pagination={false} itemsToShow={itemsToShow}  >
+                    <div className="flex  px-6 gap-6 max-md:px-2 max-lg:px-4">
                       <div className="inline-block ">
                         <a className="relative block" href="#">
                           <div className="flex rounded-xl h-[92px] bg-[#EEF0F2]">
@@ -267,8 +267,7 @@ const YourRecipes = () => {
                           </div>
                         </a>
                       </div>
-                      
-                    </Carousel> */}
+                    </div>
                   </div>
                 </div>
               </div>

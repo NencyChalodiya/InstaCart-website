@@ -40,10 +40,10 @@ const BrandStores = () => {
       <div>
         <div className="mr-[260px] max-lg:mr-10">
           <div className="flex mb-8">
-            {/* <Carousel
-              pagination={false}
-              itemsToShow={itemsToShow}
-              showArrows={false}
+            <div
+              // pagination={false}
+              // itemsToShow={itemsToShow}
+              // showArrows={false}
               className="justify-between mt-4 ml-60 max-lg:ml-0"
             >
               {brandStoresData.map((items) => (
@@ -78,7 +78,7 @@ const BrandStores = () => {
                   </div>
                 </div>
               ))}
-            </Carousel> */}
+            </div>
             <a href="/" className="relative mt-4 text-center">
               <div className="pt-3">
                 <div className="rounded-[50%] items-center justify-center flex w-12 h-12 bg-[#343538]">
