@@ -1,22 +1,35 @@
 import React from "react";
 import Navbar from "../../components/LandingPageComponents/Navbar";
-import Carousel from "@itseasy21/react-elastic-carousel"
-import useMediaQuery from '@mui/material/useMediaQuery';
+// import Carousel from "@itseasy21/react-elastic-carousel"
+import useMediaQuery from "@mui/material/useMediaQuery";
 const YourRecipes = () => {
-  const isExtraSmallScreen = useMediaQuery('(max-width: 639px)'); // xs
-  const isSmallScreen = useMediaQuery('(min-width: 640px) and (max-width: 767px)'); // sm
-  const isMediumScreen = useMediaQuery('(min-width: 768px) and ( max-width: 1023px)'); // md
-  const isLargeScreen = useMediaQuery('(min-width: 1024px) and ( max-width: 1279px)'); // lg
-  const isExtraLargeScreen = useMediaQuery('( min-width: 1280px) and (max-width: 1535px) '); // xl
-  const isExtraExtraLargeScreen = useMediaQuery('(min-width: 1536px)'); // 2xl
-  const itemsToShow =
-    isExtraSmallScreen ? 2 :
-      isSmallScreen ? 3 :
-        isMediumScreen ? 4 :
-          isLargeScreen ? 5 :
-            isExtraLargeScreen ? 7:
-              isExtraExtraLargeScreen ? 9 :
-                9;
+  const isExtraSmallScreen = useMediaQuery("(max-width: 639px)"); // xs
+  const isSmallScreen = useMediaQuery(
+    "(min-width: 640px) and (max-width: 767px)"
+  ); // sm
+  const isMediumScreen = useMediaQuery(
+    "(min-width: 768px) and ( max-width: 1023px)"
+  ); // md
+  const isLargeScreen = useMediaQuery(
+    "(min-width: 1024px) and ( max-width: 1279px)"
+  ); // lg
+  const isExtraLargeScreen = useMediaQuery(
+    "( min-width: 1280px) and (max-width: 1535px) "
+  ); // xl
+  const isExtraExtraLargeScreen = useMediaQuery("(min-width: 1536px)"); // 2xl
+  const itemsToShow = isExtraSmallScreen
+    ? 2
+    : isSmallScreen
+    ? 3
+    : isMediumScreen
+    ? 4
+    : isLargeScreen
+    ? 5
+    : isExtraLargeScreen
+    ? 7
+    : isExtraExtraLargeScreen
+    ? 9
+    : 9;
   return (
     <>
       <Navbar />
@@ -91,7 +104,7 @@ const YourRecipes = () => {
               <div>
                 <div className="relative flex ">
                   <div className="w-full ">
-                    <Carousel  className="flex  px-6 gap-6 max-md:px-2 max-lg:px-4" pagination={false} itemsToShow={itemsToShow}  >
+                    {/* <Carousel  className="flex  px-6 gap-6 max-md:px-2 max-lg:px-4" pagination={false} itemsToShow={itemsToShow}  >
                       <div className="inline-block ">
                         <a className="relative block" href="#">
                           <div className="flex rounded-xl h-[92px] bg-[#EEF0F2]">
@@ -255,7 +268,7 @@ const YourRecipes = () => {
                         </a>
                       </div>
                       
-                    </Carousel>
+                    </Carousel> */}
                   </div>
                 </div>
               </div>

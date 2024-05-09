@@ -2,7 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { brandStoresData } from "../../../BrandStoreData/brandStoreData";
 import { Link } from "react-router-dom";
-import Carousel from "@itseasy21/react-elastic-carousel";
+// import Carousel from "@itseasy21/react-elastic-carousel";
 import useMediaQuery from "@mui/material/useMediaQuery";
 
 const BrandStores = () => {
@@ -40,7 +40,7 @@ const BrandStores = () => {
       <div>
         <div className="mr-[260px] max-lg:mr-10">
           <div className="flex mb-8">
-            <Carousel
+            {/* <Carousel
               pagination={false}
               itemsToShow={itemsToShow}
               showArrows={false}
@@ -78,7 +78,7 @@ const BrandStores = () => {
                   </div>
                 </div>
               ))}
-            </Carousel>
+            </Carousel> */}
             <a href="/" className="relative mt-4 text-center">
               <div className="pt-3">
                 <div className="rounded-[50%] items-center justify-center flex w-12 h-12 bg-[#343538]">
