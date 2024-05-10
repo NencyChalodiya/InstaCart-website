@@ -302,7 +302,7 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                     <div>
                       <img
                         className="h-6 ml-2 rounded-full w-25"
-                        src="./images/google.png"
+                        src="../../images/google-icon.svg"
                         alt="google-logo"
                       />
                     </div>
@@ -310,11 +310,31 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
                   </div>
                   <div className="flex items-center w-full mt-3 mb-4 border rounded-full cursor-pointer h-11 gap-11">
                     <div>
-                      <img
+                      <span>
+                        <svg
+                          width="32"
+                          height="32"
+                          viewBox="0 0 32 32"
+                          fill="#FFFFFF"
+                          xmlns="http://www.w3.org/2000/svg"
+                          color="systemGrayscale00"
+                          size="32"
+                          class="e-rz498l"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M16 2.667c7.364 0 13.333 5.968 13.333 13.333 0 6.656-4.875 12.172-11.25 13.172v-9.318h3.107L21.78 16h-3.698v-2.5c0-1.055.516-2.083 2.172-2.083h1.682V8.135s-1.526-.26-2.984-.26c-3.047 0-5.036 1.846-5.036 5.188V16H10.53v3.854h3.385v9.318c-6.374-1-11.25-6.516-11.25-13.172C2.666 8.635 8.636 2.667 16 2.667"
+                            fill="#3A75EA"
+                          ></path>
+                        </svg>
+                      </span>
+                      {/* <img
                         className="h-6 ml-2 rounded-full w-25"
-                        src="./images/facebook.webp"
+                        src=".././images/facebook.webp"
                         alt="facebook-logo"
-                      />
+                      /> */}
                     </div>
                     <div className="text-base">Continue with Facebook</div>
                   </div>

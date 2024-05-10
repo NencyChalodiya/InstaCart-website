@@ -279,11 +279,11 @@ const Header = () => {
         </div>
 
         <div
-          className="m-auto pb-[1px] max-2xl:m-0"
+          className="m-auto pb-[1px] max-2xl:m-0 border-b"
           style={{ width: "calc(1280px + 80px)" }}
         >
           <div className="relative pt-1 bg-[#F7F5F0] ">
-            <div className=" flex justify-between max-h-[75px] box-content px-2">
+            <div className=" flex justify-between max-h-[75px] box-content px-12">
               <ConfigProvider
                 theme={{
                   components: {
@@ -301,7 +301,7 @@ const Header = () => {
                     <Tabs.TabPane
                       tab={
                         <button
-                          className=" cursor-pointer bg-transparent relative rounded-[8px] max-w-32  pr-1  pl-3 text-[#242529] flex flex-col items-center justify-center
+                          className=" cursor-pointer bg-transparent relative rounded-[8px] max-w-32  pr-1  px-1 text-[#242529] flex flex-col items-center justify-center
                           hover:black max-2xl:pl-3 
                           max-xl:pl-2
                           max-lg:pl-1

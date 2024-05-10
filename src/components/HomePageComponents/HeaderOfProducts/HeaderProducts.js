@@ -3,7 +3,9 @@ import { Avatar, Flex, Segmented } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import TotalCartItems from "../../../pages/TotalCartItems/TotalCartItems";
 import { useSelector } from "react-redux";
+import DeliveryTimesModal from "../../../pages/DeliveryTimesModal/DeliveryTimesModal";
 const HeaderProducts = () => {
+  const [deliveryTimeModal, openDeliveryTimeModal] = useState(false);
   const [totalCartItemsModal, setTotalCartItemsModal] = useState(false);
   const { cartItems } = useSelector((state) => state.cartItems);
   const styles = {
@@ -242,8 +244,39 @@ const HeaderProducts = () => {
               </div>
             </div>
 
+            <div className="mx-3">
+              <div className="relative">
+                <button
+                  href="/"
+                  className="relative min-h-14 cursor-pointer"
+                  onClick={() => openDeliveryTimeModal(true)}
+                >
+                  <span className="flex items-center ">
+                    <svg
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="#343538"
+                      xmlns="http://www.w3.org/2000/svg"
+                      role="img"
+                      size="24"
+                      class="e-ozd7xs"
+                      aria-hidden="true"
+                    >
+                      <path
+                        fill-rule="evenodd"
+                        clip-rule="evenodd"
+                        d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10m1-17v6.52l4.625 3.7-1.25 1.56L11 12.48V5z"
+                      ></path>
+                    </svg>
+                    <span className="ml-1 text-base">Today,1pm</span>
+                  </span>
+                </button>
+              </div>
+            </div>
+
             <button
-              className="rounded-[24px] flex relative h-8 min-w-14 py-1 px-2 justify-evenly items-center"
+              className="rounded-[24px] flex relative h-8 min-w-14 py-1 px-6 justify-evenly items-center"
               onClick={() => setTotalCartItemsModal(true)}
             >
               <svg
@@ -271,6 +304,10 @@ const HeaderProducts = () => {
           onCancel={() => setTotalCartItemsModal(false)}
         />
       </header>
+      <DeliveryTimesModal
+        deliveryTimeModal={deliveryTimeModal}
+        onCancel={() => openDeliveryTimeModal(false)}
+      />
     </>
   );
 };

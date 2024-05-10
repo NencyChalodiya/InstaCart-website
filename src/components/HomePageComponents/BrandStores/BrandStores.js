@@ -2,38 +2,57 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import { brandStoresData } from "../../../BrandStoreData/brandStoreData";
 import { Link } from "react-router-dom";
-// import Carousel from "@itseasy21/react-elastic-carousel";
+//import Carousel from "@itseasy21/react-elastic-carousel";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 
 const BrandStores = () => {
   const { id } = useParams();
-  const isExtraSmallScreen = useMediaQuery("(max-width: 639px)"); // xs
-  const isSmallScreen = useMediaQuery(
-    "(min-width: 640px) and (max-width: 767px)"
-  ); // sm
-  const isMediumScreen = useMediaQuery(
-    "(min-width: 768px) and ( max-width: 1023px)"
-  ); // md
-  const isLargeScreen = useMediaQuery(
-    "(min-width: 1024px) and ( max-width: 1279px)"
-  ); // lg
-  const isExtraLargeScreen = useMediaQuery(
-    "( min-width: 1280px) and (max-width: 1535px) "
-  ); // xl
-  const isExtraExtraLargeScreen = useMediaQuery("(min-width: 1536px)"); // 2xl
-  const itemsToShow = isExtraSmallScreen
-    ? 3
-    : isSmallScreen
-    ? 4
-    : isMediumScreen
-    ? 6
-    : isLargeScreen
-    ? 5
-    : isExtraLargeScreen
-    ? 7
-    : isExtraExtraLargeScreen
-    ? 9
-    : 9;
+  // const isExtraSmallScreen = useMediaQuery("(max-width: 639px)"); // xs
+  // const isSmallScreen = useMediaQuery(
+  //   "(min-width: 640px) and (max-width: 767px)"
+  // ); // sm
+  // const isMediumScreen = useMediaQuery(
+  //   "(min-width: 768px) and ( max-width: 1023px)"
+  // ); // md
+  // const isLargeScreen = useMediaQuery(
+  //   "(min-width: 1024px) and ( max-width: 1279px)"
+  // ); // lg
+  // const isExtraLargeScreen = useMediaQuery(
+  //   "( min-width: 1280px) and (max-width: 1535px) "
+  // ); // xl
+  // const isExtraExtraLargeScreen = useMediaQuery("(min-width: 1536px)"); // 2xl
+  // const itemsToShow = isExtraSmallScreen
+  //   ? 3
+  //   : isSmallScreen
+  //   ? 4
+  //   : isMediumScreen
+  //   ? 6
+  //   : isLargeScreen
+  //   ? 5
+  //   : isExtraLargeScreen
+  //   ? 7
+  //   : isExtraExtraLargeScreen
+  //   ? 9
+  //   : 9;
+  // const responsive = {
+  //   desktop: {
+  //     breakpoint: { max: 3000, min: 1024 },
+  //     items: 3,
+  //     slidesToSlide: 3 // optional, default to 1.
+  //   },
+  //   tablet: {
+  //     breakpoint: { max: 1024, min: 464 },
+  //     items: 2,
+  //     slidesToSlide: 2 // optional, default to 1.
+  //   },
+  //   mobile: {
+  //     breakpoint: { max: 464, min: 0 },
+  //     items: 1,
+  //     slidesToSlide: 1 // optional, default to 1.
+  //   }
+  // };
 
   return (
     <>
@@ -44,11 +63,11 @@ const BrandStores = () => {
               // pagination={false}
               // itemsToShow={itemsToShow}
               // showArrows={false}
-              className="justify-between mt-4 ml-60 max-lg:ml-0"
+              className="flex justify-between mt-4 ml-72 max-lg:ml-0 "
             >
               {brandStoresData.map((items) => (
                 <div>
-                  <div className="w-[116px] text-center">
+                  <div className="w-[135px] text-center">
                     <div className="pl-3 pr-3">
                       <Link
                         to={`/store/${items.id}`}

@@ -78,9 +78,7 @@ const InnerSideBarData = () => {
                 }}
               >
                 <span className="flex items-center h-10">
-                  {item.title === "Your orders" // Check if title is "Stores"
-                    ? item.selectedLogo
-                    : item.unselectedLogo}
+                  {item.unselectedLogo}
                 </span>
                 <span className="pt-2 pb-2 ml-2">{item.title}</span>
               </Link>

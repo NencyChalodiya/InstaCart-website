@@ -406,7 +406,7 @@ const OffersCategoryPage = () => {
                   <div>
                     <div class="relative flex flex-row">
                       <div class="w-full">
-                        <ul class="w-full h-full min-h-[304px] grid grid-cols-7 gap-2 justify-between mt-2">
+                        <ul class="w-full h-full min-h-[304px] grid grid-cols-7 gap-2 justify-between mt-2 max-2xl:grid-cols-5 max-lg:grid-cols-3 max-xl:grid-cols-4 max-md:grid-cols-3 max-sm:grid-cols-1">
                           {Items.items.map((category) => (
                             <ItemsCategory
                               category={category}

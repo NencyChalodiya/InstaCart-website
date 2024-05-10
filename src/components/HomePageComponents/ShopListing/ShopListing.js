@@ -45,7 +45,7 @@ const ShopListing = ({ selectedCategoryId }) => {
       <div className=" mx-72 max-lg:mx-40 max-md:mx-4 max-sm:mx-4 mt-44">
         <div>
           <div>
-            <ul className="grid justify-center w-full grid-cols-3 gap-6 px-0 py-8 m-0 max-2xl:grid-cols-2 max-xl:grid-cols-1">
+            <ul className="grid justify-center w-full grid-cols-3 gap-6 px-0 py-1 m-0 max-2xl:grid-cols-2 max-xl:grid-cols-1">
               {shops.map((shop) => (
                 <li key={shop.id} onClick={() => handleShopClick(shop.id)}>
                   <div className="h-full">
