@@ -76,8 +76,12 @@ function App() {
             <Route path="/store/manage_promos" element={<Manage_promos />} />
             <Route path="/help" element={<HelpCenter />} />
             <Route
-              path="/products/:shopId"
+              path="/store/:storeId/front"
               element={<GetProductsBasedOnShops />}
+            />
+            <Route
+              path="/store/:storeId/front/collection/:categoryId"
+              component={<GetProductsBasedOnShops />}
             />
             <Route path="/store/addresses" element={<Addresses />} />
             <Route path="/store/checkout" element={<Checkout />} />

@@ -105,12 +105,20 @@ export const getShopsByCategory = (id) => {
   return Ajax.Request(`/store/category?main_category_id=${id}`, Ajax.GET, true);
 };
 
-export const getProductsBasedShops = (id) => {
-  return Ajax.Request(`/product/ListProduct/?id=${id}`, Ajax.GET, true);
+// export const getProductsBasedShops = (id) => {
+//   return Ajax.Request(`/product/ListProduct/?id=${id}`, Ajax.GET, true);
+// };
+
+export const getStoreFrontDetails = (storeId) => {
+  return Ajax.Request(`/store/${storeId}/front`, Ajax.GET, true);
 };
 
-export const getSubCategoryList = () => {
-  return Ajax.Request(`/product/List-Subcat/`, Ajax.GET, true);
+export const getStoreSubCategory = (categoryId) => {
+  return Ajax.Request(`/store/collection/${categoryId}`, Ajax.GET, true);
+};
+
+export const getStoreDeliveryDetails = (storeId) => {
+  return Ajax.Request(`/store/${storeId}/info`, Ajax.GET, true);
 };
 
 export const getProductsOfSubCategory = (id) => {
@@ -146,8 +154,9 @@ let API = {
   verifyChangedPhoneNumber,
   getCategoryFilter,
   getShopsByCategory,
-  getProductsBasedShops,
-  getSubCategoryList,
+  getStoreFrontDetails,
+  getStoreSubCategory,
+  getStoreDeliveryDetails,
   getProductsOfSubCategory,
   RegisterAddress,
   getUserAddress,

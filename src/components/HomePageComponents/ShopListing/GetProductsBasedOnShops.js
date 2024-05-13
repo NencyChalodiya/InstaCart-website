@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Navigate, useParams } from "react-router-dom";
 import { brandStoresData } from "../../../BrandStoreData/brandStoreData";
 import AddToCart from "../../../pages/AddToCart/AddToCart";
-import Navbar from "../../LandingPageComponents/Navbar";
+//import Navbar from "../../LandingPageComponents/Navbar";
+import HeaderProducts from "../HeaderOfProducts/HeaderProducts";
 import API from "../../../services/api";
 import { useNavigate } from "react-router-dom";
+import DeliveryTimesModal from "../../../pages/DeliveryTimesModal/DeliveryTimesModal";
 const GetProductsBasedOnShops = () => {
   const navigate = useNavigate();
   // const recipes = [
@@ -30,59 +32,96 @@ const GetProductsBasedOnShops = () => {
   //   "Dry Goods & Pasta",
   // ];
   const [addToCartModal, setaddToCartModal] = useState(false);
+  const [deliveryTimeModal, openDeliveryTimeModal] = useState(false);
   //const [storeData, setstoreData] = useState(null);
   //const [brandsStoreLogo, setbrandsStoreLogo] = useState(null);
   const [productsWithImages, setProductsWithImages] = useState([]);
   const [shopsSubCategory, setShopsSubCategory] = useState([]);
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
+  const [storeFrontDetails, setStoreFrontDetails] = useState([]);
+  const [storeSubcategory, setStoreSubCatgeory] = useState([]);
+  const [deliveryDetails, setDeliveryDetails] = useState([]);
 
   //const [shopData, setShopData] = useState(null);
   //const params = useParams();
-  const { shopId } = useParams();
-  console.log(shopId);
+  const { storeId, categoryId } = useParams();
+  console.log("categroyId", categoryId);
+
+  //console.log(storeId);
+
+  // useEffect(() => {
+  //   const fetchProductsForShop = async () => {
+  //     try {
+  //       const response = await API.getProductsBasedShops(shopId);
+  //       const productsWithImages = response.products.map((product) => ({
+  //         ...product,
+  //         images: response.images[product.id] || [], // Get images for the current product
+  //       }));
+  //       setProductsWithImages(productsWithImages);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  //   fetchProductsForShop();
+  // }, [shopId]);
 
   useEffect(() => {
-    const fetchProductsForShop = async () => {
+    const fetchStoreFrontDetails = async () => {
       try {
-        const response = await API.getProductsBasedShops(shopId);
-        const productsWithImages = response.products.map((product) => ({
-          ...product,
-          images: response.images[product.id] || [], // Get images for the current product
-        }));
-        setProductsWithImages(productsWithImages);
+        const response = await API.getStoreFrontDetails(storeId);
+        //console.log(response);
+        setStoreFrontDetails(response.data);
       } catch (error) {
         console.log(error);
       }
     };
-
-    fetchProductsForShop();
-  }, [shopId]);
-
-  const fetchSubCategory = async () => {
-    try {
-      const response = await API.getSubCategoryList();
-      setShopsSubCategory(response.results);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  useEffect(() => {
-    fetchSubCategory();
-  }, []);
+    fetchStoreFrontDetails();
+  }, [storeId]);
+  //console.log("storeFrontDetails", storeFrontDetails);
 
   const handleSubCatClick = async (subCatId) => {
     setSelectedSubCategory(subCatId);
+    // try {
+    //   const response = await API.getProductsOfSubCategory(subCatId);
+    //   const productsWithImages = response.products.map((product) => ({
+    //     ...product,
+    //     images: response.images[product.id] || [],
+    //   }));
+    //   setProductsWithImages(productsWithImages);
+    // } catch (error) {
+    //   console.log(error);
+    // }
+
+    // Call fetchStoreSubCategory here
+    fetchStoreSubCategory(subCatId);
+  };
+
+  const fetchStoreSubCategory = async (categoryId) => {
     try {
-      const response = await API.getProductsOfSubCategory(subCatId);
-      const productsWithImages = response.products.map((product) => ({
-        ...product,
-        images: response.images[product.id] || [], // Get images for the current product
-      }));
-      setProductsWithImages(productsWithImages);
+      const response = await API.getStoreSubCategory(categoryId);
+      console.log(response); // Use the response data as needed
+      setStoreSubCatgeory(response.data);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const fetchStoreDeliveryDetails = async () => {
+    try {
+      const response = await API.getStoreDeliveryDetails(storeId);
+      //console.log(response);
+      setDeliveryDetails(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const openModalWithApiCall = () => {
+    openDeliveryTimeModal(true);
+    fetchStoreDeliveryDetails(); // Call the API when opening the modal
+  };
+  //console.log("subCategory", storeSubcategory);
   // useEffect(() => {
   //   brandStoresData.map((d) => {
   //     if (d.id == params.storeId) {
@@ -95,34 +134,64 @@ const GetProductsBasedOnShops = () => {
 
   return (
     <>
-      <Navbar />
+      <HeaderProducts />
       <div className="h-full bg-white">
         <div
           className="fixed z-10 w-64 overflow-y-auto bg-white border-r-2 top-20"
           style={{ height: `calc(100% - 80px)` }}
         >
           <div className="sticky bg-white z-1 will-change-transform backdrop-blur-sm">
-            {/* <div className="flex flex-col items-center px-1 pt-6 pb-4 text-center flex-nowrap">
-              {brandsStoreLogo ? (
-                <div className="relative">
-                  <a
-                    href="/"
-                    className="flex flex-col items-center no-underline"
-                  >
-                    <img
-                      src={brandsStoreLogo.img}
-                      className="w-auto h-20 border-2 rounded-full aspect-square"
-                    />
-                    <h2 className="mt-1 text-xl leading-5">
-                      {brandsStoreLogo.title}
-                    </h2>
-                  </a>
-                </div>
+            <div className="flex flex-col items-center px-1 pt-6 pb-4 text-center flex-nowrap">
+              {storeFrontDetails ? (
+                storeFrontDetails.map((store) => (
+                  <div key={store.store_id} className="relative">
+                    <a
+                      href="/"
+                      className="flex flex-col items-center no-underline"
+                    >
+                      <img
+                        src={store?.logo}
+                        className="w-auto h-20 border rounded-full aspect-square"
+                        alt="Store Logo"
+                      />
+                      <h2 className="mt-1 text-xl leading-5">
+                        {store?.store_name}
+                      </h2>
+                    </a>
+                    <button
+                      className="relative flex items-center mt-1 text-sm leading-4 text-gray-500"
+                      onClick={() => openModalWithApiCall()}
+                    >
+                      {store?.messages[0]
+                        ? store.messages[0]
+                        : "View pricing policy"}
+                      {/* {store?.messages[0]} */}
+                      <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="#C7C8CD"
+                        xmlns="http://www.w3.org/2000/svg"
+                        color="systemGrayscale30"
+                        size="12"
+                        class="e-ozd7xs"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="m12.52 12.001-4.208 4.208 1.584 1.584 5.792-5.792-5.792-5.792-1.584 1.584z"
+                        ></path>
+                      </svg>
+                    </button>
+                    {/* Other details */}
+                  </div>
+                ))
               ) : (
                 <div>Loading...</div>
               )}
 
-              <a
+              {/* <a
                 href="/"
                 className="relative flex items-center mt-1 text-sm leading-4 text-gray-400"
               >
@@ -144,7 +213,7 @@ const GetProductsBasedOnShops = () => {
                     d="m12.52 12.001-4.208 4.208 1.584 1.584 5.792-5.792-5.792-5.792-1.584 1.584z"
                   ></path>
                 </svg>
-              </a>
+              </a> */}
               <button>
                 <div className="flex items-center mt-1 cursor-pointer">
                   <svg
@@ -186,7 +255,7 @@ const GetProductsBasedOnShops = () => {
                   </svg>
                 </div>
               </button>
-              <span>
+              {/* <span>
                 <a
                   href="/"
                   className="relative flex items-center mt-1 text-sm leading-4 text-gray-400"
@@ -210,8 +279,8 @@ const GetProductsBasedOnShops = () => {
                     ></path>
                   </svg>
                 </a>
-              </span>
-            </div> */}
+              </span> */}
+            </div>
           </div>
           <hr />
           <ul className="w-full px-3 py-4 list-none">
@@ -289,7 +358,7 @@ const GetProductsBasedOnShops = () => {
             </li>
           </ul>
           <hr />
-          <ul className="px-3 pt-4 pb-3">
+          {/* <ul className="px-3 pt-4 pb-3">
             {shopsSubCategory.map((subCategory) => (
               <li
                 key={subCategory.id}
@@ -300,9 +369,50 @@ const GetProductsBasedOnShops = () => {
                     : "bg-white hover:bg-gray-100 text-gray-700"
                 } px-3 py-2 cursor-pointer rounded-lg`}
               >
-                {subCategory.title}
+                {subCategory.name}
               </li>
             ))}
+          </ul> */}
+          <ul className="px-3 pt-4 pb-3">
+            {storeFrontDetails &&
+              storeFrontDetails.length > 0 &&
+              storeFrontDetails?.map((store) =>
+                store?.categories?.map((category) => (
+                  <>
+                    <li
+                      key={category.category_id}
+                      onClick={() => handleSubCatClick(category.category_id)}
+                      className={`${
+                        selectedSubCategory === category.category_id
+                          ? "bg-[#242529] text-white"
+                          : "bg-white hover:bg-gray-100 text-gray-700"
+                      } px-3 py-2 cursor-pointer rounded-lg`}
+                    >
+                      <h2 className="text-base leading-5 font-medium">
+                        {" "}
+                        {category?.category_name}
+                      </h2>
+                    </li>
+                    <div>
+                      {selectedSubCategory === category.category_id && (
+                        <ul>
+                          {storeSubcategory.map((subCategory) => (
+                            <li
+                              key={subCategory?.id}
+                              className="bg-white hover:bg-gray-100 text-gray-700 px-6 py-2 cursor-pointer rounded-lg "
+                            >
+                              <h3 className="text-sm leading-5">
+                                {" "}
+                                {subCategory?.name}
+                              </h3>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  </>
+                ))
+              )}
           </ul>
         </div>
 
@@ -557,6 +667,11 @@ const GetProductsBasedOnShops = () => {
       <AddToCart
         addToCartModal={addToCartModal}
         onBackClick={() => setaddToCartModal(false)}
+      />
+      <DeliveryTimesModal
+        deliveryTimeModal={deliveryTimeModal}
+        onCancel={() => openDeliveryTimeModal(false)}
+        deliveryDetails={deliveryDetails}
       />
     </>
   );
