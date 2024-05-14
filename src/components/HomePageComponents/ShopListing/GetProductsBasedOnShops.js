@@ -8,6 +8,10 @@ import API from "../../../services/api";
 import { useNavigate } from "react-router-dom";
 import DeliveryTimesModal from "../../../pages/DeliveryTimesModal/DeliveryTimesModal";
 const GetProductsBasedOnShops = () => {
+  const { storeId, categoryId, productId } = useParams();
+  console.log("StoreId", storeId);
+  console.log("categroyId", categoryId);
+  console.log("productId", productId);
   const navigate = useNavigate();
   // const recipes = [
   //   "Recipes",
@@ -41,11 +45,10 @@ const GetProductsBasedOnShops = () => {
   const [storeFrontDetails, setStoreFrontDetails] = useState([]);
   const [storeSubcategory, setStoreSubCatgeory] = useState([]);
   const [deliveryDetails, setDeliveryDetails] = useState([]);
+  const [productDetail, setProductDetail] = useState([]);
 
   //const [shopData, setShopData] = useState(null);
   //const params = useParams();
-  const { storeId, categoryId } = useParams();
-  console.log("categroyId", categoryId);
 
   //console.log(storeId);
 
@@ -82,6 +85,7 @@ const GetProductsBasedOnShops = () => {
 
   const handleSubCatClick = async (subCatId) => {
     setSelectedSubCategory(subCatId);
+
     // try {
     //   const response = await API.getProductsOfSubCategory(subCatId);
     //   const productsWithImages = response.products.map((product) => ({
@@ -95,6 +99,7 @@ const GetProductsBasedOnShops = () => {
 
     // Call fetchStoreSubCategory here
     fetchStoreSubCategory(subCatId);
+    //navigate(`/store/${storeId}/front/collection/${subCatId}`);
   };
 
   const fetchStoreSubCategory = async (categoryId) => {
@@ -106,6 +111,7 @@ const GetProductsBasedOnShops = () => {
       console.log(error);
     }
   };
+  //console.log("subCategory", storeSubcategory);
 
   const fetchStoreDeliveryDetails = async () => {
     try {
@@ -121,6 +127,25 @@ const GetProductsBasedOnShops = () => {
     openDeliveryTimeModal(true);
     fetchStoreDeliveryDetails(); // Call the API when opening the modal
   };
+
+  const fetchProductDetail = async (productId) => {
+    try {
+      const response = await API.getIndividualProductDetail(productId);
+      //console.log(response);
+      setProductDetail(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  // console.log("Productdetail", productDetail);
+
+  const openProductDetailModal = (productId) => {
+    setaddToCartModal(true);
+
+    fetchProductDetail(productId);
+    // navigate(`/product/${productId}`);
+  };
+
   //console.log("subCategory", storeSubcategory);
   // useEffect(() => {
   //   brandStoresData.map((d) => {
@@ -398,12 +423,12 @@ const GetProductsBasedOnShops = () => {
                         <ul>
                           {storeSubcategory.map((subCategory) => (
                             <li
-                              key={subCategory?.id}
+                              key={subCategory?.subcategory_id}
                               className="bg-white hover:bg-gray-100 text-gray-700 px-6 py-2 cursor-pointer rounded-lg "
                             >
                               <h3 className="text-sm leading-5">
                                 {" "}
-                                {subCategory?.name}
+                                {subCategory?.subcategory_name}
                               </h3>
                             </li>
                           ))}
@@ -416,28 +441,21 @@ const GetProductsBasedOnShops = () => {
           </ul>
         </div>
 
-        <div className="ml-64 ">
+        <div className="ml-72">
           <div className="h-14"></div>
 
-          <div className="w-full py-6 ">
-            <div className="w-full px-8 mb-6">
-              <div className="flex items-center justify-between mt-6 ">
-                <div>
-                  <h2 className="flex mr-2">
-                    {productsWithImages.length > 0 && (
-                      <div
-                        className="text-3xl font-bold leading-5 max-md:text-2xl"
-                        key={productsWithImages[0].category.id}
-                      >
-                        {productsWithImages[0].category.title}
-                      </div>
-                    )}
-                  </h2>
-                </div>
-                <div className="flex items-center justify-center align-baseline max-md:hidden">
+          {storeSubcategory.map((subCategory) => (
+            <div key={subCategory.subcategory_id}>
+              <div className="flex items-center justify-between mt-6">
+                <h2 className="flex mr-2">
+                  <div className="text-3xl font-bold leading-5 max-md:text-2xl">
+                    {subCategory?.subcategory_name}
+                  </div>
+                </h2>
+                <div className="flex items-center justify-center  max-md:hidden">
                   <div className="flex items-center justify-center">
                     <button className="flex w-full h-10 text-green-600 rounded-xl">
-                      <span className="flex items-center gap-1 mt-2 ml-2 mr-2 overflow-hidden text-sm leading-5 text-ellipsis">
+                      <span className="flex items-center gap-1 mt-2 ml-2 mr-6 overflow-hidden text-sm leading-5 text-ellipsis">
                         View all (80+)
                         <svg
                           width="14"
@@ -447,12 +465,12 @@ const GetProductsBasedOnShops = () => {
                           xmlns="http://www.w3.org/2000/svg"
                           color="systemGrayscale80"
                           size="14"
-                          class="e-jyj61s"
+                          className="e-jyj61s"
                           aria-hidden="true"
                         >
                           <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
+                            fillRule="evenodd"
+                            clipRule="evenodd"
                             d="m12.52 12.001-4.208 4.208 1.584 1.584 5.792-5.792-5.792-5.792-1.584 1.584z"
                           ></path>
                         </svg>
@@ -460,50 +478,7 @@ const GetProductsBasedOnShops = () => {
                     </button>
                   </div>
                   <div className="flex items-center ml-4 mr-2 min-h-20">
-                    <div className="rounded-3xl">
-                      <button className="relative flex items-center justify-center w-10 h-10 mr-2 text-gray-600 bg-gray-400 rounded-3xl ">
-                        <span className="flex overflow-hidden text-ellipsis">
-                          <svg
-                            width="1em"
-                            height="1em"
-                            viewBox="0 0 24 24"
-                            fill="#C7C8CD"
-                            xmlns="http://www.w3.org/2000/svg"
-                            color="systemGrayscale30"
-                            class="e-1xkhv85"
-                            aria-hidden="true"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              clip-rule="evenodd"
-                              d="m11.48 11.999 4.208-4.208-1.584-1.584-5.792 5.792 5.792 5.792 1.584-1.584z"
-                            ></path>
-                          </svg>
-                        </span>
-                      </button>
-                    </div>
-                    <div className="rounded-3xl">
-                      <button className="relative flex items-center justify-center w-10 h-10 mr-2 text-gray-600 bg-gray-400 rounded-3xl ">
-                        <span className="flex overflow-hidden text-ellipsis">
-                          <svg
-                            width="1em"
-                            height="1em"
-                            viewBox="0 0 24 24"
-                            fill="#343538"
-                            xmlns="http://www.w3.org/2000/svg"
-                            color="systemGrayscale70"
-                            class="e-1xkhv85"
-                            aria-hidden="true"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              clip-rule="evenodd"
-                              d="m12.52 12.001-4.208 4.208 1.584 1.584 5.792-5.792-5.792-5.792-1.584 1.584z"
-                            ></path>
-                          </svg>
-                        </span>
-                      </button>
-                    </div>
+                    {/* Previous code for buttons */}
                   </div>
                 </div>
               </div>
@@ -511,162 +486,113 @@ const GetProductsBasedOnShops = () => {
               <div>
                 <div className="relative flex flex-row">
                   <div className="w-full">
-                    <ul className="w-full h-full min-h-[304px] grid grid-cols-5 gap-6 justify-between mt-2 max-2xl:grid-cols-6 max-lg:grid-cols-4 max-xl:grid-cols-5 max-md:grid-cols-3 max-sm:grid-cols-1">
-                      {
-                        <>
-                          {productsWithImages.map((product) => (
-                            // <li key={product.id}>
-                            //   <h3>{product.title}</h3>
-                            //   <p>{product.details}</p>
-                            //   <ul>
-                            //     {product.images.map((image) => (
-                            //       <li key={image.id}>
-                            //         <img
-                            //           src={image.image}
-                            //           alt={`Product ${product.id}`}
-                            //         />
-                            //       </li>
-                            //     ))}
-                            //   </ul>
-                            // </li>
-                            <li
-                              key={product.id}
-                              className="relative flex flex-col cursor-pointer"
-                              onClick={() => setaddToCartModal(true)}
-                            >
-                              <div className="absolute z-10 top-1 right-1">
-                                {" "}
-                                {/* Move absolute positioning here */}
-                                <div className="inline-block rounded-[20px] p-[2px] bg-[#2C890F]">
-                                  <button className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 bg-[#2C890F]">
-                                    <div>
-                                      <div className="flex items-center px-2">
-                                        <svg
-                                          width="24"
-                                          height="24"
-                                          viewBox="0 0 24 24"
-                                          fill="#FFFFFF"
-                                          xmlns="http://www.w3.org/2000/svg"
-                                          size="24"
-                                          color="systemGrayscale00"
-                                          aria-hidden="true"
-                                        >
-                                          <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
-                                        </svg>
-                                        <span className="pl-1 text-white">
-                                          Add
-                                        </span>
-                                      </div>
-                                    </div>
-                                  </button>
+                    <ul className="w-full h-full min-h-[304px] grid grid-cols-5 gap-9 justify-between mt-2 max-2xl:grid-cols-6 max-lg:grid-cols-4 max-xl:grid-cols-5 max-md:grid-cols-3 max-sm:grid-cols-1">
+                      {subCategory.products.map((product) => (
+                        <li
+                          key={product.id}
+                          className="relative flex flex-col cursor-pointer"
+                          onClick={() => openProductDetailModal(product.id)}
+                        >
+                          <div className="absolute z-10 top-1 right-1">
+                            <div className="inline-block rounded-[20px] p-[2px] bg-[#2C890F]">
+                              <button className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 bg-[#2C890F]">
+                                <div>
+                                  <div className="flex items-center px-2">
+                                    <svg
+                                      width="24"
+                                      height="24"
+                                      viewBox="0 0 24 24"
+                                      fill="#FFFFFF"
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      size="24"
+                                      color="systemGrayscale00"
+                                      aria-hidden="true"
+                                    >
+                                      <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
+                                    </svg>
+                                    <span className="pl-1 text-white">Add</span>
+                                  </div>
                                 </div>
+                              </button>
+                            </div>
+                          </div>
+                          <div>
+                            <div className="relative overflow-hidden rounded-xl">
+                              <div className="w-full h-[200px] object-cover">
+                                <ul>
+                                  <li>
+                                    <img
+                                      src={product?.image}
+                                      alt={`Product ${product.id}`}
+                                    />
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                            <div className="px-2 mt-2 ">
+                              <div className="py-[1px] px-1 flex items-center">
+                                <div>
+                                  <span className="text-sm font-bold text-gray-700 align-super">
+                                    $
+                                  </span>
+                                  <span className="mr-[2px] font-bold text-2xl leading-5 text-gray-700">
+                                    {product?.actual_price}
+                                  </span>
+                                  <span className="text-sm font-bold text-gray-700 align-super">
+                                    49
+                                  </span>
+                                </div>
+                                <div>
+                                  <span className="text-gray-500 ml-2">
+                                    <s>{product?.selling_price}</s>
+                                  </span>
+                                </div>
+                              </div>
+
+                              <div className="">
+                                <span className="text-gray-600">
+                                  {product?.title}
+                                </span>
                               </div>
                               <div>
-                                <div className="relative overflow-hidden rounded-xl">
-                                  <div className="w-full h-[200px] object-cover">
-                                    <ul>
-                                      {product.images.map((image) => (
-                                        <li key={image.id}>
-                                          <img
-                                            src={image.image}
-                                            alt={`Product ${product.id}`}
-                                          />
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  </div>
-                                </div>
-                                <div className="px-2 mt-2">
-                                  <div className="py-[1px] px-1 ">
-                                    <span className="text-sm font-bold text-gray-700 align-super">
-                                      $
-                                    </span>
-                                    <span className="mr-[2px] font-bold text-2xl leading-5 text-gray-700">
-                                      {product.price}
-                                    </span>
-                                    <span className="text-sm font-bold text-gray-700 align-super">
-                                      49
-                                    </span>
-                                  </div>
-                                  <div className="">
-                                    <span className="text-gray-500">
-                                      {product.title}
-                                    </span>
-                                  </div>
-                                  <div>
-                                    <p className="mt-[6px] text-gray-400">
-                                      {product.details.length > 100
-                                        ? product.details.substring(0, 100) +
-                                          "..."
-                                        : product.details}
-                                    </p>
-                                  </div>
-                                  <div className="flex">
-                                    <div className="text-gray-400">
-                                      {product?.m_qty} {product?.measurement}
-                                    </div>
-                                  </div>
+                                <span className="text-gray-500">
+                                  {product?.label}
+                                </span>
+                              </div>
+                              <div>
+                                <span className="bg-[#FDDC22] ">
+                                  {product?.discount_label}
+                                </span>
+                              </div>
+                              <div>
+                                <p className="mt-[6px] text-gray-400">
+                                  {/* {product.details.length > 100
+                        ? product.details.substring(0, 100) +
+                          "..."
+                        : product.details} */}
+                                </p>
+                              </div>
+                              <div className="flex">
+                                <div className="text-gray-400">
+                                  {/* {product?.m_qty} {product?.measurement} */}
                                 </div>
                               </div>
-                              {/* <div className="absolute z-10 top-1 right-1">
-                              <div className="inline-block rounded-[20px] p-[2px] bg-[#2C890F]">
-                                <button className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 bg-[#2C890F]">
-                                  <div>
-                                    <div className="flex items-center px-1">
-                                      <svg
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="#FFFFFF"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        size="24"
-                                        color="systemGrayscale00"
-                                        aria-hidden="true"
-                                      >
-                                        <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
-                                      </svg>
-                                      <span className="pl-1 text-white">
-                                        Add
-                                      </span>
-                                    </div>
-                                  </div>
-                                </button>
-                              </div>
-                            </div> */}
-                            </li>
-                          ))}
-                        </>
-                      }
-                    </ul>
-                    {/* <h2>Products</h2>
-                    <ul>
-                      {productsWithImages.map((product) => (
-                        <li key={product.id}>
-                          <h3>{product.title}</h3>
-                          <p>{product.details}</p>
-                          <ul>
-                            {product.images.map((image) => (
-                              <li key={image.id}>
-                                <img
-                                  src={image.image}
-                                  alt={`Product ${product.id}`}
-                                />
-                              </li>
-                            ))}
-                          </ul>
+                            </div>
+                          </div>
                         </li>
                       ))}
-                    </ul> */}
+                    </ul>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
       <AddToCart
         addToCartModal={addToCartModal}
         onBackClick={() => setaddToCartModal(false)}
+        productDetail={productDetail}
       />
       <DeliveryTimesModal
         deliveryTimeModal={deliveryTimeModal}

@@ -121,9 +121,13 @@ export const getStoreDeliveryDetails = (storeId) => {
   return Ajax.Request(`/store/${storeId}/info`, Ajax.GET, true);
 };
 
-export const getProductsOfSubCategory = (id) => {
-  return Ajax.Request(`/product/subcategory/${id}/`, Ajax.GET, true);
+export const getIndividualProductDetail = (productId) => {
+  return Ajax.Request(`/products/${productId}`, Ajax.GET, true);
 };
+
+// export const getProductsOfSubCategory = (id) => {
+//   return Ajax.Request(`/product/subcategory/${id}/`, Ajax.GET, true);
+// };
 
 export const RegisterAddress = (payload) => {
   return Ajax.Request(`/register-address/`, Ajax.POST, true, payload);
@@ -157,7 +161,7 @@ let API = {
   getStoreFrontDetails,
   getStoreSubCategory,
   getStoreDeliveryDetails,
-  getProductsOfSubCategory,
+  getIndividualProductDetail,
   RegisterAddress,
   getUserAddress,
   editUserAddress,

@@ -21,6 +21,7 @@ import GetProductsBasedOnShops from "./components/HomePageComponents/ShopListing
 import Addresses from "./pages/StoreSidebarPages/Address/Addresses";
 import Checkout from "./pages/CheckoutPage/Checkout";
 import StoreSidebar from "./components/HomePageComponents/StoreSidebar.js/StoreSidebar";
+import AddToCart from "./pages/AddToCart/AddToCart";
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -83,6 +84,7 @@ function App() {
               path="/store/:storeId/front/collection/:categoryId"
               component={<GetProductsBasedOnShops />}
             />
+            {/* <Route path="/product/:productId" component={<AddToCart />} /> */}
             <Route path="/store/addresses" element={<Addresses />} />
             <Route path="/store/checkout" element={<Checkout />} />
           </>

@@ -2,7 +2,13 @@ import React from "react";
 import { Modal } from "antd";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { offersCategory } from "../../data/offers";
-const AddToCart = ({ addToCartModal, onBackClick, itemsAdd }) => {
+const AddToCart = ({
+  addToCartModal,
+  onBackClick,
+  itemsAdd,
+  productDetail,
+}) => {
+  console.log("Productdetail", productDetail);
   return (
     <Modal
       // title={
@@ -309,42 +315,29 @@ const AddToCart = ({ addToCartModal, onBackClick, itemsAdd }) => {
                               </button>
                             </div>
                           </li>
-                          <li className="inline-block p-1">
-                            <button className="border p-1 m-[1px] bg-white cursor-pointer w-[46px] flex rounded-xl">
-                              <img
-                                src="https://www.instacart.com/assets/domains/product-image/file/large_b7c18887-0fad-4c0f-a410-628cd79883bb.jpg"
-                                alt="img-1"
-                                className="h-auto max-w-full rounded-xl"
-                              />
-                            </button>
-                          </li>
-                          <li className="inline-block p-1">
-                            <button className="border p-1 m-[1px] bg-white cursor-pointer w-[46px] flex rounded-xl">
-                              <img
-                                src="https://www.instacart.com/assets/domains/product-image/file/large_b7c18887-0fad-4c0f-a410-628cd79883bb.jpg"
-                                alt="img-1"
-                                className="h-auto max-w-full rounded-xl"
-                              />
-                            </button>
-                          </li>
-                          <li className="inline-block p-1">
-                            <button className="border p-1 m-[1px] bg-white cursor-pointer w-[46px] flex rounded-xl">
-                              <img
-                                src="https://www.instacart.com/assets/domains/product-image/file/large_b7c18887-0fad-4c0f-a410-628cd79883bb.jpg"
-                                alt="img-1"
-                                className="h-auto max-w-full rounded-xl"
-                              />
-                            </button>
-                          </li>
-                          <li className="inline-block p-1">
-                            <button className="border p-1 m-[1px] bg-white cursor-pointer w-[46px] flex rounded-xl">
-                              <img
-                                src="https://www.instacart.com/assets/domains/product-image/file/large_b7c18887-0fad-4c0f-a410-628cd79883bb.jpg"
-                                alt="img-1"
-                                className="h-auto max-w-full rounded-xl"
-                              />
-                            </button>
-                          </li>
+
+                          {productDetail ? (
+                            <>
+                              {productDetail?.product_images.map(
+                                (productImg) => (
+                                  <li className="inline-block p-1">
+                                    <button className="border p-1 m-[1px] bg-white cursor-pointer w-[46px] flex rounded-xl">
+                                      <img
+                                        src={productImg}
+                                        alt="img-1"
+                                        className="h-auto max-w-full rounded-xl"
+                                      />
+                                    </button>
+                                  </li>
+                                )
+                              )}
+                            </>
+                          ) : (
+                            <>
+                              <div>Loading...</div>
+                            </>
+                          )}
+
                           <li>
                             <div className="mt-6 lg:hidden">
                               <button className="w-[30px] h-[30px] rounded-[24px] border-[2px] flex items-center justify-center">
