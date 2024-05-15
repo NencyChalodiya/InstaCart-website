@@ -18,6 +18,19 @@ const ShopListing = ({ selectedCategoryId }) => {
       }
     };
 
+    fetchShopsByCategory(1);
+  }, [1]);
+
+  useEffect(() => {
+    const fetchShopsByCategory = async (categoryId) => {
+      try {
+        const response = await API.getShopsByCategory(categoryId); // Pass category ID directly
+        setShops(response.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     if (selectedCategoryId !== null) {
       // Ensure selectedCategoryId is a number before passing it to fetchShopsByCategory
       if (!isNaN(selectedCategoryId)) {
@@ -25,6 +38,7 @@ const ShopListing = ({ selectedCategoryId }) => {
       }
     }
   }, [selectedCategoryId]);
+
   //console.log(shops);
   const handleShopClick = async (storeId) => {
     // try {
@@ -126,17 +140,6 @@ const ShopListing = ({ selectedCategoryId }) => {
         </div>
       </div>
     </>
-    // <div className="mt-40">
-    //   <h2>Shops</h2>
-    //   <ul>
-    //     {shops.map((shop) => (
-    //       <li key={shop.id}>
-    //         {shop.title}
-    //         <img src={shop.logo} alt="shop-list" />
-    //       </li>
-    //     ))}
-    //   </ul>
-    // </div>
   );
 };
 

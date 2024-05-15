@@ -117,6 +117,18 @@ export const getStoreSubCategory = (categoryId) => {
   return Ajax.Request(`/store/collection/${categoryId}`, Ajax.GET, true);
 };
 
+export const getProductsOfShop = (storeId) => {
+  return Ajax.Request(`/store/collection/store/${storeId}`, Ajax.GET, true);
+};
+
+export const getProductsOfSubCategory = (subcategoryId) => {
+  return Ajax.Request(
+    `/store/collection/subcategory/${subcategoryId}`,
+    Ajax.GET,
+    true
+  );
+};
+
 export const getStoreDeliveryDetails = (storeId) => {
   return Ajax.Request(`/store/${storeId}/info`, Ajax.GET, true);
 };
@@ -125,6 +137,9 @@ export const getIndividualProductDetail = (productId) => {
   return Ajax.Request(`/products/${productId}`, Ajax.GET, true);
 };
 
+export const addToSavedProducts = (payload) => {
+  return Ajax.Request(`/products/addtosaved`, Ajax.POST, true, payload);
+};
 // export const getProductsOfSubCategory = (id) => {
 //   return Ajax.Request(`/product/subcategory/${id}/`, Ajax.GET, true);
 // };
@@ -160,8 +175,11 @@ let API = {
   getShopsByCategory,
   getStoreFrontDetails,
   getStoreSubCategory,
+  getProductsOfShop,
   getStoreDeliveryDetails,
   getIndividualProductDetail,
+  getProductsOfSubCategory,
+  addToSavedProducts,
   RegisterAddress,
   getUserAddress,
   editUserAddress,

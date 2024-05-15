@@ -4,14 +4,33 @@ import { UserOutlined } from "@ant-design/icons";
 import TotalCartItems from "../../../pages/TotalCartItems/TotalCartItems";
 import { useSelector } from "react-redux";
 import DeliveryTimesModal from "../../../pages/DeliveryTimesModal/DeliveryTimesModal";
-const HeaderProducts = () => {
+import API from "../../../services/api";
+
+const HeaderProducts = ({ storeId }) => {
   const [deliveryTimeModal, openDeliveryTimeModal] = useState(false);
   const [totalCartItemsModal, setTotalCartItemsModal] = useState(false);
+  const [deliveryDetails, setDeliveryDetails] = useState([]);
   const { cartItems } = useSelector((state) => state.cartItems);
   const styles = {
     display: "grid",
     gridTemplateColumns: "auto 1fr auto",
   };
+
+  const fetchStoreDeliveryDetails = async () => {
+    try {
+      const response = await API.getStoreDeliveryDetails(storeId);
+      setDeliveryDetails(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const openModalWithApiCall = () => {
+    openDeliveryTimeModal(true);
+
+    fetchStoreDeliveryDetails(); // Call the API when opening the modal
+  };
+
   return (
     <>
       <header className="fixed top-0 z-20 w-full bg-white border-b">
@@ -249,28 +268,57 @@ const HeaderProducts = () => {
                 <button
                   href="/"
                   className="relative min-h-14 cursor-pointer"
-                  onClick={() => openDeliveryTimeModal(true)}
+                  onClick={() => openModalWithApiCall()}
                 >
-                  <span className="flex items-center ">
-                    <svg
-                      width="24"
-                      height="24"
-                      viewBox="0 0 24 24"
-                      fill="#343538"
-                      xmlns="http://www.w3.org/2000/svg"
-                      role="img"
-                      size="24"
-                      class="e-ozd7xs"
-                      aria-hidden="true"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        clip-rule="evenodd"
-                        d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10m1-17v6.52l4.625 3.7-1.25 1.56L11 12.48V5z"
-                      ></path>
-                    </svg>
-                    <span className="ml-1 text-base">Today,1pm</span>
-                  </span>
+                  {deliveryDetails ? (
+                    <>
+                      <span className="flex items-center ">
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="#108910"
+                          xmlns="http://www.w3.org/2000/svg"
+                          role="img"
+                          size="24"
+                          class="e-ozd7xs"
+                          aria-hidden="true"
+                        >
+                          <path d="M12.79 10.33 14.74 2h-1.27L5.54 12.63v1.05h5.67L9.26 22h1.27l7.93-10.62v-1.05z"></path>
+                        </svg>
+
+                        {deliveryDetails.map((detail) => (
+                          <span className="ml-1 text-base text-[#308E1F]">
+                            Delivery by
+                            {detail?.delivery_time?.next_delivery?.timeSlot}
+                          </span>
+                        ))}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="flex items-center">
+                        <svg
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          fill="#343538"
+                          xmlns="http://www.w3.org/2000/svg"
+                          role="img"
+                          size="24"
+                          class="e-ozd7xs"
+                          aria-hidden="true"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10m1-17v6.52l4.625 3.7-1.25 1.56L11 12.48V5z"
+                          ></path>
+                        </svg>
+                        <span className="ml-1 text-base">Today,1pm</span>
+                      </span>
+                    </>
+                  )}
                 </button>
               </div>
             </div>
@@ -307,6 +355,7 @@ const HeaderProducts = () => {
       <DeliveryTimesModal
         deliveryTimeModal={deliveryTimeModal}
         onCancel={() => openDeliveryTimeModal(false)}
+        deliveryDetails={deliveryDetails}
       />
     </>
   );

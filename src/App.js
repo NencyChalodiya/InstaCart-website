@@ -82,8 +82,15 @@ function App() {
             />
             <Route
               path="/store/:storeId/front/collection/:categoryId"
-              component={<GetProductsBasedOnShops />}
+              element={<GetProductsBasedOnShops />}
             />
+
+            <Route
+              path="/store/:storeId/front/collection/:categoryId/:subcategoryId"
+              element={<GetProductsBasedOnShops />}
+            />
+
+            {/* <Route path="/products/:productId" element={<AddToCart />} /> */}
             {/* <Route path="/product/:productId" component={<AddToCart />} /> */}
             <Route path="/store/addresses" element={<Addresses />} />
             <Route path="/store/checkout" element={<Checkout />} />
