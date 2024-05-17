@@ -5,7 +5,7 @@ import Sidebar from "./Sidebar";
 import { RxCross2 } from "react-icons/rx";
 import { useLocation } from "react-router-dom";
 import StoreSidebar from "../HomePageComponents/StoreSidebar.js/StoreSidebar";
-const Navbar = ({ onLoginButton, onSignupHandler }) => {
+const Navbar = ({ onLoginButton, onSignupHandler, searchDetails }) => {
   const location = useLocation();
 
   const [open, isOpen] = useState(false);
@@ -105,6 +105,7 @@ const Navbar = ({ onLoginButton, onSignupHandler }) => {
                     type="text"
                     className="box-border relative flex items-center w-full h-full pr-12 text-base text-black placeholder-black bg-transparent rounded-lg shadow-inner indent-10 outline-black "
                     placeholder="Search products and stores"
+                    value={searchDetails}
                   />
                 </div>
               </form>

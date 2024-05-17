@@ -15,8 +15,9 @@ import { Tabs } from "antd";
 import { ConfigProvider } from "antd";
 import ShopListing from "../ShopListing/ShopListing";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
+import { useNavigate } from "react-router-dom";
 const Header = () => {
+  const navigate = useNavigate();
   const styles = {
     display: "grid",
     gridTemplateColumns: "auto 1fr auto",
@@ -25,7 +26,7 @@ const Header = () => {
   const [categoryList, setCategoryList] = useState([]);
   //const [shops, setShops] = useState([]);
   const [selectedCategoryId, setSelectedCategoryId] = useState(null);
-
+  const [searchValue, setSearchValue] = useState("");
   const fetchCategoryFilter = async () => {
     try {
       const response = await API.getCategoryFilter();
@@ -60,6 +61,22 @@ const Header = () => {
 
   const onClosebutton = () => {
     setopen(false);
+  };
+
+  const handleSearch = () => {
+    if (searchValue.trim() !== "") {
+      navigate(`/store/search/${encodeURIComponent(searchValue)}`);
+    }
+  };
+
+  const handleInputChange = (event) => {
+    setSearchValue(event.target.value);
+  };
+
+  const handleKeyPress = (event) => {
+    if (event.key === "Enter") {
+      handleSearch();
+    }
   };
 
   const isExtraSmallScreen = useMediaQuery("(max-width: 639px)"); // xs
@@ -148,6 +165,9 @@ const Header = () => {
                   <input
                     className=" flex relative items-center w-full py-3 rounded-[28px] border border-[#C7C8CD] bg-white outline-none  pr-[47.5px] h-full box-border text-[#242529] pl-[34.5px]  placeholder-[#47474A] text-base shadow-md focus:border-black  "
                     type="text"
+                    value={searchValue}
+                    onChange={handleInputChange}
+                    onKeyPress={handleKeyPress}
                     placeholder="Search products,stores,and recipes"
                   />
                 </div>

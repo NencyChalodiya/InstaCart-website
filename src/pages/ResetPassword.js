@@ -18,7 +18,7 @@ const ResetPassword = ({ resetPassword, onClickSignup, onClickBack }) => {
         email: resetPasswordDetails.email,
       };
       const response = await API.resetPasswordUser(payload);
-      console.log(response);
+      // console.log(response);
       if (response.status === "success") {
         //console.log("mail sent successfully");
         message.success("Mail sent Successfully");

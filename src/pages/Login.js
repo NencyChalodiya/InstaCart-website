@@ -64,7 +64,7 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
       ...loginUserDetails,
       enteredotp: enteredotp,
     });
-    console.log(enteredotp);
+    // console.log(enteredotp);
   };
 
   const validateEmail = (email) => {
@@ -111,7 +111,7 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
           password: loginUserDetails.password,
         };
         const response = await API.LoginUser(payload);
-        console.log(response);
+        // console.log(response);
         if (response.status === "success") {
           localStorage.setItem(
             "accessToken",
@@ -132,7 +132,7 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
             country_code: loginUserDetails.countryCode,
           };
           const response = await API.LoginUser(payload);
-          console.log(response);
+          // console.log(response);
           setLoginUserDetails({
             ...loginUserDetails,
             otpid: response.data.otpid,
@@ -163,7 +163,7 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
         enteredotp: loginUserDetails.enteredotp,
       };
       const response = await API.VerifyOtpToLogin(payload);
-      console.log(response);
+      // console.log(response);
       if (response.status === "success") {
         localStorage.setItem("accessToken", response.data.JWTToken.accessToken);
         localStorage.setItem(
@@ -202,7 +202,7 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
         otpid: loginUserDetails.otpid,
       };
       const response = await API.resendOtp(payload);
-      console.log(response);
+      // console.log(response);
       if (response.status === "success") {
         message.success("Resend Otp send successfully");
       } else {

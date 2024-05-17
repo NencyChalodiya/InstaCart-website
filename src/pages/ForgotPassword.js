@@ -9,7 +9,7 @@ import "./Loading.css";
 const ForgotPassword = () => {
   const navigate = useNavigate();
   const params = useParams();
-  console.log(params);
+  // console.log(params);
   const [newPassword, setNewPassword] = useState("");
   const [screen, setScreen] = useState(false);
   const [isLoading, setLoading] = useState(false);

@@ -81,7 +81,7 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
         };
       }
       const response = await API.SendOtpToRegister(payload);
-      console.log(response);
+      // console.log(response);
 
       setUserDetails({
         ...userDetails,
@@ -123,7 +123,7 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
         };
       }
       const response = await API.VerifyOtpToRegister(payload);
-      console.log(response);
+      // console.log(response);
       if (response.status === "success") {
         localStorage.setItem("accessToken", response.data.JWTToken.accessToken);
         localStorage.setItem(
@@ -215,7 +215,7 @@ const Signup = ({ signup, onCancel, onClickLogin }) => {
         otpid: userDetails.otpid,
       };
       const response = await API.resendOtp(payload);
-      console.log(response);
+      // console.log(response);
       if (response.status === "success") {
         message.success("Resend Otp send successfully");
       } else {

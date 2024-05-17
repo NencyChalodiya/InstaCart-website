@@ -24,7 +24,7 @@ const DeliveryTimesModal = ({
 
   //console.log("sawdewasdasd", deliveryDetails);
 
-  console.log("deliverygd", deliveryDetails);
+  //console.log("deliverygd", deliveryDetails);
   // const fetchStoreDeliveryDetails = async () => {
   //   try {
   //     const response = await API.getStoreDeliveryDetails(storeId);

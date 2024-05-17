@@ -36,7 +36,7 @@ const Addresses = () => {
     fetchUserAddressDetail();
   }, []);
 
-  console.log("addressDetail", getUserAddressDetail);
+  //console.log("addressDetail", getUserAddressDetail);
 
   const handleEditAddress = (address) => {
     // Open the EditAddress modal and pass the address data

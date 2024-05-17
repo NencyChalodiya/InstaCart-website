@@ -4,6 +4,7 @@ import BrandStores from "../components/HomePageComponents/BrandStores/BrandStore
 import Offers from "../components/HomePageComponents/Offers/Offers";
 import StoreToHelpYouSave from "../components/HomePageComponents/StoresToHelpYouSave/StoreToHelpYouSave";
 import StoreFooter from "../components/HomePageComponents/StoreFooter/StoreFooter";
+import SearchPageProducts from "./SearchPageProducts/SearchPageProducts";
 const Home = () => {
   return (
     <>
@@ -19,6 +20,7 @@ const Home = () => {
       <Offers />
       <StoreToHelpYouSave />
       <StoreFooter />
+     
     </>
   );
 };

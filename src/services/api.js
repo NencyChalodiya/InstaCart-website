@@ -144,6 +144,34 @@ export const addToSavedProducts = (payload) => {
 //   return Ajax.Request(`/product/subcategory/${id}/`, Ajax.GET, true);
 // };
 
+export const Search = (filter) => {
+  return Ajax.Request(
+    `/store/search`,
+    Ajax.GET,
+    true,
+    null,
+    null,
+    null,
+    filter
+  );
+};
+
+export const SearchInsideStore = (storeFilter) => {
+  return Ajax.Request(
+    `/store/inside/search`,
+    Ajax.GET,
+    true,
+    null,
+    null,
+    null,
+    storeFilter
+  );
+};
+
+// export const Search = (query) => {
+//   return Ajax.Request(`/store/search?query=${query}`, Ajax.GET, true);
+// };
+
 export const RegisterAddress = (payload) => {
   return Ajax.Request(`/register-address/`, Ajax.POST, true, payload);
 };
@@ -180,6 +208,8 @@ let API = {
   getIndividualProductDetail,
   getProductsOfSubCategory,
   addToSavedProducts,
+  Search,
+  SearchInsideStore,
   RegisterAddress,
   getUserAddress,
   editUserAddress,

@@ -12,6 +12,20 @@ const DELETE = "delete";
 const INVALID_TOKEN = "invalid or expired jwt";
 // const HEALTH_SECRET = "SfUyfAztruqg92sbm30rEIyHLNV7f5";
 
+const jsonToUrlParams = (json) => {
+  return Object.keys(json)
+    .map(function (k) {
+      if (json[k]) {
+        return encodeURIComponent(k) + "=" + encodeURIComponent(json[k]);
+      }
+      return "";
+    })
+    .filter((item) => {
+      return item;
+    })
+    .join("&");
+};
+
 const getToken = () => {
   const token = localStorage.getItem("accessToken");
   if (token !== null) {
@@ -88,8 +102,12 @@ const Request = async (
   priv = true,
   payload,
   imageType = "",
-  API_URL = ""
+  API_URL = "",
+  params = {}
 ) => {
+  if (Object.keys(params).length > 0) {
+    route += `?${jsonToUrlParams(params)}`;
+  }
   let config = {
     method: method,
     headers: {},

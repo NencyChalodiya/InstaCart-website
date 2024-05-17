@@ -20,8 +20,10 @@ import ForgotPassword from "./pages/ForgotPassword";
 import GetProductsBasedOnShops from "./components/HomePageComponents/ShopListing/GetProductsBasedOnShops";
 import Addresses from "./pages/StoreSidebarPages/Address/Addresses";
 import Checkout from "./pages/CheckoutPage/Checkout";
+import SearchPageProducts from "./pages/SearchPageProducts/SearchPageProducts";
 import StoreSidebar from "./components/HomePageComponents/StoreSidebar.js/StoreSidebar";
 import AddToCart from "./pages/AddToCart/AddToCart";
+import FilteredStoreProducts from "./pages/FilteredStoreProducts/FilteredStoreProducts";
 function App() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -35,7 +37,7 @@ function App() {
       }
     }
   }, [accessToken]);
-  console.log(accessToken);
+  // console.log(accessToken);
 
   // const location = useLocation();
   // //console.log(location);
@@ -94,6 +96,14 @@ function App() {
             {/* <Route path="/product/:productId" component={<AddToCart />} /> */}
             <Route path="/store/addresses" element={<Addresses />} />
             <Route path="/store/checkout" element={<Checkout />} />
+            <Route
+              path="/store/search/:searchQuery"
+              element={<SearchPageProducts />}
+            />
+            <Route
+              path="/store/search/:searchQuery/:storeId"
+              element={<FilteredStoreProducts />}
+            />
           </>
         ) : (
           <>
