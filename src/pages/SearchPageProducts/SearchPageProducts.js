@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 import GetProductsBasedOnShops from "../../components/HomePageComponents/ShopListing/GetProductsBasedOnShops";
 import { useNavigate } from "react-router-dom";
 
-const SearchPageProducts = () => {
+const SearchPageProducts = ({ setStoreFilteredProducts }) => {
   const navigate = useNavigate();
   const params = useParams();
   const [searchDetails, setSearchDetails] = useState({
@@ -16,7 +16,6 @@ const SearchPageProducts = () => {
   const [searchResponse, setSearchResponse] = useState(null);
   const [filter, setFilter] = useState({});
   const [storeId, setStoreId] = useState(null);
-  const [storeFilteredProducts, setStoreFilteredProducts] = useState([]);
 
   const searchapi = async (filter) => {
     if (!searchDetails.searchquery) {
@@ -66,18 +65,11 @@ const SearchPageProducts = () => {
       if (response.status === "success") {
         setStoreFilteredProducts(response.data);
         navigate(`/store/search/${searchDetails.searchquery}/${storeId}`);
-      } else {
-        console.log(
-          "SearchInsideStore API response status not success:",
-          response
-        );
       }
     } catch (error) {
       console.error("SearchInsideStore API error:", error);
     }
   };
-
-  console.log("store Products updated", storeFilteredProducts);
 
   return (
     <>
@@ -410,7 +402,7 @@ const SearchPageProducts = () => {
                                     (store) => (
                                       <li
                                         key={`view-all-${store.store_id}`}
-                                        className="rounded-[12px] bg-[#F6F7F8] w-[115px] h-[115px] hover:bg-gray-200"
+                                        className="rounded-[12px] bg-[#F6F7F8] w-[115px] h-[115px] hover:bg-gray-200 flex justify-center items-center"
                                       >
                                         {/* {console.log("store", store.store_id)} */}
                                         <button

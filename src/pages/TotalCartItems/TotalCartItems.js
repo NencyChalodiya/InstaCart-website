@@ -8,6 +8,7 @@ import { DeleteTotalItems } from "../../utils/Reducers/ItemSlice";
 import { Link } from "react-router-dom";
 const TotalCartItems = ({ totalCartItemsModal, onCancel }) => {
   const { cartItems } = useSelector((state) => state.cartItems);
+  console.log("cartItems", cartItems);
   const dispatch = useDispatch();
   const DeleteItemsFromCart = (items) => {
     dispatch(DeleteParticularItemFromCart(items));
@@ -205,10 +206,7 @@ const TotalCartItems = ({ totalCartItemsModal, onCancel }) => {
                       <div className="basis-[50px] h-full mr-2">
                         <button className="relative mr-2 cursor-pointer">
                           <span className="flex items-center text-ellipsis ">
-                            <img
-                              src={items.offerCategoryImg}
-                              className="max-w-full"
-                            />
+                            <img src={items.image} className="max-w-full" />
                           </span>
                         </button>
                       </div>
@@ -219,8 +217,7 @@ const TotalCartItems = ({ totalCartItemsModal, onCancel }) => {
                               <button className="relative mr-2 cursor-pointer ">
                                 <span className="flex items-center text-ellipsis">
                                   <h3 className="text-left text-gray-500">
-                                    {items.offerCategoryName},
-                                    {items.offerCategoryWeight}
+                                    {items.title},{items.label}
                                   </h3>
                                 </span>
                               </button>
@@ -239,7 +236,7 @@ const TotalCartItems = ({ totalCartItemsModal, onCancel }) => {
                             </div>
                           </div>
                           <div className="h-9 flex flex-col basis-[54px] items-end justify-center">
-                            $22.35
+                            ${items.qty * items.selling_price}
                           </div>
                         </div>
                       </div>

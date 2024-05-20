@@ -322,29 +322,60 @@ const HeaderProducts = ({ storeId }) => {
                 </button>
               </div>
             </div>
-
-            <button
-              className="rounded-[24px] flex relative h-8 min-w-14 py-1 px-6 justify-evenly items-center"
-              onClick={() => setTotalCartItemsModal(true)}
-            >
-              <svg
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="#343538"
-                xmlns="http://www.w3.org/2000/svg"
-                size="24"
-                color="systemGrayscale70"
-                aria-hidden="true"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="m6.84 2.68-1.27-.19-.17-.03L2.29 2 2 3.93l3.16.47 2.2 12.84h14.18v-1.95H9l-.34-2 11.92-1.58L22 4.99 6.84 2.69zm1.14 19.27a1.62 1.62 0 1 0 0-3.24 1.62 1.62 0 0 0 0 3.24m11.94 0a1.62 1.62 0 1 0 0-3.24 1.62 1.62 0 0 0 0 3.24"
-                ></path>
-              </svg>
-              <span className="px-2">{cartItems?.length || 0}</span>
-            </button>
+            {cartItems.length > 0 ? (
+              <div>
+                <button
+                  className="rounded-[24px] flex relative h-8 min-w-14  px-6 justify-evenly items-center cursor-pointer bg-[#277D0F py-6 mr-3  bg-[#277D0F]"
+                  onClick={() => setTotalCartItemsModal(true)}
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="#FFFFFF"
+                    xmlns="http://www.w3.org/2000/svg"
+                    size="24"
+                    color="systemGrayscale00"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="m6.84 2.68-1.27-.19-.17-.03L2.29 2 2 3.93l3.16.47 2.2 12.84h14.18v-1.95H9l-.34-2 11.92-1.58L22 4.99 6.84 2.69zm1.14 19.27a1.62 1.62 0 1 0 0-3.24 1.62 1.62 0 0 0 0 3.24m11.94 0a1.62 1.62 0 1 0 0-3.24 1.62 1.62 0 0 0 0 3.24"
+                    ></path>
+                  </svg>
+                  <span className=" pl-2 text-white">
+                    {cartItems?.length || 0}
+                  </span>
+                </button>
+              </div>
+            ) : (
+              <div>
+                {" "}
+                <button
+                  className="rounded-[24px] flex relative h-8 min-w-14 py-1 px-6 justify-evenly items-center"
+                  onClick={() => setTotalCartItemsModal(true)}
+                >
+                  <svg
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="#343538"
+                    xmlns="http://www.w3.org/2000/svg"
+                    size="24"
+                    color="systemGrayscale70"
+                    aria-hidden="true"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      clip-rule="evenodd"
+                      d="m6.84 2.68-1.27-.19-.17-.03L2.29 2 2 3.93l3.16.47 2.2 12.84h14.18v-1.95H9l-.34-2 11.92-1.58L22 4.99 6.84 2.69zm1.14 19.27a1.62 1.62 0 1 0 0-3.24 1.62 1.62 0 0 0 0 3.24m11.94 0a1.62 1.62 0 1 0 0-3.24 1.62 1.62 0 0 0 0 3.24"
+                    ></path>
+                  </svg>
+                  <span className="px-2">0</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
         <TotalCartItems

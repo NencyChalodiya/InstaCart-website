@@ -140,6 +140,10 @@ export const getIndividualProductDetail = (productId) => {
 export const addToSavedProducts = (payload) => {
   return Ajax.Request(`/products/addtosaved`, Ajax.POST, true, payload);
 };
+
+export const delSavedProducts = (productId) => {
+  return Ajax.Request(`/products/saved/remove/${productId}`, Ajax.DELETE, true);
+};
 // export const getProductsOfSubCategory = (id) => {
 //   return Ajax.Request(`/product/subcategory/${id}/`, Ajax.GET, true);
 // };
@@ -208,6 +212,7 @@ let API = {
   getIndividualProductDetail,
   getProductsOfSubCategory,
   addToSavedProducts,
+  delSavedProducts,
   Search,
   SearchInsideStore,
   RegisterAddress,

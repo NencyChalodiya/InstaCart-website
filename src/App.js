@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import LandingPage from "./pages/LandingPage";
 import Home from "./pages/Home";
@@ -25,6 +25,7 @@ import StoreSidebar from "./components/HomePageComponents/StoreSidebar.js/StoreS
 import AddToCart from "./pages/AddToCart/AddToCart";
 import FilteredStoreProducts from "./pages/FilteredStoreProducts/FilteredStoreProducts";
 function App() {
+  const [storeFilteredProducts, setStoreFilteredProducts] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
   const accessToken = localStorage.getItem("accessToken") ?? null;
@@ -98,11 +99,19 @@ function App() {
             <Route path="/store/checkout" element={<Checkout />} />
             <Route
               path="/store/search/:searchQuery"
-              element={<SearchPageProducts />}
+              element={
+                <SearchPageProducts
+                  setStoreFilteredProducts={setStoreFilteredProducts}
+                />
+              }
             />
             <Route
               path="/store/search/:searchQuery/:storeId"
-              element={<FilteredStoreProducts />}
+              element={
+                <GetProductsBasedOnShops
+                  storeFilteredProducts={storeFilteredProducts}
+                />
+              }
             />
           </>
         ) : (

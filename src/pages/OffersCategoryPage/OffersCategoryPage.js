@@ -13,7 +13,7 @@ const OffersCategoryPage = () => {
   const [itemsAdd, setItemsAdd] = useState(null);
 
   const { Items } = useSelector((state) => state);
-  //console.log(Items.items);
+  console.log(Items.items);
   const recipes = [
     "Recipes",
     "Snacks & Candy",

@@ -5,7 +5,7 @@ import AddToCart from "../AddToCart/AddToCart";
 import Navbar from "../../components/LandingPageComponents/Navbar";
 import HeaderProducts from "../../components/HomePageComponents/HeaderOfProducts/HeaderProducts";
 import { useSelector } from "react-redux";
-const FilteredStoreProducts = () => {
+const FilteredStoreProducts = ({ storeFilteredProducts }) => {
   const recipes = [
     "Recipes",
     "Snacks & Candy",
@@ -34,6 +34,8 @@ const FilteredStoreProducts = () => {
   const params = useParams();
   const { Items } = useSelector((state) => state);
   //console.log(Items);
+
+  console.log("storeFilteredProducts", storeFilteredProducts);
 
   useEffect(() => {
     brandStoresData.map((d) => {

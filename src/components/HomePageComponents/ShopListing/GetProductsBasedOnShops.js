@@ -9,14 +9,21 @@ import { useNavigate } from "react-router-dom";
 import DeliveryTimesModal from "../../../pages/DeliveryTimesModal/DeliveryTimesModal";
 import Loader from "react-js-loader";
 import { Category } from "@mui/icons-material";
-const GetProductsBasedOnShops = () => {
+import { useDispatch, useSelector } from "react-redux";
+import { SetCategoryItems } from "../../../utils/Reducers/ProductSlice";
+import { AddItem, RemoveItem } from "../../../utils/Reducers/ProductSlice";
+import {
+  AddItemToCart,
+  RemoveItemFromCart,
+} from "../../../utils/Reducers/CartSlice";
+const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
   const { storeId, categoryId, productId, subcategoryId } = useParams();
   // console.log("StoreId", storeId);
   // console.log("categroyId", categoryId);
   // console.log("productId", productId);
   // console.log("subCatgeory", subcategoryId);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const [addToCartModal, setaddToCartModal] = useState(false);
   const [deliveryTimeModal, openDeliveryTimeModal] = useState(false);
   //const [storeData, setstoreData] = useState(null);
@@ -29,30 +36,55 @@ const GetProductsBasedOnShops = () => {
   const [deliveryDetails, setDeliveryDetails] = useState([]);
   const [productDetail, setProductDetail] = useState([]);
   const [isLoading, setLoading] = useState(false);
-  const [storeProducts, setStoreProducts] = useState([]);
+  const [storeProducts, setStoreProducts] = useState([]); //Shop products state
   //const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [subCatProducts, setSubCatProducts] = useState([]);
-  //const [shopData, setShopData] = useState(null);
-  //const params = useParams();
+  const { productItems } = useSelector((state) => state);
+  console.log("productsItems", productItems.items);
+  const [hoveredProductId, setHoveredProductId] = useState(null);
 
-  //console.log(storeId);
+  const handleMouseEnter = (productId) => {
+    setHoveredProductId(productId);
+  };
 
-  // useEffect(() => {
-  //   const fetchProductsForShop = async () => {
-  //     try {
-  //       const response = await API.getProductsBasedShops(shopId);
-  //       const productsWithImages = response.products.map((product) => ({
-  //         ...product,
-  //         images: response.images[product.id] || [], // Get images for the current product
-  //       }));
-  //       setProductsWithImages(productsWithImages);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
+  const handleMouseLeave = () => {
+    setHoveredProductId(null);
+  };
 
-  //   fetchProductsForShop();
-  // }, [shopId]);
+  const AddtoCart = (e, product, subCategoryId, categoryId) => {
+    e.stopPropagation();
+    dispatch(
+      AddItem({
+        ...product,
+        subcategory_id: subCategoryId,
+        category_id: categoryId,
+      })
+    );
+    dispatch(
+      AddItemToCart({
+        ...product,
+        subcategory_id: subCategoryId,
+        category_id: categoryId,
+      })
+    );
+  };
+  const RemoveFromCart = (e, product, subCategoryId, categoryId) => {
+    e.stopPropagation();
+    dispatch(
+      RemoveItem({
+        ...product,
+        subcategory_id: subCategoryId,
+        category_id: categoryId,
+      })
+    );
+    dispatch(
+      RemoveItemFromCart({
+        ...product,
+        subcategory_id: subCategoryId,
+        category_id: categoryId,
+      })
+    );
+  };
 
   useEffect(() => {
     const fetchStoreFrontDetails = async () => {
@@ -73,7 +105,8 @@ const GetProductsBasedOnShops = () => {
       try {
         const response = await API.getProductsOfShop(storeId);
         console.log(response);
-        setStoreProducts(response.data);
+        //setStoreProducts(response.data);
+        dispatch(SetCategoryItems(response.data));
         //setIsDataLoaded(true);
       } catch (error) {
         console.log(error);
@@ -81,23 +114,11 @@ const GetProductsBasedOnShops = () => {
     };
     if (storeId) fetchProductsOfShop();
   }, [storeId]);
-  console.log("products", storeProducts);
+  //console.log("storeProducts", storeProducts);
 
   const handleSubCatClick = async (categoryId) => {
     setSelectedSubCategory(categoryId);
-    //setIsDataLoaded(false);
-    // try {
-    //   const response = await API.getProductsOfSubCategory(subCatId);
-    //   const productsWithImages = response.products.map((product) => ({
-    //     ...product,
-    //     images: response.images[product.id] || [],
-    //   }));
-    //   setProductsWithImages(productsWithImages);
-    // } catch (error) {
-    //   console.log(error);
-    // }
 
-    // Call fetchStoreSubCategory here
     navigate(`/store/${storeId}/front/collection/${categoryId}`);
   };
 
@@ -782,12 +803,116 @@ const GetProductsBasedOnShops = () => {
               ))}
             </div>
           </>
+        ) : storeFilteredProducts ? (
+          <div>
+            <div className="ml-72">
+              <div className="h-14"></div>
+
+              <div>
+                <div className="flex items-center justify-between  ">
+                  <div className="flex items-center justify-center max-md:hidden mt-16"></div>
+                </div>
+
+                <div>
+                  <div>
+                    <div className="relative flex flex-row">
+                      <div className="w-full">
+                        <ul className="w-full h-full min-h-[304px] grid grid-cols-5 gap-9 justify-between mt-8 max-2xl:grid-cols-6 max-lg:grid-cols-4 max-xl:grid-cols-5 max-md:grid-cols-3 max-sm:grid-cols-1">
+                          {storeFilteredProducts.map((cat) => (
+                            <div
+                              key={cat?.id}
+                              className="relative flex cursor-pointer"
+                            >
+                              <div className="absolute z-10 top-1 right-1">
+                                <div className="inline-block rounded-[20px] p-[2px] bg-[#2C890F]">
+                                  <button className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 bg-[#2C890F]">
+                                    <div className="flex items-center px-2">
+                                      <svg
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="#FFFFFF"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        size="24"
+                                        color="systemGrayscale00"
+                                        aria-hidden="true"
+                                      >
+                                        <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
+                                      </svg>
+                                      <span className="pl-1 text-white">
+                                        Add
+                                      </span>
+                                    </div>
+                                  </button>
+                                </div>
+                              </div>
+                              <div className="relative overflow-hidden rounded-xl">
+                                <div className="w-full h-[200px] object-cover">
+                                  <img
+                                    src={cat?.image}
+                                    alt={`Product ${cat.id}`}
+                                  />
+                                </div>
+                                <div className="px-2 mt-16">
+                                  <div className="py-[1px] px-1 flex items-center">
+                                    <div>
+                                      <span className="text-sm font-bold text-gray-700 align-super">
+                                        $
+                                      </span>
+                                      <span className="mr-[2px] font-bold text-2xl leading-5 text-gray-700">
+                                        {cat?.actual_price}
+                                      </span>
+                                      <span className="text-sm font-bold text-gray-700 align-super">
+                                        49
+                                      </span>
+                                    </div>
+                                    <div>
+                                      <span className="text-gray-500 ml-2">
+                                        <s>{cat?.selling_price}</s>
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <span className="text-gray-600">
+                                      {cat?.title}
+                                    </span>
+                                  </div>
+                                  <div>
+                                    <span className="text-gray-500">
+                                      {cat?.label}
+                                    </span>
+                                  </div>
+
+                                  <div>
+                                    <p className="mt-[6px] text-gray-400">
+                                      {/* {product.details.length > 100
+                              ? product.details.substring(0, 100) + "..."
+                              : product.details} */}
+                                    </p>
+                                  </div>
+                                  <div className="flex">
+                                    <div className="text-gray-400">
+                                      {/* {product?.m_qty} {product?.measurement} */}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         ) : (
           <div>
             <div className="ml-72">
               <div className="h-14"></div>
 
-              {storeProducts.map((category) => (
+              {productItems.items.map((category) => (
                 <div key={category?.category_id}>
                   <div className="flex items-center justify-between  ">
                     <div className="flex items-center justify-center max-md:hidden mt-16"></div>
@@ -839,25 +964,146 @@ const GetProductsBasedOnShops = () => {
                                 >
                                   <div className="absolute z-10 top-1 right-1">
                                     <div className="inline-block rounded-[20px] p-[2px] bg-[#2C890F]">
-                                      <button className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 bg-[#2C890F]">
-                                        <div className="flex items-center px-2">
-                                          <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="#FFFFFF"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            size="24"
-                                            color="systemGrayscale00"
-                                            aria-hidden="true"
-                                          >
-                                            <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
-                                          </svg>
-                                          <span className="pl-1 text-white">
-                                            Add
-                                          </span>
+                                      {product.qty ? (
+                                        <div className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 w-[125px]">
+                                          <div className="absolute">
+                                            <div className="inline-block ">
+                                              <span className="flex justify-center items-center min-h-[40px] flex-nowrap">
+                                                <button
+                                                  className="flex flex-nowrap justify-center items-center  relative left-[1px]"
+                                                  onClick={(e) =>
+                                                    RemoveFromCart(
+                                                      e,
+                                                      product,
+                                                      subCategory.subcategory_id,
+                                                      category.category_id
+                                                    )
+                                                  }
+                                                >
+                                                  {product.qty > 1 ? (
+                                                    <svg
+                                                      width="24"
+                                                      height="24"
+                                                      viewBox="0 0 24 24"
+                                                      fill="#FFFFFF"
+                                                      xmlns="http://www.w3.org/2000/svg"
+                                                      size="24"
+                                                      color="systemGrayscale00"
+                                                      aria-hidden="true"
+                                                    >
+                                                      <path
+                                                        fill-rule="evenodd"
+                                                        clip-rule="evenodd"
+                                                        d="M4 10.879h16v2.24H4z"
+                                                      ></path>
+                                                    </svg>
+                                                  ) : (
+                                                    <svg
+                                                      width="24"
+                                                      height="24"
+                                                      viewBox="0 0 24 24"
+                                                      fill="#FFFFFF"
+                                                      xmlns="http://www.w3.org/2000/svg"
+                                                      size="24"
+                                                      color="systemGrayscale00"
+                                                      aria-hidden="true"
+                                                    >
+                                                      <path
+                                                        fill-rule="evenodd"
+                                                        clip-rule="evenodd"
+                                                        d="M7 6V5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1h4v2h-2l-1 14H6L5 8H3V6zm3-2h4a1 1 0 0 1 1 1v1H9V5a1 1 0 0 1 1-1m3 15v-8h2v8zm-2-8H9v8h2z"
+                                                      ></path>
+                                                    </svg>
+                                                  )}
+                                                </button>
+                                                <span className="px-1 text-sm leading-4 text-white ">
+                                                  <span className="w-[1px] absolute">
+                                                    {product?.qty}
+                                                  </span>
+                                                  <span className="pl-4">
+                                                    banana
+                                                  </span>
+                                                </span>
+                                                <button
+                                                  className="flex flex-nowrap items-center relative right-[1px]"
+                                                  onClick={(e) =>
+                                                    AddtoCart(
+                                                      e,
+                                                      product,
+                                                      subCategory.subcategory_id,
+                                                      category.category_id
+                                                    )
+                                                  }
+                                                >
+                                                  <svg
+                                                    width="24"
+                                                    height="24"
+                                                    viewBox="0 0 24 24"
+                                                    fill="#FFFFFF"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    size="24"
+                                                    color="systemGrayscale00"
+                                                    aria-hidden="true"
+                                                  >
+                                                    <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
+                                                  </svg>
+                                                </button>
+                                              </span>
+                                            </div>
+                                          </div>
                                         </div>
-                                      </button>
+                                      ) : (
+                                        <button
+                                          className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9"
+                                          onMouseLeave={handleMouseLeave}
+                                          onMouseEnter={() =>
+                                            handleMouseEnter(product.id)
+                                          }
+                                          style={{
+                                            backgroundColor:
+                                              hoveredProductId === product.id
+                                                ? "#226b0b"
+                                                : "green",
+                                            transition:
+                                              "width 0.3s ease-in-out", // Apply transition to width property
+                                            width:
+                                              hoveredProductId === product.id
+                                                ? "127px"
+                                                : "80px",
+                                          }}
+                                        >
+                                          <div className="flex items-center px-2">
+                                            <svg
+                                              width="24"
+                                              height="24"
+                                              viewBox="0 0 24 24"
+                                              fill="#FFFFFF"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              size="24"
+                                              color="systemGrayscale00"
+                                              aria-hidden="true"
+                                            >
+                                              <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
+                                            </svg>
+
+                                            <span
+                                              className="text-white"
+                                              onClick={(e) =>
+                                                AddtoCart(
+                                                  e,
+                                                  product,
+                                                  subCategory.subcategory_id,
+                                                  category.category_id
+                                                )
+                                              }
+                                            >
+                                              {hoveredProductId === product.id
+                                                ? "Add to cart"
+                                                : "Add"}
+                                            </span>
+                                          </div>
+                                        </button>
+                                      )}
                                     </div>
                                   </div>
                                   <div className="relative overflow-hidden rounded-xl">

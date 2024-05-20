@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect } from "react";
 import { Modal } from "antd";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { offersCategory } from "../../data/offers";
+import API from "../../services/api";
 const AddToCart = ({
   addToCartModal,
   onBackClick,
@@ -10,6 +11,7 @@ const AddToCart = ({
 }) => {
   const [mainImage, setMainImage] = useState(null);
   const [selectedValue, setSelectedValue] = useState("1");
+  const [isSaved, setIsSaved] = useState(false);
   const detailRef = useRef(null);
   const IngredientRef = useRef(null);
   const directionRef = useRef(null);
@@ -22,6 +24,41 @@ const AddToCart = ({
     }
     if (directionRef.current) {
       directionRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  const saveProducts = async () => {
+    try {
+      let payload = {
+        productId: productDetail.product_id,
+      };
+      const response = await API.addToSavedProducts(payload);
+      //console.log(response);
+      if (response.status === "success") {
+        setIsSaved(true);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteSavedProduct = async (productId) => {
+    try {
+      const response = await API.delSavedProducts(productId);
+      //console.log(response);
+      if (response.status === "success") {
+        setIsSaved(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleClick = () => {
+    if (isSaved) {
+      deleteSavedProduct(productDetail.product_id);
+    } else {
+      saveProducts();
     }
   };
 
@@ -425,7 +462,10 @@ const AddToCart = ({
                           <div className="flex flex-wrap px-1 pt-3 pb-4">
                             <div className="mx-3 my-2">
                               <div>
-                                <button className="relative m-auto leading-5 text-black bg-white cursor-pointer">
+                                <button
+                                  className="relative m-auto leading-5 text-black bg-white cursor-pointer"
+                                  onClick={() => handleClick()}
+                                >
                                   <span className="block overflow-hidden text-ellipsis">
                                     <div className="flex items-center">
                                       <svg
@@ -438,13 +478,23 @@ const AddToCart = ({
                                         size="24"
                                         aria-hidden="true"
                                       >
-                                        <path
-                                          fill-rule="evenodd"
-                                          clip-rule="evenodd"
-                                          d="M8 5a3.5 3.5 0 0 0-3.5 3.5c0 2.286 1.225 4.532 2.83 6.47 1.59 1.92 3.444 3.41 4.467 4.166.124.09.28.09.403 0 1.025-.756 2.88-2.245 4.469-4.165C18.274 13.032 19.5 10.786 19.5 8.5a3.5 3.5 0 0 0-6.61-1.604l-.666 1.294a.25.25 0 0 1-.444 0l-.667-1.293A3.5 3.5 0 0 0 8 5M2.5 8.5A5.5 5.5 0 0 1 12 4.726 5.5 5.5 0 0 1 21.5 8.5c0 2.974-1.57 5.67-3.29 7.746-1.736 2.096-3.734 3.697-4.822 4.5a2.33 2.33 0 0 1-2.778 0c-1.088-.804-3.086-2.404-4.82-4.5C4.07 14.17 2.5 11.474 2.5 8.5"
-                                        ></path>
+                                        {isSaved ? (
+                                          <path
+                                            fillRule="evenodd"
+                                            clipRule="evenodd"
+                                            d="M8 3a5.5 5.5 0 0 0-5.5 5.5c0 2.974 1.57 5.67 3.29 7.746 1.734 2.096 3.732 3.696 4.82 4.5.83.61 1.948.611 2.778 0 1.088-.803 3.086-2.404 4.821-4.5C19.93 14.17 21.5 11.474 21.5 8.5A5.5 5.5 0 0 0 12 4.726 5.49 5.49 0 0 0 8 3"
+                                          ></path>
+                                        ) : (
+                                          <path
+                                            fillRule="evenodd"
+                                            clipRule="evenodd"
+                                            d="M8 5a3.5 3.5 0 0 0-3.5 3.5c0 2.286 1.225 4.532 2.83 6.47 1.59 1.92 3.444 3.41 4.467 4.166.124.09.28.09.403 0 1.025-.756 2.88-2.245 4.469-4.165C18.274 13.032 19.5 10.786 19.5 8.5a3.5 3.5 0 0 0-6.61-1.604l-.666 1.294a.25.25 0 0 1-.444 0l-.667-1.293A3.5 3.5 0 0 0 8 5M2.5 8.5A5.5 5.5 0 0 1 12 4.726 5.5 5.5 0 0 1 21.5 8.5c0 2.974-1.57 5.67-3.29 7.746-1.736 2.096-3.734 3.697-4.822 4.5a2.33 2.33 0 0 1-2.778 0c-1.088-.804-3.086-2.404-4.82-4.5C4.07 14.17 2.5 11.474 2.5 8.5"
+                                          ></path>
+                                        )}
                                       </svg>
-                                      <span className="ml-1">Save</span>
+                                      <span className="ml-1">
+                                        {isSaved ? "Saved" : "Save"}
+                                      </span>
                                     </div>
                                   </span>
                                 </button>
