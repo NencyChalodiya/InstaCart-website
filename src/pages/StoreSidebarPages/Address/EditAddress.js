@@ -91,7 +91,7 @@ const EditAddress = ({ openEditAddressModal, onCancel, selectedAddress }) => {
                           name="apt_name"
                           placeholder="Apt, floor, suite, etc (optional)"
                           className="w-full h-full p-5 text-base leading-6 bg-transparent border-none rounded-lg focus:outline-black"
-                          value={updatedAddress?.apt_name}
+                          value={updatedAddress?.floor}
                           onChange={handleChange}
                         />
                       </div>

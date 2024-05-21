@@ -11,7 +11,17 @@ import Loader from "react-js-loader";
 import { Category } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { SetCategoryItems } from "../../../utils/Reducers/ProductSlice";
+import { SetCategoryItemsProducts } from "../../../utils/Reducers/CategorySlice";
+import { SetSubCategoryItemsProducts } from "../../../utils/Reducers/SubCategorySlice";
 import { AddItem, RemoveItem } from "../../../utils/Reducers/ProductSlice";
+import {
+  AddCategoryItem,
+  RemoveCategoryItem,
+} from "../../../utils/Reducers/CategorySlice";
+import {
+  AddSubCategoryItem,
+  RemoveSubCategoryItem,
+} from "../../../utils/Reducers/SubCategorySlice";
 import {
   AddItemToCart,
   RemoveItemFromCart,
@@ -32,7 +42,7 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
   // const [shopsSubCategory, setShopsSubCategory] = useState([]);
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [storeFrontDetails, setStoreFrontDetails] = useState([]);
-  const [storeSubcategory, setStoreSubCatgeory] = useState([]);
+  const [storeSubcategory, setStoreSubCatgeory] = useState([]); //Catgeory products
   const [deliveryDetails, setDeliveryDetails] = useState([]);
   const [productDetail, setProductDetail] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -40,7 +50,11 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
   //const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [subCatProducts, setSubCatProducts] = useState([]);
   const { productItems } = useSelector((state) => state);
-  console.log("productsItems", productItems.items);
+  //console.log("productsItems", productItems.items);
+  const { categoryItems } = useSelector((state) => state);
+  console.log("categoryItems", categoryItems.categoryItems);
+  const { subcategoryItems } = useSelector((state) => state);
+  console.log("subcategoryItems", subcategoryItems.subCategoryItems);
   const [hoveredProductId, setHoveredProductId] = useState(null);
 
   const handleMouseEnter = (productId) => {
@@ -82,6 +96,68 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
         ...product,
         subcategory_id: subCategoryId,
         category_id: categoryId,
+      })
+    );
+  };
+
+  const AddtoCartCategoryProducts = (e, product, subCategoryId) => {
+    e.stopPropagation();
+    dispatch(
+      AddCategoryItem({
+        ...product,
+        subcategory_id: subCategoryId,
+      })
+    );
+    dispatch(
+      AddItemToCart({
+        ...product,
+        subcategory_id: subCategoryId,
+      })
+    );
+  };
+  const RemoveFromCartCategoryProducts = (e, product, subCategoryId) => {
+    e.stopPropagation();
+    dispatch(
+      RemoveCategoryItem({
+        ...product,
+        subcategory_id: subCategoryId,
+      })
+    );
+    dispatch(
+      RemoveItemFromCart({
+        ...product,
+        subcategory_id: subCategoryId,
+      })
+    );
+  };
+
+  const AddtoCartSubCategoryProducts = (e, product, subCategoryId) => {
+    e.stopPropagation();
+    dispatch(
+      AddSubCategoryItem({
+        ...product,
+        subcategory_id: subCategoryId,
+      })
+    );
+    dispatch(
+      AddItemToCart({
+        ...product,
+        subcategory_id: subCategoryId,
+      })
+    );
+  };
+  const RemoveFromSubCartCategoryProducts = (e, product, subCategoryId) => {
+    e.stopPropagation();
+    dispatch(
+      RemoveSubCategoryItem({
+        ...product,
+        subcategory_id: subCategoryId,
+      })
+    );
+    dispatch(
+      RemoveItemFromCart({
+        ...product,
+        subcategory_id: subCategoryId,
       })
     );
   };
@@ -133,8 +209,9 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
     const fetchStoreSubCategory = async () => {
       try {
         const response = await API.getStoreSubCategory(categoryId);
-        console.log(response); // Use the response data as needed
-        setStoreSubCatgeory(response.data);
+        //console.log(response); // Use the response data as needed
+        //setStoreSubCatgeory(response.data);
+        dispatch(SetCategoryItemsProducts(response.data));
       } catch (error) {
         console.log(error);
       }
@@ -147,7 +224,8 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
       try {
         const response = await API.getProductsOfSubCategory(subcategoryId);
         //console.log(response);
-        setSubCatProducts(response.data);
+        //setSubCatProducts(response.data);
+        dispatch(SetSubCategoryItemsProducts(response.data));
       } catch (error) {
         console.log(error);
       }
@@ -465,7 +543,7 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
                     <div>
                       {selectedSubCategory === category.category_id && (
                         <ul>
-                          {storeSubcategory.map((subCategory) => (
+                          {categoryItems.categoryItems.map((subCategory) => (
                             <li
                               key={subCategory?.subcategory_id}
                               onClick={() =>
@@ -493,17 +571,18 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
         {subcategoryId ? (
           <>
             {" "}
-            {subCatProducts && subCatProducts.products ? (
+            {subcategoryItems.subCategoryItems &&
+            subcategoryItems.subCategoryItems.products ? (
               <>
                 {" "}
                 <div className="ml-72">
                   <div className="h-14"></div>
 
-                  <div key={subCatProducts.subcategory_id}>
+                  <div key={subcategoryItems.subCategoryItems.subcategory_id}>
                     <div className="flex items-center justify-between mt-6">
                       <h2 className="flex mr-2">
                         <div className="text-3xl font-bold leading-5 max-md:text-2xl">
-                          {subCatProducts?.subcategory_name}
+                          {subcategoryItems.subCategoryItems?.subcategory_name}
                         </div>
                       </h2>
                       <div className="flex items-center justify-center  max-md:hidden">
@@ -541,104 +620,228 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
                       <div className="relative flex flex-row">
                         <div className="w-full">
                           <ul className="w-full h-full min-h-[304px] grid grid-cols-5 gap-9 justify-between mt-2 max-2xl:grid-cols-6 max-lg:grid-cols-4 max-xl:grid-cols-5 max-md:grid-cols-3 max-sm:grid-cols-1">
-                            {subCatProducts.products.map((product) => (
-                              <li
-                                key={product.id}
-                                className="relative flex flex-col cursor-pointer"
-                                onClick={() =>
-                                  openProductDetailModal(product.id)
-                                }
-                              >
-                                <div className="absolute z-10 top-1 right-1">
-                                  <div className="inline-block rounded-[20px] p-[2px] bg-[#2C890F]">
-                                    <button className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 bg-[#2C890F]">
-                                      <div>
-                                        <div className="flex items-center px-2">
-                                          <svg
-                                            width="24"
-                                            height="24"
-                                            viewBox="0 0 24 24"
-                                            fill="#FFFFFF"
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            size="24"
-                                            color="systemGrayscale00"
-                                            aria-hidden="true"
-                                          >
-                                            <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
-                                          </svg>
-                                          <span className="pl-1 text-white">
-                                            Add
+                            {subcategoryItems.subCategoryItems.products.map(
+                              (product) => (
+                                <li
+                                  key={product.id}
+                                  className="relative flex flex-col cursor-pointer"
+                                  onClick={() =>
+                                    openProductDetailModal(product.id)
+                                  }
+                                >
+                                  <div className="absolute z-10 top-1 right-1">
+                                    <div className="inline-block rounded-[20px] p-[2px] bg-[#2C890F]">
+                                      {product.qty ? (
+                                        <div className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 w-[125px]">
+                                          <div className="absolute">
+                                            <div className="inline-block ">
+                                              <span className="flex justify-center items-center min-h-[40px] flex-nowrap">
+                                                <button
+                                                  className="flex flex-nowrap justify-center items-center  relative  right-[8px]"
+                                                  onClick={(e) =>
+                                                    RemoveFromSubCartCategoryProducts(
+                                                      e,
+                                                      product,
+                                                      subcategoryItems
+                                                        .subCategoryItems
+                                                        .subcategory_id
+                                                    )
+                                                  }
+                                                >
+                                                  {product.qty > 1 ? (
+                                                    <svg
+                                                      width="24"
+                                                      height="24"
+                                                      viewBox="0 0 24 24"
+                                                      fill="#FFFFFF"
+                                                      xmlns="http://www.w3.org/2000/svg"
+                                                      size="24"
+                                                      color="systemGrayscale00"
+                                                      aria-hidden="true"
+                                                    >
+                                                      <path
+                                                        fill-rule="evenodd"
+                                                        clip-rule="evenodd"
+                                                        d="M4 10.879h16v2.24H4z"
+                                                      ></path>
+                                                    </svg>
+                                                  ) : (
+                                                    <svg
+                                                      width="24"
+                                                      height="24"
+                                                      viewBox="0 0 24 24"
+                                                      fill="#FFFFFF"
+                                                      xmlns="http://www.w3.org/2000/svg"
+                                                      size="24"
+                                                      color="systemGrayscale00"
+                                                      aria-hidden="true"
+                                                    >
+                                                      <path
+                                                        fill-rule="evenodd"
+                                                        clip-rule="evenodd"
+                                                        d="M7 6V5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1h4v2h-2l-1 14H6L5 8H3V6zm3-2h4a1 1 0 0 1 1 1v1H9V5a1 1 0 0 1 1-1m3 15v-8h2v8zm-2-8H9v8h2z"
+                                                      ></path>
+                                                    </svg>
+                                                  )}
+                                                </button>
+                                                <span className="px-1 text-sm leading-4 text-white ">
+                                                  <span className="w-[1px] absolute">
+                                                    {product?.qty}
+                                                  </span>
+                                                  <span className="pl-4">
+                                                    ct
+                                                  </span>
+                                                </span>
+                                                <button
+                                                  className="flex flex-nowrap items-center relative left-[8px]"
+                                                  onClick={(e) =>
+                                                    AddtoCartSubCategoryProducts(
+                                                      e,
+                                                      product,
+                                                      subcategoryItems
+                                                        .subCategoryItems
+                                                        .subcategory_id
+                                                    )
+                                                  }
+                                                >
+                                                  <svg
+                                                    width="24"
+                                                    height="24"
+                                                    viewBox="0 0 24 24"
+                                                    fill="#FFFFFF"
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    size="24"
+                                                    color="systemGrayscale00"
+                                                    aria-hidden="true"
+                                                  >
+                                                    <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
+                                                  </svg>
+                                                </button>
+                                              </span>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      ) : (
+                                        <button
+                                          className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9"
+                                          onMouseLeave={handleMouseLeave}
+                                          onMouseEnter={() =>
+                                            handleMouseEnter(product.id)
+                                          }
+                                          style={{
+                                            backgroundColor:
+                                              hoveredProductId === product.id
+                                                ? "#226b0b"
+                                                : "green",
+                                            transition:
+                                              "width 0.3s ease-in-out", // Apply transition to width property
+                                            width:
+                                              hoveredProductId === product.id
+                                                ? "130px"
+                                                : "80px",
+                                          }}
+                                        >
+                                          <div className="flex items-center px-2">
+                                            <svg
+                                              width="24"
+                                              height="24"
+                                              viewBox="0 0 24 24"
+                                              fill="#FFFFFF"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                              size="24"
+                                              color="systemGrayscale00"
+                                              aria-hidden="true"
+                                            >
+                                              <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
+                                            </svg>
+
+                                            <span
+                                              className="text-white"
+                                              onClick={(e) =>
+                                                AddtoCartSubCategoryProducts(
+                                                  e,
+                                                  product,
+                                                  subcategoryItems
+                                                    .subCategoryItems
+                                                    .subcategory_id
+                                                )
+                                              }
+                                            >
+                                              {hoveredProductId === product.id
+                                                ? "Add to cart"
+                                                : "Add"}
+                                            </span>
+                                          </div>
+                                        </button>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <div>
+                                    <div className="relative overflow-hidden rounded-xl">
+                                      <div className="w-full h-[200px] object-cover">
+                                        <ul>
+                                          <li>
+                                            <img
+                                              src={product?.image}
+                                              alt={`Product ${product.id}`}
+                                            />
+                                          </li>
+                                        </ul>
+                                      </div>
+                                    </div>
+                                    <div className="px-2 mt-2 ">
+                                      <div className="py-[1px] px-1 flex items-center">
+                                        <div>
+                                          <span className="text-sm font-bold text-gray-700 align-super">
+                                            $
+                                          </span>
+                                          <span className="mr-[2px] font-bold text-2xl leading-5 text-gray-700">
+                                            {product?.actual_price}
+                                          </span>
+                                          <span className="text-sm font-bold text-gray-700 align-super">
+                                            49
+                                          </span>
+                                        </div>
+                                        <div>
+                                          <span className="text-gray-500 ml-2">
+                                            <s>{product?.selling_price}</s>
                                           </span>
                                         </div>
                                       </div>
-                                    </button>
-                                  </div>
-                                </div>
-                                <div>
-                                  <div className="relative overflow-hidden rounded-xl">
-                                    <div className="w-full h-[200px] object-cover">
-                                      <ul>
-                                        <li>
-                                          <img
-                                            src={product?.image}
-                                            alt={`Product ${product.id}`}
-                                          />
-                                        </li>
-                                      </ul>
-                                    </div>
-                                  </div>
-                                  <div className="px-2 mt-2 ">
-                                    <div className="py-[1px] px-1 flex items-center">
-                                      <div>
-                                        <span className="text-sm font-bold text-gray-700 align-super">
-                                          $
-                                        </span>
-                                        <span className="mr-[2px] font-bold text-2xl leading-5 text-gray-700">
-                                          {product?.actual_price}
-                                        </span>
-                                        <span className="text-sm font-bold text-gray-700 align-super">
-                                          49
-                                        </span>
-                                      </div>
-                                      <div>
-                                        <span className="text-gray-500 ml-2">
-                                          <s>{product?.selling_price}</s>
-                                        </span>
-                                      </div>
-                                    </div>
 
-                                    <div className="">
-                                      <span className="text-gray-600">
-                                        {product?.title}
-                                      </span>
-                                    </div>
-                                    <div>
-                                      <span className="text-gray-500">
-                                        {product?.label}
-                                      </span>
-                                    </div>
-                                    <div>
-                                      <span className="bg-[#FDDC22] ">
-                                        {product?.discount_label}
-                                      </span>
-                                    </div>
-                                    <div>
-                                      <p className="mt-[6px] text-gray-400">
-                                        {/* {product.details.length > 100
+                                      <div className="">
+                                        <span className="text-gray-600">
+                                          {product?.title}
+                                        </span>
+                                      </div>
+                                      <div>
+                                        <span className="text-gray-500">
+                                          {product?.label}
+                                        </span>
+                                      </div>
+                                      <div>
+                                        <span className="bg-[#FDDC22] ">
+                                          {product?.discount_label}
+                                        </span>
+                                      </div>
+                                      <div>
+                                        <p className="mt-[6px] text-gray-400">
+                                          {/* {product.details.length > 100
                               ? product.details.substring(0, 100) +
                                 "..."
                               : product.details} */}
-                                      </p>
-                                    </div>
-                                    <div className="flex">
-                                      <div className="text-gray-400">
-                                        {/* {product?.m_qty} {product?.measurement} */}
+                                        </p>
+                                      </div>
+                                      <div className="flex">
+                                        <div className="text-gray-400">
+                                          {/* {product?.m_qty} {product?.measurement} */}
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
-                                </div>
-                              </li>
-                            ))}
+                                </li>
+                              )
+                            )}
                           </ul>
                         </div>
                       </div>
@@ -656,7 +859,7 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
             <div className="ml-72">
               <div className="h-14"></div>
 
-              {storeSubcategory.map((subCategory) => (
+              {categoryItems.categoryItems.map((subCategory) => (
                 <div key={subCategory.subcategory_id}>
                   <div className="flex items-center justify-between mt-6">
                     <h2 className="flex mr-2">
@@ -707,8 +910,109 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
                             >
                               <div className="absolute z-10 top-1 right-1">
                                 <div className="inline-block rounded-[20px] p-[2px] bg-[#2C890F]">
-                                  <button className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 bg-[#2C890F]">
-                                    <div>
+                                  {product.qty ? (
+                                    <div className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9 w-[125px]">
+                                      <div className="absolute">
+                                        <div className="inline-block ">
+                                          <span className="flex justify-center items-center min-h-[40px] flex-nowrap">
+                                            <button
+                                              className="flex flex-nowrap justify-center items-center  relative  right-[8px]"
+                                              onClick={(e) =>
+                                                RemoveFromCartCategoryProducts(
+                                                  e,
+                                                  product,
+                                                  subCategory.subcategory_id
+                                                )
+                                              }
+                                            >
+                                              {product.qty > 1 ? (
+                                                <svg
+                                                  width="24"
+                                                  height="24"
+                                                  viewBox="0 0 24 24"
+                                                  fill="#FFFFFF"
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  size="24"
+                                                  color="systemGrayscale00"
+                                                  aria-hidden="true"
+                                                >
+                                                  <path
+                                                    fill-rule="evenodd"
+                                                    clip-rule="evenodd"
+                                                    d="M4 10.879h16v2.24H4z"
+                                                  ></path>
+                                                </svg>
+                                              ) : (
+                                                <svg
+                                                  width="24"
+                                                  height="24"
+                                                  viewBox="0 0 24 24"
+                                                  fill="#FFFFFF"
+                                                  xmlns="http://www.w3.org/2000/svg"
+                                                  size="24"
+                                                  color="systemGrayscale00"
+                                                  aria-hidden="true"
+                                                >
+                                                  <path
+                                                    fill-rule="evenodd"
+                                                    clip-rule="evenodd"
+                                                    d="M7 6V5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1h4v2h-2l-1 14H6L5 8H3V6zm3-2h4a1 1 0 0 1 1 1v1H9V5a1 1 0 0 1 1-1m3 15v-8h2v8zm-2-8H9v8h2z"
+                                                  ></path>
+                                                </svg>
+                                              )}
+                                            </button>
+                                            <span className="px-1 text-sm leading-4 text-white ">
+                                              <span className="w-[1px] absolute">
+                                                {product?.qty}
+                                              </span>
+                                              <span className="pl-4">ct</span>
+                                            </span>
+                                            <button
+                                              className="flex flex-nowrap items-center relative left-[8px]"
+                                              onClick={(e) =>
+                                                AddtoCartCategoryProducts(
+                                                  e,
+                                                  product,
+                                                  subCategory.subcategory_id
+                                                )
+                                              }
+                                            >
+                                              <svg
+                                                width="24"
+                                                height="24"
+                                                viewBox="0 0 24 24"
+                                                fill="#FFFFFF"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                size="24"
+                                                color="systemGrayscale00"
+                                                aria-hidden="true"
+                                              >
+                                                <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
+                                              </svg>
+                                            </button>
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <button
+                                      className="cursor-pointer flex flex-row relative items-center justify-evenly rounded-[20px] h-9 min-w-9"
+                                      onMouseLeave={handleMouseLeave}
+                                      onMouseEnter={() =>
+                                        handleMouseEnter(product.id)
+                                      }
+                                      style={{
+                                        backgroundColor:
+                                          hoveredProductId === product.id
+                                            ? "#226b0b"
+                                            : "green",
+                                        transition: "width 0.3s ease-in-out", // Apply transition to width property
+                                        width:
+                                          hoveredProductId === product.id
+                                            ? "130px"
+                                            : "80px",
+                                      }}
+                                    >
                                       <div className="flex items-center px-2">
                                         <svg
                                           width="24"
@@ -722,12 +1026,24 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
                                         >
                                           <path d="M10.88 13.12V20h2.24v-6.88H20v-2.24h-6.88V4h-2.24v6.88H4v2.24z"></path>
                                         </svg>
-                                        <span className="pl-1 text-white">
-                                          Add
+
+                                        <span
+                                          className="text-white"
+                                          onClick={(e) =>
+                                            AddtoCartCategoryProducts(
+                                              e,
+                                              product,
+                                              subCategory.subcategory_id
+                                            )
+                                          }
+                                        >
+                                          {hoveredProductId === product.id
+                                            ? "Add to cart"
+                                            : "Add"}
                                         </span>
                                       </div>
-                                    </div>
-                                  </button>
+                                    </button>
+                                  )}
                                 </div>
                               </div>
                               <div>
@@ -970,7 +1286,7 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
                                             <div className="inline-block ">
                                               <span className="flex justify-center items-center min-h-[40px] flex-nowrap">
                                                 <button
-                                                  className="flex flex-nowrap justify-center items-center  relative left-[1px]"
+                                                  className="flex flex-nowrap justify-center items-center  relative  right-[8px]"
                                                   onClick={(e) =>
                                                     RemoveFromCart(
                                                       e,
@@ -1021,11 +1337,11 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
                                                     {product?.qty}
                                                   </span>
                                                   <span className="pl-4">
-                                                    banana
+                                                    ct
                                                   </span>
                                                 </span>
                                                 <button
-                                                  className="flex flex-nowrap items-center relative right-[1px]"
+                                                  className="flex flex-nowrap items-center relative left-[8px]"
                                                   onClick={(e) =>
                                                     AddtoCart(
                                                       e,
@@ -1068,7 +1384,7 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
                                               "width 0.3s ease-in-out", // Apply transition to width property
                                             width:
                                               hoveredProductId === product.id
-                                                ? "127px"
+                                                ? "130px"
                                                 : "80px",
                                           }}
                                         >
@@ -1113,7 +1429,7 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
                                         alt={`Product ${product.id}`}
                                       />
                                     </div>
-                                    <div className="px-2 mt-16">
+                                    <div className="px-2 mt-20">
                                       <div className="py-[1px] px-1 flex items-center">
                                         <div>
                                           <span className="text-sm font-bold text-gray-700 align-super">

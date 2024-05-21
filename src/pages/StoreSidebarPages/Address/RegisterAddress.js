@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Modal } from "antd";
 import API from "../../../services/api";
-const RegisterAddress = ({ openRegisterAddressModal, onCancel }) => {
+const RegisterAddress = ({
+  openRegisterAddressModal,
+  onCancel,
+  fetchUserAddressDetail,
+}) => {
   const [registerAddressDetails, setRegisterAddressDetails] = useState({
     streetAddress: "",
     apartAddress: "",
@@ -10,18 +14,18 @@ const RegisterAddress = ({ openRegisterAddressModal, onCancel }) => {
   });
 
   const registerUserAddress = async () => {
-    const token = localStorage.getItem("token");
-    console.log("Token", token);
     try {
       let payload = {
         street: registerAddressDetails.streetAddress,
-        apt_name: registerAddressDetails.apartAddress,
+        floor: registerAddressDetails.apartAddress,
         business_name: registerAddressDetails.bussinessAddress,
         zip_code: registerAddressDetails.ZipCode,
-        token: token,
       };
       const response = await API.RegisterAddress(payload);
       console.log(response);
+      if (response.status === "success") {
+        fetchUserAddressDetail();
+      }
       onCancel();
     } catch (error) {
       console.log(error);

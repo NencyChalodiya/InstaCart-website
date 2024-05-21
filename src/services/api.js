@@ -177,15 +177,20 @@ export const SearchInsideStore = (storeFilter) => {
 // };
 
 export const RegisterAddress = (payload) => {
-  return Ajax.Request(`/register-address/`, Ajax.POST, true, payload);
+  return Ajax.Request(`/add-address`, Ajax.POST, true, payload);
 };
 
 export const getUserAddress = () => {
-  return Ajax.Request(`/address/`, Ajax.GET, true);
+  return Ajax.Request(`/addresses`, Ajax.GET, true);
 };
 
-export const editUserAddress = (payload) => {
-  return Ajax.Request(`/edit-address/`, Ajax.POST, true, payload);
+export const editUserAddress = (payload, addressId) => {
+  return Ajax.Request(
+    `/addresses/${addressId}/edit-address`,
+    Ajax.POST,
+    true,
+    payload
+  );
 };
 
 let API = {

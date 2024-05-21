@@ -1,18 +1,52 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Drawer } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { Form } from "antd";
 import { Switch } from "antd";
 import { DeleteParticularItemFromCart } from "../../utils/Reducers/CartSlice";
 import { DeleteTotalItems } from "../../utils/Reducers/ItemSlice";
-import { Link } from "react-router-dom";
+import { DeleteTotalCategoryItems } from "../../utils/Reducers/CategorySlice";
+import { DeleteTotalSubCategoryItems } from "../../utils/Reducers/SubCategorySlice";
+import { Link, useParams } from "react-router-dom";
 const TotalCartItems = ({ totalCartItemsModal, onCancel }) => {
+  const { storeId, categoryId, subcategoryId } = useParams();
+  const [subtotal, setSubtotal] = useState(0);
+  console.log("StoreId", storeId);
+  console.log("categroyId", categoryId);
+
+  console.log("subCatgeory", subcategoryId);
   const { cartItems } = useSelector((state) => state.cartItems);
   console.log("cartItems", cartItems);
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    calculateSubtotal();
+  }, [cartItems]);
+
+  // Function to calculate subtotal
+  const calculateSubtotal = () => {
+    let total = 0;
+    cartItems.forEach((item) => {
+      total += item.qty * item.selling_price;
+    });
+    setSubtotal(total);
+  };
+
+  //Shop products deleteItems
   const DeleteItemsFromCart = (items) => {
     dispatch(DeleteParticularItemFromCart(items));
     dispatch(DeleteTotalItems(items));
+  };
+
+  //Catgeory products deleteItems
+  const DeleteCategoryItemsProductsFromCart = (CategoryItems) => {
+    dispatch(DeleteParticularItemFromCart(CategoryItems));
+    dispatch(DeleteTotalCategoryItems(CategoryItems));
+  };
+
+  const DeleteSubCategoryItemsProductsFromCart = (subCategoryItems) => {
+    dispatch(DeleteParticularItemFromCart(subCategoryItems));
+    dispatch(DeleteTotalSubCategoryItems(subCategoryItems));
   };
   return (
     <Drawer
@@ -186,206 +220,329 @@ const TotalCartItems = ({ totalCartItemsModal, onCancel }) => {
                     ></path>
                   </svg>
                 </button>
-                <span>
-                  <span className="text-sm leading-4 text-gray-500">
-                    Add $12.65 for{" "}
-                    <span className="bg-[#FDDC22] text-black">$10 off</span> at
-                    Costco
-                  </span>
-                </span>
               </div>
               <div></div>
             </div>
           </div>
           <ul>
-            {cartItems.map((items) => (
-              <li key={items.id}>
-                <div>
-                  <div className="flex flex-col p-3">
-                    <div className="flex">
-                      <div className="basis-[50px] h-full mr-2">
-                        <button className="relative mr-2 cursor-pointer">
-                          <span className="flex items-center text-ellipsis ">
-                            <img src={items.image} className="max-w-full" />
-                          </span>
-                        </button>
-                      </div>
-                      <div className="flex flex-col justify-start flex-grow ml-2">
+            {subcategoryId ? (
+              <>
+                {cartItems.map((subCategoryItems) => (
+                  <li key={subCategoryItems.id}>
+                    <div>
+                      <div className="flex flex-col p-3">
                         <div className="flex">
-                          <div className="flex flex-col justify-start flex-grow ml-2 ">
-                            <div className="">
-                              <button className="relative mr-2 cursor-pointer ">
-                                <span className="flex items-center text-ellipsis">
-                                  <h3 className="text-left text-gray-500">
-                                    {items.title},{items.label}
-                                  </h3>
-                                </span>
-                              </button>
-                            </div>
-                            <div className="mb-3 mt-[2px] text-gray-400 ">
-                              each
-                            </div>
-                          </div>
-                          <div className="relative z-10 flex items-center self-center justify-end bg-black mb-14 basis-20">
-                            <div className="absolute cursor-pointer top-1 right-1">
-                              <div className="inline-block rounded-[8px] border">
-                                <button className="cursor-pointer flex relative items-center justify-evenly min-w-9 py-[6px] px-1 whitespace-nowrap">
-                                  <span>{items.qty} ct</span>
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="h-9 flex flex-col basis-[54px] items-end justify-center">
-                            ${items.qty * items.selling_price}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex flex-col">
-                      <div className="flex flex-wrap cursor-pointer ml-[66px] gap-2">
-                        <button className="relative mr-4 cursor-pointer ">
-                          <span className="flex items-center text-ellipsis ">
-                            <svg
-                              width="18"
-                              height="18"
-                              viewBox="0 0 24 24"
-                              fill="#343538"
-                              xmlns="http://www.w3.org/2000/svg"
-                              size="18"
-                              color="systemGrayscale70"
-                              aria-hidden="true"
-                            >
-                              <path d="M19.518 9.264a8 8 0 0 0-13.175-2.92L4 4v6h6L7.757 7.757a6 6 0 0 1 9.881 2.19zM16.243 16.243 14 14h6v6l-2.343-2.343a8 8 0 0 1-13.175-2.92l1.88-.685a6 6 0 0 0 9.88 2.19"></path>
-                            </svg>
-                            <span className="text-gray-500">
-                              Choose replacement
-                            </span>
-                          </span>
-                        </button>
-                        <button className="relative mr-2 cursor-pointer ">
-                          <span className="flex items-center text-ellipsis ">
-                            <svg
-                              width="18"
-                              height="18"
-                              viewBox="0 0 24 24"
-                              fill="#343538"
-                              xmlns="http://www.w3.org/2000/svg"
-                              size="18"
-                              color="systemGrayscale70"
-                              aria-hidden="true"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                clip-rule="evenodd"
-                                d="M7 6V5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1h4v2h-2l-1 14H6L5 8H3V6zm3-2h4a1 1 0 0 1 1 1v1H9V5a1 1 0 0 1 1-1m3 15v-8h2v8zm-2-8H9v8h2z"
-                              ></path>
-                            </svg>
-                            <span
-                              className="text-gray-500"
-                              onClick={() => DeleteItemsFromCart(items)}
-                            >
-                              Remove
-                            </span>
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </li>
-            ))}
-            {/* <li>
-              <div>
-                <div className="flex flex-col p-3">
-                  <div className="flex">
-                    <div className="basis-[50px] h-full mr-2">
-                      <button className="relative mr-2 cursor-pointer">
-                        <span className="flex items-center text-ellipsis ">
-                          <img
-                            src="https://d2lnr5mha7bycj.cloudfront.net/product-image/file/large_488f7dad-277f-41bd-8aa6-09a2410816f0.jpeg"
-                            className="max-w-full"
-                          />
-                        </span>
-                      </button>
-                    </div>
-                    <div className="flex flex-col justify-start flex-grow ml-2">
-                      <div className="flex">
-                        <div className="flex flex-col justify-start flex-grow ml-2 ">
-                          <div className="">
-                            <button className="relative mr-2 cursor-pointer ">
-                              <span className="flex items-center text-ellipsis">
-                                <h3 className="text-left text-gray-500">
-                                  Plums,3lbs
-                                </h3>
+                          <div className="basis-[50px] h-full mr-2">
+                            <button className="relative mr-2 cursor-pointer">
+                              <span className="flex items-center text-ellipsis ">
+                                <img
+                                  src={subCategoryItems.image}
+                                  className="max-w-full"
+                                />
                               </span>
                             </button>
                           </div>
-                          <div className="mb-3 mt-[2px] text-gray-400 ">
-                            each
-                          </div>
-                        </div>
-                        <div className="relative z-10 flex items-center self-center justify-end bg-black mb-14 basis-20">
-                          <div className="absolute cursor-pointer top-1 right-1">
-                            <div className="inline-block rounded-[8px] border">
-                              <button className="cursor-pointer flex relative items-center justify-evenly min-w-9 py-[6px] px-1 whitespace-nowrap">
-                                <span>3 ct</span>
-                              </button>
+                          <div className="flex flex-col justify-start flex-grow ml-2">
+                            <div className="flex">
+                              <div className="flex flex-col justify-start flex-grow ml-2 ">
+                                <div className="">
+                                  <button className="relative mr-2 cursor-pointer ">
+                                    <span className="flex items-center text-ellipsis">
+                                      <h3 className="text-left text-gray-500">
+                                        {subCategoryItems.title},
+                                        {subCategoryItems.label}
+                                      </h3>
+                                    </span>
+                                  </button>
+                                </div>
+                                <div className="mb-3 mt-[2px] text-gray-400 ">
+                                  each
+                                </div>
+                              </div>
+                              <div className="relative z-10 flex items-center self-center justify-end bg-black mb-14 basis-20">
+                                <div className="absolute cursor-pointer top-1 right-1">
+                                  <div className="inline-block rounded-[8px] border">
+                                    <button className="cursor-pointer flex relative items-center justify-evenly min-w-9 py-[6px] px-1 whitespace-nowrap">
+                                      <span>{subCategoryItems.qty} ct</span>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="h-9 flex flex-col basis-[54px] items-end justify-center">
+                                $
+                                {subCategoryItems.qty *
+                                  subCategoryItems.selling_price}
+                              </div>
                             </div>
                           </div>
                         </div>
-                        <div className="h-9 flex flex-col basis-[54px] items-end justify-center">
-                          $22.35
+                        <div className="flex flex-col">
+                          <div className="flex flex-wrap cursor-pointer ml-[66px] gap-2">
+                            <button className="relative mr-4 cursor-pointer ">
+                              <span className="flex items-center text-ellipsis ">
+                                <svg
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="#343538"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  size="18"
+                                  color="systemGrayscale70"
+                                  aria-hidden="true"
+                                >
+                                  <path d="M19.518 9.264a8 8 0 0 0-13.175-2.92L4 4v6h6L7.757 7.757a6 6 0 0 1 9.881 2.19zM16.243 16.243 14 14h6v6l-2.343-2.343a8 8 0 0 1-13.175-2.92l1.88-.685a6 6 0 0 0 9.88 2.19"></path>
+                                </svg>
+                                <span className="text-gray-500">
+                                  Choose replacement
+                                </span>
+                              </span>
+                            </button>
+                            <button className="relative mr-2 cursor-pointer ">
+                              <span className="flex items-center text-ellipsis ">
+                                <svg
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="#343538"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  size="18"
+                                  color="systemGrayscale70"
+                                  aria-hidden="true"
+                                >
+                                  <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M7 6V5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1h4v2h-2l-1 14H6L5 8H3V6zm3-2h4a1 1 0 0 1 1 1v1H9V5a1 1 0 0 1 1-1m3 15v-8h2v8zm-2-8H9v8h2z"
+                                  ></path>
+                                </svg>
+                                <span
+                                  className="text-gray-500"
+                                  onClick={() =>
+                                    DeleteSubCategoryItemsProductsFromCart(
+                                      subCategoryItems
+                                    )
+                                  }
+                                >
+                                  Remove
+                                </span>
+                              </span>
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="flex flex-wrap cursor-pointer ml-[66px] gap-2">
-                      <button className="relative mr-4 cursor-pointer ">
-                        <span className="flex items-center text-ellipsis ">
-                          <svg
-                            width="18"
-                            height="18"
-                            viewBox="0 0 24 24"
-                            fill="#343538"
-                            xmlns="http://www.w3.org/2000/svg"
-                            size="18"
-                            color="systemGrayscale70"
-                            aria-hidden="true"
-                          >
-                            <path d="M19.518 9.264a8 8 0 0 0-13.175-2.92L4 4v6h6L7.757 7.757a6 6 0 0 1 9.881 2.19zM16.243 16.243 14 14h6v6l-2.343-2.343a8 8 0 0 1-13.175-2.92l1.88-.685a6 6 0 0 0 9.88 2.19"></path>
-                          </svg>
-                          <span className="text-gray-500">
-                            Choose replacement
-                          </span>
-                        </span>
-                      </button>
-                      <button className="relative mr-2 cursor-pointer ">
-                        <span className="flex items-center text-ellipsis ">
-                          <svg
-                            width="18"
-                            height="18"
-                            viewBox="0 0 24 24"
-                            fill="#343538"
-                            xmlns="http://www.w3.org/2000/svg"
-                            size="18"
-                            color="systemGrayscale70"
-                            aria-hidden="true"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              clip-rule="evenodd"
-                              d="M7 6V5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1h4v2h-2l-1 14H6L5 8H3V6zm3-2h4a1 1 0 0 1 1 1v1H9V5a1 1 0 0 1 1-1m3 15v-8h2v8zm-2-8H9v8h2z"
-                            ></path>
-                          </svg>
-                          <span className="text-gray-500">Remove</span>
-                        </span>
-                      </button>
+                  </li>
+                ))}
+              </>
+            ) : categoryId ? (
+              <>
+                {cartItems.map((CategoryItems) => (
+                  <li key={CategoryItems.id}>
+                    <div>
+                      <div className="flex flex-col p-3">
+                        <div className="flex">
+                          <div className="basis-[50px] h-full mr-2">
+                            <button className="relative mr-2 cursor-pointer">
+                              <span className="flex items-center text-ellipsis ">
+                                <img
+                                  src={CategoryItems.image}
+                                  className="max-w-full"
+                                />
+                              </span>
+                            </button>
+                          </div>
+                          <div className="flex flex-col justify-start flex-grow ml-2">
+                            <div className="flex">
+                              <div className="flex flex-col justify-start flex-grow ml-2 ">
+                                <div className="">
+                                  <button className="relative mr-2 cursor-pointer ">
+                                    <span className="flex items-center text-ellipsis">
+                                      <h3 className="text-left text-gray-500">
+                                        {CategoryItems.title},
+                                        {CategoryItems.label}
+                                      </h3>
+                                    </span>
+                                  </button>
+                                </div>
+                                <div className="mb-3 mt-[2px] text-gray-400 ">
+                                  each
+                                </div>
+                              </div>
+                              <div className="relative z-10 flex items-center self-center justify-end bg-black mb-14 basis-20">
+                                <div className="absolute cursor-pointer top-1 right-1">
+                                  <div className="inline-block rounded-[8px] border">
+                                    <button className="cursor-pointer flex relative items-center justify-evenly min-w-9 py-[6px] px-1 whitespace-nowrap">
+                                      <span>{CategoryItems.qty} ct</span>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="h-9 flex flex-col basis-[54px] items-end justify-center">
+                                $
+                                {CategoryItems.qty *
+                                  CategoryItems.selling_price}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex flex-col">
+                          <div className="flex flex-wrap cursor-pointer ml-[66px] gap-2">
+                            <button className="relative mr-4 cursor-pointer ">
+                              <span className="flex items-center text-ellipsis ">
+                                <svg
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="#343538"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  size="18"
+                                  color="systemGrayscale70"
+                                  aria-hidden="true"
+                                >
+                                  <path d="M19.518 9.264a8 8 0 0 0-13.175-2.92L4 4v6h6L7.757 7.757a6 6 0 0 1 9.881 2.19zM16.243 16.243 14 14h6v6l-2.343-2.343a8 8 0 0 1-13.175-2.92l1.88-.685a6 6 0 0 0 9.88 2.19"></path>
+                                </svg>
+                                <span className="text-gray-500">
+                                  Choose replacement
+                                </span>
+                              </span>
+                            </button>
+                            <button className="relative mr-2 cursor-pointer ">
+                              <span className="flex items-center text-ellipsis ">
+                                <svg
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="#343538"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  size="18"
+                                  color="systemGrayscale70"
+                                  aria-hidden="true"
+                                >
+                                  <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M7 6V5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1h4v2h-2l-1 14H6L5 8H3V6zm3-2h4a1 1 0 0 1 1 1v1H9V5a1 1 0 0 1 1-1m3 15v-8h2v8zm-2-8H9v8h2z"
+                                  ></path>
+                                </svg>
+                                <span
+                                  className="text-gray-500"
+                                  onClick={() =>
+                                    DeleteCategoryItemsProductsFromCart(
+                                      CategoryItems
+                                    )
+                                  }
+                                >
+                                  Remove
+                                </span>
+                              </span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </div>
-            </li> */}
+                  </li>
+                ))}
+              </>
+            ) : (
+              <>
+                {cartItems.map((items) => (
+                  <li key={items.id}>
+                    <div>
+                      <div className="flex flex-col p-3">
+                        <div className="flex">
+                          <div className="basis-[50px] h-full mr-2">
+                            <button className="relative mr-2 cursor-pointer">
+                              <span className="flex items-center text-ellipsis ">
+                                <img src={items.image} className="max-w-full" />
+                              </span>
+                            </button>
+                          </div>
+                          <div className="flex flex-col justify-start flex-grow ml-2">
+                            <div className="flex">
+                              <div className="flex flex-col justify-start flex-grow ml-2 ">
+                                <div className="">
+                                  <button className="relative mr-2 cursor-pointer ">
+                                    <span className="flex items-center text-ellipsis">
+                                      <h3 className="text-left text-gray-500">
+                                        {items.title},{items.label}
+                                      </h3>
+                                    </span>
+                                  </button>
+                                </div>
+                                <div className="mb-3 mt-[2px] text-gray-400 ">
+                                  each
+                                </div>
+                              </div>
+                              <div className="relative z-10 flex items-center self-center justify-end bg-black mb-14 basis-20">
+                                <div className="absolute cursor-pointer top-1 right-1">
+                                  <div className="inline-block rounded-[8px] border">
+                                    <button className="cursor-pointer flex relative items-center justify-evenly min-w-9 py-[6px] px-1 whitespace-nowrap">
+                                      <span>{items.qty} ct</span>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="h-9 flex flex-col basis-[54px] items-end justify-center">
+                                ${items.qty * items.selling_price}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex flex-col">
+                          <div className="flex flex-wrap cursor-pointer ml-[66px] gap-2">
+                            <button className="relative mr-4 cursor-pointer ">
+                              <span className="flex items-center text-ellipsis ">
+                                <svg
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="#343538"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  size="18"
+                                  color="systemGrayscale70"
+                                  aria-hidden="true"
+                                >
+                                  <path d="M19.518 9.264a8 8 0 0 0-13.175-2.92L4 4v6h6L7.757 7.757a6 6 0 0 1 9.881 2.19zM16.243 16.243 14 14h6v6l-2.343-2.343a8 8 0 0 1-13.175-2.92l1.88-.685a6 6 0 0 0 9.88 2.19"></path>
+                                </svg>
+                                <span className="text-gray-500">
+                                  Choose replacement
+                                </span>
+                              </span>
+                            </button>
+                            <button className="relative mr-2 cursor-pointer ">
+                              <span className="flex items-center text-ellipsis ">
+                                <svg
+                                  width="18"
+                                  height="18"
+                                  viewBox="0 0 24 24"
+                                  fill="#343538"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  size="18"
+                                  color="systemGrayscale70"
+                                  aria-hidden="true"
+                                >
+                                  <path
+                                    fill-rule="evenodd"
+                                    clip-rule="evenodd"
+                                    d="M7 6V5a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1h4v2h-2l-1 14H6L5 8H3V6zm3-2h4a1 1 0 0 1 1 1v1H9V5a1 1 0 0 1 1-1m3 15v-8h2v8zm-2-8H9v8h2z"
+                                  ></path>
+                                </svg>
+                                <span
+                                  className="text-gray-500"
+                                  onClick={() => DeleteItemsFromCart(items)}
+                                >
+                                  Remove
+                                </span>
+                              </span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </>
+            )}
           </ul>
           <label className="relative flex px-2 py-2 border-t border-b cursor-pointer">
             <svg
@@ -470,10 +627,10 @@ const TotalCartItems = ({ totalCartItemsModal, onCancel }) => {
               </span>
             </div>
             <Link to="/store/checkout">
-              <span className=" flex justify-between items-center bg-[#277D0F] rounded-[27px] h-[54px] w-full relative text-white">
+              <span className=" flex justify-between items-center bg-[#2C890F] rounded-[27px] h-[54px] w-full relative text-white">
                 <div className="pl-40">Go to checkout</div>
                 <div className=" bg-[#23720C] rounded-[27px] w-16 h-10 flex items-center pl-2 ">
-                  $24.99
+                  ${subtotal.toFixed(2)}
                 </div>
               </span>
             </Link>

@@ -1,6 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import API from "../../services/api";
+import EditAddress from "../StoreSidebarPages/Address/EditAddress";
+import RegisterAddress from "../StoreSidebarPages/Address/RegisterAddress";
 
 const Checkout = () => {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [openRegisterAddressModal, setRegisterAddressModal] = useState(false);
+  const [openEditAddressModal, setEditAddressModal] = useState(true);
+  const [getUserAddressDetail, setUserAddressDetail] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState(null);
+  const toggleAccordion = () => {
+    setIsExpanded(!isExpanded);
+  };
+
+  const fetchUserAddressDetail = async () => {
+    try {
+      const response = await API.getUserAddress();
+      console.log(response);
+      if (response.status === "success") {
+        setUserAddressDetail(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserAddressDetail();
+  }, []);
+  console.log("address", getUserAddressDetail);
+
+  const handleEditAddress = (address) => {
+    setEditAddressModal(true);
+    setSelectedAddress({ ...address });
+  };
+
   return (
     <>
       <div className="w-full h-[57px] z-10 border-b bg-white flex justify-center items-center">
@@ -17,7 +51,7 @@ const Checkout = () => {
           <div className="row-span-3">
             <div className="relative ">
               <div>
-                <div>
+                {/* <div>
                   <div className="px-4 pt-4">
                     <div className="flex mx-3 h-10 rounded-[20px]">
                       <button className="cursor-pointer relative box-border rounded-[20px] h-10 border-2">
@@ -64,56 +98,163 @@ const Checkout = () => {
                       </button>
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div>
-                  <div className="p-6 cursor-pointer ">
-                    <div>
-                      <div className="absolute flex items-center">
-                        <svg
-                          width="32"
-                          height="32"
-                          viewBox="0 0 24 24"
-                          fill="#343538"
-                          xmlns="http://www.w3.org/2000/svg"
-                          size="32"
-                          color="systemGrayscale70"
-                          aria-hidden="true"
-                          class="e-3pclmc"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            clip-rule="evenodd"
-                            d="M5.714 12.561a7.1 7.1 0 0 1-.86-3.659 7.152 7.152 0 1 1 13.242 3.994L12.84 22h-1.679l-5.265-9.121a7 7 0 0 1-.183-.318m9.266-3.305a2.98 2.98 0 1 1-5.956-.208 2.98 2.98 0 0 1 5.956.208"
-                          ></path>
-                        </svg>
-                        <div className="mx-3 flex-grow min-h-11 flex flex-col justify-center">
-                          <h2>8008 Herb Kelleher Way, texas</h2>
-                          <div>Dallas, TX 75235</div>
-                        </div>
-                        <button className="h-8 w-8 cursor-pointer pl-96">
+                  <div>
+                    <div
+                      className="p-6 cursor-pointer"
+                      onClick={toggleAccordion}
+                    >
+                      <div>
+                        <div className="absolute flex items-center ">
                           <svg
                             width="32"
                             height="32"
                             viewBox="0 0 24 24"
-                            fill="#C7C8CD"
+                            fill="#343538"
                             xmlns="http://www.w3.org/2000/svg"
-                            color="systemGrayscale30"
                             size="32"
+                            color="systemGrayscale70"
                             aria-hidden="true"
+                            className="e-3pclmc"
                           >
                             <path
                               fill-rule="evenodd"
                               clip-rule="evenodd"
-                              d="M12 12.52 7.792 8.314 6.208 9.896 12 15.688l5.792-5.792-1.584-1.584z"
+                              d="M5.714 12.561a7.1 7.1 0 0 1-.86-3.659 7.152 7.152 0 1 1 13.242 3.994L12.84 22h-1.679l-5.265-9.121a7 7 0 0 1-.183-.318m9.266-3.305a2.98 2.98 0 1 1-5.956-.208 2.98 2.98 0 0 1 5.956.208"
                             ></path>
                           </svg>
-                        </button>
+                          <div className="mx-1 flex-grow min-h-11 flex flex-col justify-center">
+                            {isExpanded ? (
+                              <>
+                                {" "}
+                                <h2 className="text-xl ">Delivery Address</h2>
+                              </>
+                            ) : (
+                              <>
+                                <h2 className="text-xl ">
+                                  8008 Herb Kelleher Way, texas
+                                </h2>
+                                <div className="text-base text-gray-500">
+                                  Dallas, TX 75235
+                                </div>
+                              </>
+                            )}
+                          </div>
+                          {!isExpanded && (
+                            <button className="h-8 w-8 cursor-pointer pl-64">
+                              <svg
+                                width="32"
+                                height="32"
+                                viewBox="0 0 24 24"
+                                fill="#C7C8CD"
+                                xmlns="http://www.w3.org/2000/svg"
+                                color="systemGrayscale30"
+                                size="32"
+                                aria-hidden="true"
+                              >
+                                <path
+                                  fill-rule="evenodd"
+                                  clip-rule="evenodd"
+                                  d="M12 12.52 7.792 8.314 6.208 9.896 12 15.688l5.792-5.792-1.584-1.584z"
+                                ></path>
+                              </svg>
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
+                    {isExpanded && (
+                      <div className=" p-4 mt-2 border-b">
+                        {getUserAddressDetail &&
+                        getUserAddressDetail.addressDetails ? (
+                          <>
+                            {getUserAddressDetail.addressDetails.map((addr) => (
+                              <>
+                                <div
+                                  className="flex justify-between relative py-3 cursor-pointer"
+                                  key={addr?.address_id}
+                                >
+                                  <div className="flex pr-1">
+                                    <div className="inline-block relative my-[2px] mr-2 h-6 w-6">
+                                      <span className="absolute w-full h-full">
+                                        {/* <input
+                                          type="radio"
+                                          checked={
+                                            selectedAddress === addr.address_id
+                                          }
+                                          onChange={() =>
+                                            setSelectedAddress(addr.address_id)
+                                          }
+                                          className="cursor-pointer"
+                                        /> */}
+
+                                        <svg
+                                          width="24"
+                                          height="24"
+                                          viewBox="0 0 24 24"
+                                          fill="#108910"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                          size="24"
+                                          aria-hidden="true"
+                                        >
+                                          <path
+                                            fillRule="evenodd"
+                                            clipRule="evenodd"
+                                            d="M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0m2 0c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-10 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8"
+                                          ></path>
+                                        </svg>
+                                      </span>
+                                    </div>
+                                    <div className="self-center">
+                                      <span className="flex flex-col">
+                                        <span className="text-base font-semibold">
+                                          {addr?.street}, {addr?.floor}
+                                        </span>
+                                        <span className="text-sm text-gray-500">
+                                          {addr?.business_name},{" "}
+                                          {addr?.zip_code}
+                                        </span>
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <button
+                                    className="text-[#2C890F]"
+                                    onClick={() => handleEditAddress(addr)}
+                                  >
+                                    <span className="text-base">Edit</span>
+                                  </button>
+                                </div>
+                              </>
+                            ))}
+                          </>
+                        ) : (
+                          <>No Address Found</>
+                        )}
+
+                        <div>
+                          <button className="px-4 cursor-pointer h-14 w-full bg-[#2C890F] rounded-full">
+                            <span className="block mx-2 text-white">
+                              Confirm address
+                            </span>
+                          </button>
+                        </div>
+
+                        <div className="mt-5">
+                          <button
+                            className="text-[#2C890F]"
+                            onClick={() => setRegisterAddressModal(true)}
+                          >
+                            Add Address
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
+
                 <div>
-                  <div className="p-6 mt-10 border-b  ">
+                  <div className="p-6  border-b mt-1 ">
                     <div>
                       <div>
                         <div className="relative flex items-center">
@@ -598,6 +739,17 @@ const Checkout = () => {
           </div>
         </div>
       </div>
+      <RegisterAddress
+        openRegisterAddressModal={openRegisterAddressModal}
+        onCancel={() => setRegisterAddressModal(false)}
+        fetchUserAddressDetail={fetchUserAddressDetail}
+      />
+      <EditAddress
+        openEditAddressModal={openEditAddressModal}
+        onCancel={() => setEditAddressModal(false)}
+        selectedAddress={selectedAddress}
+        // selectedAddress={selectedAddress}
+      />
     </>
   );
 };
