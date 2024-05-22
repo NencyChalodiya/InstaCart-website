@@ -1,16 +1,28 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import API from "../../services/api";
 import EditAddress from "../StoreSidebarPages/Address/EditAddress";
 import RegisterAddress from "../StoreSidebarPages/Address/RegisterAddress";
+import ChooseHourWindow from "./ChooseHourWindow";
 
 const Checkout = () => {
+  const { storeId } = useParams();
+
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isDeliveryTimeExpanded, setIsDeliveryTimeExpanded] = useState(false);
   const [openRegisterAddressModal, setRegisterAddressModal] = useState(false);
   const [openEditAddressModal, setEditAddressModal] = useState(true);
   const [getUserAddressDetail, setUserAddressDetail] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
+  const [confirmedAddress, setConfirmedAddress] = useState(null);
+  const [deliveryTimeDetails, setDeliveryTimeDetails] = useState([]);
+  const [chooseHourWindow, openChooseHourWindow] = useState(false);
+
   const toggleAccordion = () => {
     setIsExpanded(!isExpanded);
+  };
+  const toggleDeliveryTimeAccordion = () => {
+    setIsDeliveryTimeExpanded(!isDeliveryTimeExpanded);
   };
 
   const fetchUserAddressDetail = async () => {
@@ -30,11 +42,42 @@ const Checkout = () => {
   }, []);
   console.log("address", getUserAddressDetail);
 
+  const fetchDeliveryTime = async () => {
+    try {
+      const response = await API.deliveryTimeInCheckout(storeId);
+      // console.log(response);
+      if (response.status === "success") {
+        setDeliveryTimeDetails(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    console.log("storeId", storeId);
+    if (storeId) {
+      fetchDeliveryTime();
+    }
+  }, [storeId]);
+  console.log("deliveryDetails", deliveryTimeDetails);
+
   const handleEditAddress = (address) => {
     setEditAddressModal(true);
     setSelectedAddress({ ...address });
   };
+  const handleAddressSelection = (addressId) => {
+    setSelectedAddress(addressId);
+  };
 
+  const handleConfirmAddress = () => {
+    const confirmedAddress = getUserAddressDetail.addressDetails.find(
+      (addr) => addr.address_id === selectedAddress
+    );
+    setConfirmedAddress(confirmedAddress);
+
+    setIsExpanded(false); // Close the accordion
+  };
   return (
     <>
       <div className="w-full h-[57px] z-10 border-b bg-white flex justify-center items-center">
@@ -119,30 +162,39 @@ const Checkout = () => {
                             className="e-3pclmc"
                           >
                             <path
-                              fill-rule="evenodd"
-                              clip-rule="evenodd"
+                              fillRule="evenodd"
+                              clipRule="evenodd"
                               d="M5.714 12.561a7.1 7.1 0 0 1-.86-3.659 7.152 7.152 0 1 1 13.242 3.994L12.84 22h-1.679l-5.265-9.121a7 7 0 0 1-.183-.318m9.266-3.305a2.98 2.98 0 1 1-5.956-.208 2.98 2.98 0 0 1 5.956.208"
                             ></path>
                           </svg>
                           <div className="mx-1 flex-grow min-h-11 flex flex-col justify-center">
                             {isExpanded ? (
-                              <>
-                                {" "}
-                                <h2 className="text-xl ">Delivery Address</h2>
-                              </>
+                              <h2 className="text-xl">Delivery Address</h2>
                             ) : (
                               <>
-                                <h2 className="text-xl ">
-                                  8008 Herb Kelleher Way, texas
-                                </h2>
-                                <div className="text-base text-gray-500">
-                                  Dallas, TX 75235
-                                </div>
+                                {confirmedAddress ? (
+                                  <>
+                                    <h2 className="text-xl">
+                                      {confirmedAddress.street},{" "}
+                                      {confirmedAddress.floor}
+                                    </h2>
+                                    <div className="text-base text-gray-500">
+                                      {confirmedAddress.business_name},{" "}
+                                      {confirmedAddress.zip_code}
+                                    </div>
+                                  </>
+                                ) : (
+                                  <>
+                                    <h2 className="text-xl">
+                                      Please select an address
+                                    </h2>
+                                  </>
+                                )}
                               </>
                             )}
                           </div>
                           {!isExpanded && (
-                            <button className="h-8 w-8 cursor-pointer pl-64">
+                            <button className="h-8 w-8 cursor-pointer pl-72">
                               <svg
                                 width="32"
                                 height="32"
@@ -154,9 +206,9 @@ const Checkout = () => {
                                 aria-hidden="true"
                               >
                                 <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
-                                  d="M12 12.52 7.792 8.314 6.208 9.896 12 15.688l5.792-5.792-1.584-1.584z"
+                                  fillRule="evenodd"
+                                  clipRule="evenodd"
+                                  d="M12 12.52L7.792 8.314 6.208 9.896 12 15.688l5.792-5.792-1.584-1.584z"
                                 ></path>
                               </svg>
                             </button>
@@ -165,30 +217,21 @@ const Checkout = () => {
                       </div>
                     </div>
                     {isExpanded && (
-                      <div className=" p-4 mt-2 border-b">
+                      <div className="p-4 mt-2 border-b">
                         {getUserAddressDetail &&
                         getUserAddressDetail.addressDetails ? (
                           <>
                             {getUserAddressDetail.addressDetails.map((addr) => (
-                              <>
+                              <React.Fragment key={addr?.address_id}>
                                 <div
                                   className="flex justify-between relative py-3 cursor-pointer"
-                                  key={addr?.address_id}
+                                  onClick={() =>
+                                    handleAddressSelection(addr.address_id)
+                                  }
                                 >
                                   <div className="flex pr-1">
                                     <div className="inline-block relative my-[2px] mr-2 h-6 w-6">
-                                      <span className="absolute w-full h-full">
-                                        {/* <input
-                                          type="radio"
-                                          checked={
-                                            selectedAddress === addr.address_id
-                                          }
-                                          onChange={() =>
-                                            setSelectedAddress(addr.address_id)
-                                          }
-                                          className="cursor-pointer"
-                                        /> */}
-
+                                      {selectedAddress === addr.address_id ? (
                                         <svg
                                           width="24"
                                           height="24"
@@ -204,7 +247,20 @@ const Checkout = () => {
                                             d="M20 12a8 8 0 1 1-16 0 8 8 0 0 1 16 0m2 0c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10m-10 4a4 4 0 1 0 0-8 4 4 0 0 0 0 8"
                                           ></path>
                                         </svg>
-                                      </span>
+                                      ) : (
+                                        <input
+                                          type="radio"
+                                          checked={
+                                            selectedAddress === addr.address_id
+                                          }
+                                          onChange={() =>
+                                            handleAddressSelection(
+                                              addr.address_id
+                                            )
+                                          }
+                                          className="cursor-pointer"
+                                        />
+                                      )}
                                     </div>
                                     <div className="self-center">
                                       <span className="flex flex-col">
@@ -220,25 +276,32 @@ const Checkout = () => {
                                   </div>
                                   <button
                                     className="text-[#2C890F]"
-                                    onClick={() => handleEditAddress(addr)}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleEditAddress(addr);
+                                    }}
                                   >
                                     <span className="text-base">Edit</span>
                                   </button>
                                 </div>
-                              </>
+                                {selectedAddress === addr.address_id && (
+                                  <div className="my-4">
+                                    <button
+                                      className="px-4 cursor-pointer h-14 w-full bg-[#2C890F] rounded-full"
+                                      onClick={() => handleConfirmAddress()}
+                                    >
+                                      <span className="block mx-2 text-white">
+                                        Confirm address
+                                      </span>
+                                    </button>
+                                  </div>
+                                )}
+                              </React.Fragment>
                             ))}
                           </>
                         ) : (
                           <>No Address Found</>
                         )}
-
-                        <div>
-                          <button className="px-4 cursor-pointer h-14 w-full bg-[#2C890F] rounded-full">
-                            <span className="block mx-2 text-white">
-                              Confirm address
-                            </span>
-                          </button>
-                        </div>
 
                         <div className="mt-5">
                           <button
@@ -254,7 +317,7 @@ const Checkout = () => {
                 </div>
 
                 <div>
-                  <div className="p-6  border-b mt-1 ">
+                  <div className="p-6  border-b mt-4 ">
                     <div>
                       <div>
                         <div className="relative flex items-center">
@@ -323,7 +386,10 @@ const Checkout = () => {
                   </div>
                 </div>
                 <div>
-                  <div className="p-6 border-b">
+                  <div
+                    className="p-6 border-b"
+                    onClick={toggleDeliveryTimeAccordion}
+                  >
                     <div>
                       <div className="relative flex items-center">
                         <svg
@@ -344,11 +410,143 @@ const Checkout = () => {
                           ></path>
                         </svg>
                         <div className="mx-3 flex-grow">
-                          <h2>Delivery Time</h2>
+                          {isDeliveryTimeExpanded ? (
+                            <h2>Choose Delivery Time</h2>
+                          ) : (
+                            <h2>Delivery Time</h2>
+                          )}
                         </div>
+                        {!isDeliveryTimeExpanded && (
+                          <button className="h-8 w-8 cursor-pointer pl-2">
+                            <svg
+                              width="32"
+                              height="32"
+                              viewBox="0 0 24 24"
+                              fill="#C7C8CD"
+                              xmlns="http://www.w3.org/2000/svg"
+                              color="systemGrayscale30"
+                              size="32"
+                              aria-hidden="true"
+                            >
+                              <path
+                                fillRule="evenodd"
+                                clipRule="evenodd"
+                                d="M12 12.52L7.792 8.314 6.208 9.896 12 15.688l5.792-5.792-1.584-1.584z"
+                              ></path>
+                            </svg>
+                          </button>
+                        )}
                       </div>
                     </div>
                   </div>
+                  {isDeliveryTimeExpanded && (
+                    <div className="p-4 mt-2 border-b">
+                      {deliveryTimeDetails ? (
+                        <>
+                          {deliveryTimeDetails.map((delivery) => (
+                            <div className="flex flex-col">
+                              <div className="box-border cursor-pointer rounded-[12px] flex min-h-[78px] justify-between p-4 border-2 hover:bg-gray-100 hover:border-2 hover:border-black">
+                                <div className="flex items-center ">
+                                  <svg
+                                    width="25"
+                                    height="25"
+                                    viewBox="0 0 24 24"
+                                    fill="#108910"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    color="brandPrimaryRegular"
+                                    size="25"
+                                    aria-hidden="true"
+                                  >
+                                    <path d="M12.79 10.33 14.74 2h-1.27L5.54 12.63v1.05h5.67L9.26 22h1.27l7.93-10.62v-1.05z"></path>
+                                  </svg>
+                                  <div className="ml-3">
+                                    <p className="text-[#108910] ">Priority</p>
+                                    <p className="text-base text-gray-600">
+                                      {
+                                        delivery.delivery_time.next_delivery
+                                          .priority.time_slot
+                                      }
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="self-center flex">
+                                  <p>Free</p>
+                                </div>
+                              </div>
+                              <div className="box-border cursor-pointer rounded-[12px] flex min-h-[78px] justify-between p-4 border-2 mt-4 hover:bg-gray-100 hover:border-2 hover:border-black">
+                                <div className="flex items-center ">
+                                  <svg
+                                    width="25"
+                                    height="25"
+                                    viewBox="0 0 24 24"
+                                    fill="#343538"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    size="25"
+                                    aria-hidden="true"
+                                  >
+                                    <path
+                                      fill-rule="evenodd"
+                                      clip-rule="evenodd"
+                                      d="m17 3 4 8v9a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1v-2H7v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-9l4-8zm.764 6H6.236l2-4h7.528zM19 13.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0M6.5 15a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3"
+                                    ></path>
+                                  </svg>
+                                  <div className="ml-3">
+                                    <p>Standard</p>
+                                    <p className="text-base text-gray-600">
+                                      {
+                                        delivery.delivery_time.next_delivery
+                                          .standard.time_slot
+                                      }
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="self-center flex">
+                                  <p>Free</p>
+                                </div>
+                              </div>
+                              <div
+                                className="box-border cursor-pointer rounded-[12px] flex min-h-[78px] justify-between p-4 border-2 mt-4 hover:bg-gray-100 hover:border-2 hover:border-black"
+                                onClick={() => openChooseHourWindow(true)}
+                              >
+                                <div className="flex items-center ">
+                                  <svg
+                                    width="25"
+                                    height="25"
+                                    viewBox="0 0 24 24"
+                                    fill="#343538"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    size="25"
+                                    aria-hidden="true"
+                                  >
+                                    <path
+                                      fill-rule="evenodd"
+                                      clip-rule="evenodd"
+                                      d="M16 3h2v2h3v3H3V5h3V3h2v2h8zM3 10h18v11H3zm5.5 2h-3v2.625h3zm-3 4.375h3V19h-3zm8-4.375h-3v2.625h3zm2 0h3v2.625h-3zm-2 4.375h-3V19h3z"
+                                    ></path>
+                                  </svg>
+                                  <div className="ml-3">
+                                    <p>Choose 2-hour window</p>
+                                    <p className="text-base text-gray-600">
+                                      7:38am-8:38am
+                                    </p>
+                                  </div>
+                                </div>
+                                <div className="self-center flex">
+                                  <p>Free</p>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </>
+                      ) : (
+                        <></>
+                      )}
+
+                      <button className="px-4 cursor-pointer relative rounded-[27px] h-14 w-full bg-[#2C890F] mt-4">
+                        <span className="text-white text-lg">Continue</span>
+                      </button>
+                    </div>
+                  )}
                 </div>
                 <div>
                   <div className="p-6 border-b">
@@ -747,8 +945,13 @@ const Checkout = () => {
       <EditAddress
         openEditAddressModal={openEditAddressModal}
         onCancel={() => setEditAddressModal(false)}
+        fetchUserAddressDetail={fetchUserAddressDetail}
         selectedAddress={selectedAddress}
         // selectedAddress={selectedAddress}
+      />
+      <ChooseHourWindow
+        chooseHourWindow={chooseHourWindow}
+        onCancel={() => openChooseHourWindow(false)}
       />
     </>
   );

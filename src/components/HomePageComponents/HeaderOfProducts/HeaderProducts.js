@@ -290,7 +290,10 @@ const HeaderProducts = ({ storeId }) => {
                         {deliveryDetails.map((detail) => (
                           <span className="ml-1 text-base text-[#308E1F]">
                             Delivery by
-                            {detail?.delivery_time?.next_delivery?.timeSlot}
+                            {
+                              detail?.delivery_time?.next_delivery?.priority
+                                ?.time_slot
+                            }
                           </span>
                         ))}
                       </span>

@@ -307,12 +307,13 @@ const DeliveryTimesModal = ({
                                             <div className="text-2xl font-semibold">
                                               {
                                                 detail?.delivery_time
-                                                  ?.next_delivery?.day
+                                                  ?.next_delivery?.priority?.day
                                               }
                                               ,
                                               {
                                                 detail?.delivery_time
-                                                  ?.next_delivery?.timeSlot
+                                                  ?.next_delivery?.priority
+                                                  ?.time_slot
                                               }
                                             </div>
                                           ))}

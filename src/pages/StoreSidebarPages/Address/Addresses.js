@@ -24,8 +24,8 @@ const Addresses = () => {
     try {
       const response = await API.getUserAddress();
       //console.log(response);
-      if (response.status) {
-        setUserAddressDetail(response.addresses);
+      if (response.status === "success") {
+        setUserAddressDetail(response.data);
       }
     } catch (error) {
       console.log(error);
@@ -168,37 +168,46 @@ const Addresses = () => {
 
               <div className="block relative text-left w-full rounded-xl">
                 <ul>
-                  {getUserAddressDetail.map((address) => (
-                    <li
-                      className="flex mt-6 mb-4 justify-between"
-                      key={address.id}
-                    >
-                      <button className="pr-2 text-left relative">
-                        <span className="flex justify-between items-center text-ellipsis">
-                          <span className="flex-grow flex-shrink basis-auto">
-                            <address>
-                              <span className="text-lg">
-                                {address?.business_name}
-                              </span>
-                              <br />
-                              <span className="text-base text-gray-400">
-                                <span>{address?.street},</span>
-                                <span>
-                                  {address?.apt_name},{address?.zip_code}
+                  {getUserAddressDetail &&
+                  getUserAddressDetail.addressDetails ? (
+                    <>
+                      {getUserAddressDetail.addressDetails.map((addr) => (
+                        <>
+                          <li
+                            className="flex mt-6 mb-4 justify-between"
+                            key={addr?.address_id}
+                          >
+                            <button className="pr-2 text-left relative">
+                              <span className="flex justify-between items-center text-ellipsis">
+                                <span className="flex-grow flex-shrink basis-auto">
+                                  <address>
+                                    <span className="text-lg">
+                                      {addr?.business_name}
+                                    </span>
+                                    <br />
+                                    <span className="text-base text-gray-400">
+                                      <span>{addr?.street},</span>
+                                      <span>
+                                        {addr?.floor},{addr?.zip_code}
+                                      </span>
+                                    </span>
+                                  </address>
                                 </span>
                               </span>
-                            </address>
-                          </span>
-                        </span>
-                      </button>
-                      <button
-                        className="cursor-pointer relative pr-52 text-[#2C890F] font-semibold"
-                        onClick={() => handleEditAddress(address)}
-                      >
-                        <span>Edit</span>
-                      </button>
-                    </li>
-                  ))}
+                            </button>
+                            <button
+                              className="cursor-pointer relative pr-52 text-[#2C890F] font-semibold"
+                              onClick={() => handleEditAddress(addr)}
+                            >
+                              <span>Edit</span>
+                            </button>
+                          </li>
+                        </>
+                      ))}
+                    </>
+                  ) : (
+                    <>No Address Found</>
+                  )}
                 </ul>
               </div>
             </div>
@@ -208,11 +217,13 @@ const Addresses = () => {
       <RegisterAddress
         openRegisterAddressModal={openRegisterAddressModal}
         onCancel={() => setRegisterAddressModal(false)}
+        fetchUserAddressDetail={fetchUserAddressDetail}
       />
       <EditAddress
         openEditAddressModal={openEditAddressModal}
         onCancel={() => setEditAddressModal(false)}
         selectedAddress={selectedAddress}
+        fetchUserAddressDetail={fetchUserAddressDetail}
       />
     </>
   );

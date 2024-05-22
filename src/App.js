@@ -96,7 +96,7 @@ function App() {
             {/* <Route path="/products/:productId" element={<AddToCart />} /> */}
             {/* <Route path="/product/:productId" component={<AddToCart />} /> */}
             <Route path="/store/addresses" element={<Addresses />} />
-            <Route path="/store/checkout" element={<Checkout />} />
+            <Route path="/store/checkout/:storeId" element={<Checkout />} />
             <Route
               path="/store/search/:searchQuery"
               element={

@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { Modal } from "antd";
 import API from "../../../services/api";
-const EditAddress = ({ openEditAddressModal, onCancel, selectedAddress }) => {
+import Loader from "react-js-loader";
+import "../../Loading.css";
+import { useLocation } from "react-router-dom";
+const EditAddress = ({
+  openEditAddressModal,
+  onCancel,
+  selectedAddress,
+  fetchUserAddressDetail,
+}) => {
+  const location = useLocation();
   const [updatedAddress, setUpdatedAddress] = useState({ ...selectedAddress });
+  const [isLoading, setLoading] = useState(false);
   //console.log("sjahns", selectedAddress);
   //console.log("updateAddress", updatedAddress);
 
@@ -21,14 +31,34 @@ const EditAddress = ({ openEditAddressModal, onCancel, selectedAddress }) => {
 
   const handleUpdateAddress = async () => {
     try {
+      setLoading(true);
+      const { address_id, ...addressData } = updatedAddress;
       // Make API call to update address
-      const response = await API.editUserAddress(updatedAddress);
+      const response = await API.editUserAddress(addressData, address_id);
       console.log(response);
+      if (response.status === "success") {
+        fetchUserAddressDetail();
+      }
       // Handle success (e.g., close modal)
       onCancel();
     } catch (error) {
       console.error("Error updating address:", error);
       // Handle error (e.g., show error message)
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteAddress = async () => {
+    try {
+      const response = await API.deleteUserAddress(updatedAddress.address_id);
+      console.log(response);
+      if (response.status === "success") {
+        fetchUserAddressDetail();
+      }
+      onCancel();
+    } catch (error) {
+      console.log(error);
     }
   };
   return (
@@ -88,7 +118,7 @@ const EditAddress = ({ openEditAddressModal, onCancel, selectedAddress }) => {
                       <div className="relative flex-grow h-full">
                         <input
                           type="text"
-                          name="apt_name"
+                          name="floor"
                           placeholder="Apt, floor, suite, etc (optional)"
                           className="w-full h-full p-5 text-base leading-6 bg-transparent border-none rounded-lg focus:outline-black"
                           value={updatedAddress?.floor}
@@ -145,16 +175,36 @@ const EditAddress = ({ openEditAddressModal, onCancel, selectedAddress }) => {
                       </div>
                     </div>
                   </div>
+                  {location.pathname.includes("/store/addresses") ? (
+                    <>
+                      <div>
+                        <button
+                          className="cursor-pointer text-red-800"
+                          onClick={() => handleDeleteAddress()}
+                        >
+                          <span>Delete Address</span>
+                        </button>
+                      </div>
+                    </>
+                  ) : null}
 
                   <div className="mt-6 mb-3">
                     <button
                       type="submit"
-                      className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-full"
+                      className={`box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-full ${
+                        isLoading ? "opacity-50" : ""
+                      }`}
                       onClick={() => handleUpdateAddress()}
+                      disabled={isLoading}
                     >
                       <span className="block text-xl font-semibold leading-5 text-white">
                         update Address
                       </span>
+                      {isLoading && (
+                        <div className="ml-2 h-5 w-5 mt-[-20px]">
+                          <Loader size={20} />
+                        </div>
+                      )}
                     </button>
                   </div>
                 </div>

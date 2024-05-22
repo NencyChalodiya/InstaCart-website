@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { Modal } from "antd";
 import API from "../../../services/api";
+import Loader from "react-js-loader";
+import "../../Loading.css";
 const RegisterAddress = ({
   openRegisterAddressModal,
   onCancel,
@@ -12,9 +14,11 @@ const RegisterAddress = ({
     bussinessAddress: "",
     ZipCode: "",
   });
+  const [isLoading, setLoading] = useState(false);
 
   const registerUserAddress = async () => {
     try {
+      setLoading(true);
       let payload = {
         street: registerAddressDetails.streetAddress,
         floor: registerAddressDetails.apartAddress,
@@ -29,6 +33,8 @@ const RegisterAddress = ({
       onCancel();
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -166,12 +172,20 @@ const RegisterAddress = ({
                   <div className="mt-6 mb-3">
                     <button
                       type="submit"
-                      className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-full"
+                      className={`box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-full ${
+                        isLoading ? "opacity-50" : ""
+                      }`}
                       onClick={() => registerUserAddress()}
+                      disabled={isLoading}
                     >
                       <span className="block text-xl font-semibold leading-5 text-white">
                         Save Address
                       </span>
+                      {isLoading && (
+                        <div className="ml-2 h-5 w-5 mt-[-20px]">
+                          <Loader size={20} />
+                        </div>
+                      )}
                     </button>
                   </div>
                 </div>

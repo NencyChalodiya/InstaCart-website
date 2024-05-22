@@ -273,17 +273,6 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
     // navigate(`/product/${productId}`);
   };
 
-  //console.log("subCategory", storeSubcategory);
-  // useEffect(() => {
-  //   brandStoresData.map((d) => {
-  //     if (d.id == params.storeId) {
-  //       setstoreData(d);
-  //       setbrandsStoreLogo(d);
-  //     }
-  //   });
-  // }, [params]);
-  // console.log(storeData);
-
   return (
     <>
       <HeaderProducts storeId={storeId} />
@@ -1169,7 +1158,7 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
                                     alt={`Product ${cat.id}`}
                                   />
                                 </div>
-                                <div className="px-2 mt-16">
+                                <div className="px-2 mt-24">
                                   <div className="py-[1px] px-1 flex items-center">
                                     <div>
                                       <span className="text-sm font-bold text-gray-700 align-super">

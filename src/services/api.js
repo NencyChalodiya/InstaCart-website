@@ -172,10 +172,6 @@ export const SearchInsideStore = (storeFilter) => {
   );
 };
 
-// export const Search = (query) => {
-//   return Ajax.Request(`/store/search?query=${query}`, Ajax.GET, true);
-// };
-
 export const RegisterAddress = (payload) => {
   return Ajax.Request(`/add-address`, Ajax.POST, true, payload);
 };
@@ -190,6 +186,22 @@ export const editUserAddress = (payload, addressId) => {
     Ajax.POST,
     true,
     payload
+  );
+};
+
+export const deleteUserAddress = (addressId) => {
+  return Ajax.Request(
+    `/addresses/${addressId}/delete-address`,
+    Ajax.DELETE,
+    true
+  );
+};
+
+export const deliveryTimeInCheckout = (storeId) => {
+  return Ajax.Request(
+    `/orders/delivery-timing?storeId=${storeId}`,
+    Ajax.GET,
+    true
   );
 };
 
@@ -223,6 +235,8 @@ let API = {
   RegisterAddress,
   getUserAddress,
   editUserAddress,
+  deleteUserAddress,
+  deliveryTimeInCheckout,
 };
 
 export default API;
