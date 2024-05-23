@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import API from "../../../services/api";
 import { useNavigate } from "react-router-dom";
-
+import PickupIconSvg from "../../../assets/images/pickup.svg";
 const ShopListing = ({ selectedCategoryId }) => {
   const navigate = useNavigate();
   const [shops, setShops] = useState([]);
@@ -67,7 +67,7 @@ const ShopListing = ({ selectedCategoryId }) => {
                 >
                   <div className="h-full">
                     <div className="relative flex flex-row items-center h-full p-3 border rounded-lg flex-nowrap">
-                      <button className="relative flex items-center justify-start w-full h-full gap-3 m-0 opacity-100 cursor-pointer ">
+                      <button className="relative flex items-center justify-start w-full h-full gap-4 m-0 opacity-100 cursor-pointer ">
                         <div className="flex max-w-full max-h-full mr-3">
                           <img
                             src={shop.image_url}
@@ -90,22 +90,7 @@ const ShopListing = ({ selectedCategoryId }) => {
 
                           <div className="flex flex-wrap items-center">
                             <span>
-                              <svg
-                                width="1em"
-                                height="1em"
-                                viewBox="0 0 24 24"
-                                fill="#242529"
-                                xmlns="http://www.w3.org/2000/svg"
-                                color="systemGrayscale80"
-                                class="e-2bhlo8"
-                                aria-hidden="true"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
-                                  d="M20 3H4v2c.801 0 1.281.32 1.698.706L3 12v8a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-2h10v2a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-8l-2.698-6.294C18.72 5.32 19.2 5 20 5zM7.319 7 6 10.077V15h3V9h6v6h3v-4.923L16.681 7z"
-                                ></path>
-                              </svg>
+                              <img src={PickupIconSvg} alt="pickup-logo" />
                             </span>
                             <div className="text-sm leading-4">
                               Pickup available
@@ -115,19 +100,18 @@ const ShopListing = ({ selectedCategoryId }) => {
                             </span>
                           </div>
                           <ul className="flex flex-wrap gap-1 text-sm leading-4 list-none">
-                            <li className="text-sm leading-4">organic</li>
-                            <li className="text-sm leading-4">Groceries</li>
-                            <li className="text-sm leading-4">Butcher shop</li>
+                            {shop.store_categories.map((category, index) => (
+                              <li key={index} className="text-sm leading-4">
+                                {category}
+                              </li>
+                            ))}
                           </ul>
                           <ul className="flex flex-wrap gap-1 text-xs leading-4 list-none">
-                            <li className="text-sm leading-4">
-                              <span className="bg-yellow-400">
-                                In-store prices
-                              </span>
-                            </li>
-                            <li className="text-sm leading-4">
-                              <span>In-store prices</span>
-                            </li>
+                            {shop.messages.map((message, index) => (
+                              <li key={index} className="text-sm leading-4">
+                                {message}
+                              </li>
+                            ))}
                           </ul>
                         </div>
                       </button>

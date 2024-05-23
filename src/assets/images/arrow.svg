@@ -1,0 +1,17 @@
+ <svg
+                        width="12"
+                        height="12"
+                        viewBox="0 0 24 24"
+                        fill="#C7C8CD"
+                        xmlns="http://www.w3.org/2000/svg"
+                        color="systemGrayscale30"
+                        size="12"
+                        class="e-ozd7xs"
+                        aria-hidden="true"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          clip-rule="evenodd"
+                          d="m12.52 12.001-4.208 4.208 1.584 1.584 5.792-5.792-5.792-5.792-1.584 1.584z"
+                        ></path>
+                      </svg>

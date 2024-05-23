@@ -1,24 +1,41 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Modal } from "antd";
-const ChooseHourWindow = ({ chooseHourWindow, onCancel }) => {
+import { Radio } from "antd";
+import CrossSvg from "../../assets/images/cross.svg";
+
+const ChooseHourWindow = ({
+  chooseHourWindow,
+  onCancel,
+  deliveryTimeDetails,
+}) => {
+  const [selectedDay, setSelectedDay] = useState(null);
+
+  useEffect(() => {
+    if (deliveryTimeDetails[0] && deliveryTimeDetails[0].delivery_time) {
+      const todayDetail =
+        deliveryTimeDetails[0].delivery_time.delivery_timings.find(
+          (detail) => detail.day === "Today"
+        );
+      if (todayDetail) {
+        setSelectedDay("Today");
+      } else {
+        setSelectedDay(
+          deliveryTimeDetails[0].delivery_time.delivery_timings[0]?.day
+        );
+      }
+    }
+  }, [deliveryTimeDetails]);
+  const handleDayClick = (day) => {
+    setSelectedDay(day);
+  };
+
   return (
     <Modal
       title={
         <div>
           <div className="flex items-center">
             <button className="cursor-pointer" onClick={onCancel}>
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="#343538"
-                xmlns="http://www.w3.org/2000/svg"
-                size="20"
-                class="e-1p1m6ki"
-                aria-hidden="true"
-              >
-                <path d="M12 10.415 6.292 4.707 4.708 6.291l5.708 5.708-5.708 5.708 1.584 1.584L12 13.583l5.708 5.708 1.584-1.584-5.708-5.708 5.708-5.708-1.584-1.584z"></path>
-              </svg>
+              <img src={CrossSvg} alt="cross-logo" />
             </button>
             <div className="ml-52">
               <h2 className="text-xl ">Choose 2 hour window</h2>
@@ -32,54 +49,50 @@ const ChooseHourWindow = ({ chooseHourWindow, onCancel }) => {
       closable={false}
     >
       <div className="h-[500px]">
-        <div className="overflow-y-scroll px-4 pb-8">
-          <div>
-            <div className="flex">
-              <button className="min-w-[92px] h-16 rounded-[8px] text-center flex justify-center items-center cursor-pointer flex-col p-1 my-1 border">
-                <span>Today</span>
-                <span>May-22</span>
-              </button>
-              <button className="min-w-[92px] h-16 rounded-[8px] text-center flex justify-center items-center cursor-pointer flex-col p-1 my-1 border mx-1">
-                <span>Today</span>
-                <span>May-22</span>
-              </button>
-              <button className="min-w-[92px] h-16 rounded-[8px] text-center flex justify-center items-center cursor-pointer flex-col p-1 my-1 border mx-1">
-                <span>Today</span>
-                <span>May-22</span>
-              </button>
-              <button className="min-w-[92px] h-16 rounded-[8px] text-center flex justify-center items-center cursor-pointer flex-col p-1 my-1 border mx-1">
-                <span>Today</span>
-                <span>May-22</span>
-              </button>
-              <button className="min-w-[92px] h-16 rounded-[8px] text-center flex justify-center items-center cursor-pointer flex-col p-1 my-1 border mx-1">
-                <span>Today</span>
-                <span>May-22</span>
-              </button>
-              <button className="min-w-[92px] h-16 rounded-[8px] text-center flex justify-center items-center cursor-pointer flex-col p-1 my-1 border mx-1">
-                <span>Today</span>
-                <span>May-22</span>
-              </button>
-              <button className="min-w-[92px] h-16 rounded-[8px] text-center flex justify-center items-center cursor-pointer flex-col p-1 my-1 border mx-1">
-                <span>Today</span>
-                <span>May-22</span>
-              </button>
-              <button className="min-w-[92px] h-16 rounded-[8px] text-center flex justify-center items-center cursor-pointer flex-col p-1 my-1 border mx-1">
-                <span>Today</span>
-                <span>May-22</span>
-              </button>
+        {deliveryTimeDetails[0] &&
+        deliveryTimeDetails[0].delivery_time &&
+        deliveryTimeDetails[0].delivery_time.delivery_timings ? (
+          <>
+            <div className="overflow-x-auto px-4 pb-4">
+              <div className="flex">
+                {deliveryTimeDetails[0].delivery_time.delivery_timings.map(
+                  (detail) => (
+                    <button
+                      key={detail.day}
+                      className={`min-w-[92px] h-16 rounded-[8px] text-center flex justify-center items-center cursor-pointer flex-col p-4 my-1 border pl-3 ${
+                        selectedDay === detail.day ? "bg-gray-200" : ""
+                      }`}
+                      onClick={() => handleDayClick(detail.day)}
+                    >
+                      <span>{detail.day}</span>
+                      {/* <span>May-22</span> */}
+                    </button>
+                  )
+                )}
+              </div>
             </div>
-            <div className="relative">
+            <div className="relative h-[400px] overflow-y-auto">
               <ul>
-                <li>
-                  <button className="flex justify-between w-full py-6 cursor-pointer ">
-                    <div></div>
-                    <div></div>
-                  </button>
-                </li>
+                {deliveryTimeDetails[0].delivery_time.delivery_timings
+                  .filter((detail) => detail.day === selectedDay)
+                  .flatMap((detail) =>
+                    detail.slots.map((slotDetail, slotIndex) => (
+                      <li key={slotIndex}>
+                        <button className="flex justify-between w-full py-6 cursor-pointer">
+                          <div className="flex items-center">
+                            <Radio>{slotDetail.time_slot}</Radio>
+                          </div>
+                          <div>{slotDetail.price}</div>
+                        </button>
+                      </li>
+                    ))
+                  )}
               </ul>
             </div>
-          </div>
-        </div>
+          </>
+        ) : (
+          <>Loading..</>
+        )}
       </div>
     </Modal>
   );

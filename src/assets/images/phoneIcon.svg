@@ -1,0 +1,14 @@
+ <svg
+                            width="30"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="#343538"
+                            xmlns="http://www.w3.org/2000/svg"
+                            color="systemGrayscale70"
+                            size="30"
+                            class="e-rz498l"
+                            aria-hidden="true"
+                          >
+                            <path d="M7 4H2c0 11 7 18 18 18v-5l-4-2-2 2c-3-1-6-4-7-7l2-2z"></path>
+                            <path d="M14 6h2.586l-4.293 4.293 1.414 1.414L18 7.414V10h2V4h-6z"></path>
+                          </svg>

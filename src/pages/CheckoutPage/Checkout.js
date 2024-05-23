@@ -40,7 +40,7 @@ const Checkout = () => {
   useEffect(() => {
     fetchUserAddressDetail();
   }, []);
-  console.log("address", getUserAddressDetail);
+  //console.log("address", getUserAddressDetail);
 
   const fetchDeliveryTime = async () => {
     try {
@@ -60,7 +60,7 @@ const Checkout = () => {
       fetchDeliveryTime();
     }
   }, [storeId]);
-  console.log("deliveryDetails", deliveryTimeDetails);
+  //console.log("deliveryDetails", deliveryTimeDetails);
 
   const handleEditAddress = (address) => {
     setEditAddressModal(true);
@@ -952,6 +952,7 @@ const Checkout = () => {
       <ChooseHourWindow
         chooseHourWindow={chooseHourWindow}
         onCancel={() => openChooseHourWindow(false)}
+        deliveryTimeDetails={deliveryTimeDetails}
       />
     </>
   );
