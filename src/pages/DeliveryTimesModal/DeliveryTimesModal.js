@@ -14,6 +14,7 @@ const DeliveryTimesModal = ({
   //console.log("StoreID----------", storeId);
   const [activeKey, setActiveKey] = useState("1");
   const [currentDayIndex, setCurrentDayIndex] = useState(1);
+
   const handleTabChange = (key) => {
     setActiveKey(key);
   };

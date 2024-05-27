@@ -63,6 +63,15 @@ const ChooseHourWindow = ({
                         selectedDay === detail.day ? "bg-gray-200" : ""
                       }`}
                       onClick={() => handleDayClick(detail.day)}
+                      style={{
+                        marginRight:
+                          detail.day !==
+                          deliveryTimeDetails[0].pickup_time.pickup_timings
+                            .length -
+                            1
+                            ? "4px"
+                            : 0,
+                      }}
                     >
                       <span>{detail.day}</span>
                       {/* <span>May-22</span> */}

@@ -1,0 +1,16 @@
+<svg
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="#C7C8CD"
+                  xmlns="http://www.w3.org/2000/svg"
+                  color="systemGrayscale30"
+                  size="32"
+                  aria-hidden="true"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M12 12.52L7.792 8.314 6.208 9.896 12 15.688l5.792-5.792-1.584-1.584z"
+                  ></path>
+                </svg>

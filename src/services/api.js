@@ -205,6 +205,18 @@ export const deliveryTimeInCheckout = (storeId) => {
   );
 };
 
+export const getGiftImages = () => {
+  return Ajax.Request(`/orders/giftcard/images`, Ajax.GET, true);
+};
+
+export const getPickUpAddress = (storeId) => {
+  return Ajax.Request(
+    `/addresses/pickup-address?storeId=${storeId}`,
+    Ajax.GET,
+    true
+  );
+};
+
 let API = {
   SendOtpToRegister,
   VerifyOtpToRegister,
@@ -237,6 +249,8 @@ let API = {
   editUserAddress,
   deleteUserAddress,
   deliveryTimeInCheckout,
+  getGiftImages,
+  getPickUpAddress,
 };
 
 export default API;
