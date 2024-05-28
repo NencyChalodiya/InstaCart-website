@@ -3,6 +3,7 @@ import { Modal } from "antd";
 import { IoArrowBackOutline } from "react-icons/io5";
 import { offersCategory } from "../../data/offers";
 import API from "../../services/api";
+
 const AddToCart = ({
   addToCartModal,
   onBackClick,

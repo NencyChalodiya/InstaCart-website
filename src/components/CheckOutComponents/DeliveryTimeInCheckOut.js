@@ -13,9 +13,12 @@ const DeliveryTimeInCheckOut = ({
   isDeliveryTimeExpanded,
   deliveryTimeDetails,
   openChooseHourWindow,
+  handleDeliveryDetails,
+  selectDeliveryDetails,
+  onContinue,
 }) => {
   const [selectedDay, setSelectedDay] = useState(null);
-
+  // const [selectDeliveryDetails, setSelectedDeliveryDetails] = useState(null);
   useEffect(() => {
     if (deliveryTimeDetails[0] && deliveryTimeDetails[0].pickup_time) {
       const todayDetail =
@@ -31,9 +34,20 @@ const DeliveryTimeInCheckOut = ({
       }
     }
   }, [deliveryTimeDetails]);
+
   const handleDayClick = (day) => {
     setSelectedDay(day);
+    // setSelectedDeliveryDetails(null);
   };
+
+  // const handleDeliveryDetails = (details) => {
+  //   setSelectedDeliveryDetails(details);
+  // };
+
+  // const handleChooseSlot = (details) => {
+  //   setSelectedDeliveryDetails(details);
+  //   openChooseHourWindow(false);
+  // };
 
   return (
     <div>
@@ -46,6 +60,11 @@ const DeliveryTimeInCheckOut = ({
                 <h2 className="text-lg">Choose Delivery Time</h2>
               ) : (
                 <h2 className="text-lg">Delivery Time</h2>
+              )}
+              {selectDeliveryDetails && (
+                <p>
+                  {selectDeliveryDetails.day}, {selectDeliveryDetails.time_slot}
+                </p>
               )}
             </div>
             {!isDeliveryTimeExpanded && (
@@ -64,32 +83,34 @@ const DeliveryTimeInCheckOut = ({
                 <>
                   {deliveryTimeDetails.map((delivery) => (
                     <div className="flex flex-col">
-                      <div className="box-border cursor-pointer rounded-[12px] flex min-h-[78px] justify-between p-4 border-2 hover:bg-gray-100 hover:border-2 hover:border-black">
+                      <div
+                        className={`box-border cursor-pointer rounded-[12px] flex min-h-[78px] justify-between p-4 border-2 mt-4 ${
+                          selectDeliveryDetails?.type === "priority"
+                            ? "border-black"
+                            : "hover:bg-gray-100 hover:border-2 hover:border-black"
+                        }`}
+                        onClick={() =>
+                          handleDeliveryDetails({
+                            day: delivery?.delivery_time?.next_delivery
+                              ?.priority?.day,
+                            time_slot:
+                              delivery?.delivery_time?.next_delivery?.priority
+                                ?.time_slot,
+                            type: "priority",
+                            price:
+                              delivery?.delivery_time?.next_delivery?.priority
+                                ?.price,
+                          })
+                        }
+                      >
                         <div className="flex items-center ">
                           <img src={PrioritySvg} alt="prioritySvg" />
                           <div className="ml-3">
                             <p className="text-[#108910] ">Priority</p>
                             <p className="text-base text-gray-600">
                               {
-                                delivery.delivery_time.next_delivery.priority
-                                  .time_slot
-                              }
-                            </p>
-                          </div>
-                        </div>
-                        <div className="self-center flex">
-                          <p>Free</p>
-                        </div>
-                      </div>
-                      <div className="box-border cursor-pointer rounded-[12px] flex min-h-[78px] justify-between p-4 border-2 mt-4 hover:bg-gray-100 hover:border-2 hover:border-black">
-                        <div className="flex items-center ">
-                          <img src={StandardSvg} alt="standard" />
-                          <div className="ml-3">
-                            <p>Standard</p>
-                            <p className="text-base text-gray-600">
-                              {
-                                delivery.delivery_time.next_delivery.standard
-                                  .time_slot
+                                delivery?.delivery_time?.next_delivery?.priority
+                                  ?.time_slot
                               }
                             </p>
                           </div>
@@ -99,16 +120,54 @@ const DeliveryTimeInCheckOut = ({
                         </div>
                       </div>
                       <div
-                        className="box-border cursor-pointer rounded-[12px] flex min-h-[78px] justify-between p-4 border-2 mt-4 hover:bg-gray-100 hover:border-2 hover:border-black"
+                        className={`box-border cursor-pointer rounded-[12px] flex min-h-[78px] justify-between p-4 border-2 mt-4 ${
+                          selectDeliveryDetails?.type === "standard"
+                            ? "border-black"
+                            : "hover:bg-gray-100 hover:border-2 hover:border-black"
+                        }`}
+                        onClick={() =>
+                          handleDeliveryDetails({
+                            day: delivery?.delivery_time?.next_delivery
+                              ?.standard?.day,
+                            time_slot:
+                              delivery?.delivery_time?.next_delivery?.standard
+                                ?.time_slot,
+                            type: "standard",
+                            price:
+                              delivery?.delivery_time?.next_delivery?.standard
+                                ?.price,
+                          })
+                        }
+                      >
+                        <div className="flex items-center ">
+                          <img src={StandardSvg} alt="standard" />
+                          <div className="ml-3">
+                            <p>Standard</p>
+                            <p className="text-base text-gray-600">
+                              {
+                                delivery?.delivery_time?.next_delivery?.standard
+                                  ?.time_slot
+                              }
+                            </p>
+                          </div>
+                        </div>
+                        <div className="self-center flex">
+                          <p>Free</p>
+                        </div>
+                      </div>
+                      <div
+                        className={`box-border cursor-pointer rounded-[12px] flex min-h-[78px] justify-between p-4 border-2 mt-4 ${
+                          selectDeliveryDetails?.type === "chooseTwo"
+                            ? "border-black"
+                            : "hover:bg-gray-100 hover:border-2 hover:border-black"
+                        }`}
                         onClick={() => openChooseHourWindow(true)}
                       >
                         <div className="flex items-center ">
                           <img src={ChooseTwoWindowSvg} alt="choose2Hour-Svg" />
                           <div className="ml-3">
                             <p>Choose 2-hour window</p>
-                            <p className="text-base text-gray-600">
-                              7:38am-8:38am
-                            </p>
+                            <p className="text-base text-green-700">change</p>
                           </div>
                         </div>
                         <div className="self-center flex">
@@ -182,7 +241,10 @@ const DeliveryTimeInCheckOut = ({
             </>
           )}
 
-          <button className="px-4 cursor-pointer relative rounded-[27px] h-14 w-full bg-[#2C890F] mt-4">
+          <button
+            className="px-4 cursor-pointer relative rounded-[27px] h-14 w-full bg-[#2C890F] mt-4"
+            onClick={() => onContinue()}
+          >
             <span className="text-white text-lg">Continue</span>
           </button>
         </div>

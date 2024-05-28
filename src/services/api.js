@@ -217,6 +217,10 @@ export const getPickUpAddress = (storeId) => {
   );
 };
 
+export const calculateSubTotal = (payload) => {
+  return Ajax.Request(`/orders/calculate-subtotal`, Ajax.POST, true, payload);
+};
+
 let API = {
   SendOtpToRegister,
   VerifyOtpToRegister,
@@ -251,6 +255,7 @@ let API = {
   deliveryTimeInCheckout,
   getGiftImages,
   getPickUpAddress,
+  calculateSubTotal,
 };
 
 export default API;

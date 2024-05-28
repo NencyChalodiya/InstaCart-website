@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { Modal } from "antd";
-import { Radio } from "antd";
+import { Modal, Radio } from "antd";
 import CrossSvg from "../../assets/images/cross.svg";
 
 const ChooseHourWindow = ({
   chooseHourWindow,
   onCancel,
   deliveryTimeDetails,
+  onChooseSlot,
 }) => {
   const [selectedDay, setSelectedDay] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState(null);
 
   useEffect(() => {
     if (deliveryTimeDetails[0] && deliveryTimeDetails[0].delivery_time) {
@@ -25,8 +26,15 @@ const ChooseHourWindow = ({
       }
     }
   }, [deliveryTimeDetails]);
+
   const handleDayClick = (day) => {
     setSelectedDay(day);
+    setSelectedSlot(null); // Reset selected slot when changing the day
+  };
+
+  const handleSlotClick = (slot) => {
+    setSelectedSlot(slot);
+    onChooseSlot({ day: selectedDay, time_slot: slot.time_slot });
   };
 
   return (
@@ -38,7 +46,7 @@ const ChooseHourWindow = ({
               <img src={CrossSvg} alt="cross-logo" />
             </button>
             <div className="ml-52">
-              <h2 className="text-xl ">Choose 2 hour window</h2>
+              <h2 className="text-xl">Choose 2 hour window</h2>
             </div>
           </div>
         </div>
@@ -66,7 +74,7 @@ const ChooseHourWindow = ({
                       style={{
                         marginRight:
                           detail.day !==
-                          deliveryTimeDetails[0].pickup_time.pickup_timings
+                          deliveryTimeDetails[0].delivery_time.delivery_timings
                             .length -
                             1
                             ? "4px"
@@ -74,7 +82,6 @@ const ChooseHourWindow = ({
                       }}
                     >
                       <span>{detail.day}</span>
-                      {/* <span>May-22</span> */}
                     </button>
                   )
                 )}
@@ -87,9 +94,17 @@ const ChooseHourWindow = ({
                   .flatMap((detail) =>
                     detail.slots.map((slotDetail, slotIndex) => (
                       <li key={slotIndex}>
-                        <button className="flex justify-between w-full py-6 cursor-pointer">
+                        <button
+                          className={`flex justify-between w-full py-6 cursor-pointer ${
+                            selectedSlot === slotDetail ? "bg-gray-200" : ""
+                          }`}
+                          onClick={() => handleSlotClick(slotDetail)}
+                        >
                           <div className="flex items-center">
-                            <Radio>{slotDetail.time_slot}</Radio>
+                            <Radio
+                              checked={selectedSlot === slotDetail}
+                            ></Radio>
+                            {slotDetail.time_slot}
                           </div>
                           <div>{slotDetail.price}</div>
                         </button>

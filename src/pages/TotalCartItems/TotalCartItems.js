@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Drawer } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { Form } from "antd";
@@ -8,30 +8,60 @@ import { DeleteTotalItems } from "../../utils/Reducers/ItemSlice";
 import { DeleteTotalCategoryItems } from "../../utils/Reducers/CategorySlice";
 import { DeleteTotalSubCategoryItems } from "../../utils/Reducers/SubCategorySlice";
 import { Link, useParams } from "react-router-dom";
-import Checkout from "../CheckoutPage/Checkout";
-const TotalCartItems = ({ totalCartItemsModal, onCancel }) => {
-  const { storeId, categoryId, subcategoryId } = useParams();
-  const [subtotal, setSubtotal] = useState(0);
-  console.log("StoreId", storeId);
-  console.log("categroyId", categoryId);
+import { TotalContext } from "../TotalContext/TotalContext";
+import API from "../../services/api";
 
-  console.log("subCatgeory", subcategoryId);
+const TotalCartItems = ({ totalCartItemsModal, onCancel, productDetail }) => {
+  const { storeId, categoryId, subcategoryId } = useParams();
+
+  // const [total, setTotal] = useState(null);
+  // const { setTotal: setTotalContext } = useContext(TotalContext);
   const { cartItems } = useSelector((state) => state.cartItems);
-  console.log("cartItems", cartItems);
+  // console.log("cartItems", cartItems);
+  // console.log("TotalcartItemsProductsDetail", productDetail);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    calculateSubtotal();
-  }, [cartItems]);
+  // const productIdFromDetail = productDetail?.product_id;
+  // const cartItemsPayload = cartItems.map((item) => ({
+  //   product_id: item.id === productIdFromDetail ? productIdFromDetail : item.id,
+  //   quantity: item.qty,
+  //   price: item.selling_price,
+  // }));
+  // console.log("cartItemsPayload", cartItemsPayload);
 
-  // Function to calculate subtotal
-  const calculateSubtotal = () => {
-    let total = 0;
-    cartItems.forEach((item) => {
-      total += item.qty * item.selling_price;
-    });
-    setSubtotal(total);
-  };
+  // const fetchSubTotal = async () => {
+  //   const productIdFromDetail = productDetail?.product_id;
+  //   const cartItemsPayload = cartItems.map((item) => ({
+  //     product_id:
+  //       item.id === productIdFromDetail ? productIdFromDetail : item.id,
+  //     quantity: item.qty,
+  //   }));
+
+  //   try {
+  //     const payload = {
+  //       store_id: storeId,
+  //       cart_items: cartItemsPayload,
+  //       pickup_fee: 2.99,
+  //     };
+
+  //     const response = await API.calculateSubTotal(payload);
+  //     console.log(response);
+  //     setTotal(response.data);
+  //     setTotalContext(response.data);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+  // useEffect(() => {
+  //   fetchSubTotal();
+  // }, [cartItems, productDetail]);
+
+  // const handleContinue = () => {
+  //   fetchSubTotal();
+  // };
+
+  //console.log("Total", total);
 
   //Shop products deleteItems
   const DeleteItemsFromCart = (items) => {
@@ -637,7 +667,7 @@ const TotalCartItems = ({ totalCartItemsModal, onCancel }) => {
                 <span className=" flex justify-between items-center bg-[#2C890F] rounded-[27px] h-[54px] w-full relative text-white">
                   <div className="pl-40">Go to checkout</div>
                   <div className=" bg-[#23720C] rounded-[27px] w-16 h-10 flex items-center pl-2 ">
-                    ${subtotal.toFixed(2)}
+                    {/* ${total?.actual_item_subtotal} */}0
                   </div>
                 </span>
               </Link>

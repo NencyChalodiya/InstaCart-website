@@ -18,12 +18,15 @@ import InstacartSvg from "../../assets/images/instacartLogo.svg";
 
 import { Tabs } from "antd";
 import { ConfigProvider } from "antd";
+import { useSelector } from "react-redux";
 
-const Checkout = () => {
+const Checkout = ({ productDetail }) => {
   const customTabStyle = {
     padding: "2px 75px", // Increase padding
     fontSize: "24px", // Increase font size
   };
+  const { cartItems } = useSelector((state) => state.cartItems);
+  console.log("checkout", cartItems);
 
   const { storeId } = useParams();
 
@@ -35,7 +38,7 @@ const Checkout = () => {
   const [getUserAddressDetail, setUserAddressDetail] = useState([]);
   const [pickupAddresses, setPickupAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
-  const [confirmedAddress, setConfirmedAddress] = useState(null);
+  //const [confirmedAddress, setConfirmedAddress] = useState(null);
   const [deliveryTimeDetails, setDeliveryTimeDetails] = useState([]);
   const [chooseHourWindow, openChooseHourWindow] = useState(false);
   const [giftImages, setGiftImages] = useState([]);
@@ -45,7 +48,11 @@ const Checkout = () => {
     useState(null);
   const [confirmedPickupAddress, setConfirmedPickupAddress] = useState(null);
   const [activeKey, setActiveKey] = useState("1");
+  const [selectDeliveryDetails, setSelectedDeliveryDetails] = useState(null);
+  const [total, setTotal] = useState(null);
+  const [addressType, setAddressType] = useState("delivery");
 
+  //Delivery Address api
   const fetchDeliveryAddresses = async () => {
     try {
       const response = await API.getUserAddress();
@@ -57,6 +64,7 @@ const Checkout = () => {
     }
   };
 
+  //Pickup Address api
   const fetchPickupAddresses = async () => {
     try {
       const response = await API.getPickUpAddress(storeId);
@@ -76,6 +84,7 @@ const Checkout = () => {
     }
   }, [activeKey, storeId]);
 
+  //Delivery Time api
   const fetchDeliveryTime = async () => {
     try {
       const response = await API.deliveryTimeInCheckout(storeId);
@@ -89,11 +98,42 @@ const Checkout = () => {
   };
 
   useEffect(() => {
-    console.log("storeId", storeId);
+    //console.log("storeId", storeId);
     if (storeId) {
       fetchDeliveryTime();
     }
   }, [storeId]);
+
+  const fetchSubTotal = async () => {
+    const productIdFromDetail = productDetail?.product_id;
+    const cartItemsPayload = cartItems.map((item) => ({
+      product_id:
+        item.id === productIdFromDetail ? productIdFromDetail : item.id,
+      quantity: item.qty,
+    }));
+
+    try {
+      const payload = {
+        store_id: storeId,
+        cart_items: cartItemsPayload,
+        ...(addressType === "delivery" && {
+          delivery_fee: selectDeliveryDetails?.price || 0,
+        }),
+        ...(addressType === "pickup" && { pickup_fee: 2.99 }),
+      };
+
+      const response = await API.calculateSubTotal(payload);
+      console.log(response);
+      setTotal(response.data);
+      //setTotalContext(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleContinue = () => {
+    fetchSubTotal();
+  };
 
   const handleEditAddress = (address) => {
     setEditAddressModal(true);
@@ -124,10 +164,11 @@ const Checkout = () => {
     setIsExpanded(false); // Close the accordion
   };
 
+  //gift images api
   const fetchGiftImages = async () => {
     try {
       const response = await API.getGiftImages();
-      //(response);
+
       setGiftImages(response.data);
     } catch (error) {
       console.log(error);
@@ -150,6 +191,15 @@ const Checkout = () => {
   };
   const toggleGiftAccordion = () => {
     setIsGiftExpanded(!isGiftExpanded);
+  };
+
+  const handleDeliveryDetails = (details) => {
+    setSelectedDeliveryDetails(details);
+  };
+
+  const handleChooseSlot = (details) => {
+    setSelectedDeliveryDetails(details);
+    openChooseHourWindow(false);
   };
 
   return (
@@ -187,7 +237,10 @@ const Checkout = () => {
                     <Tabs.TabPane
                       key="1"
                       tab={
-                        <button className="flex justify-center">
+                        <button
+                          className="flex justify-center"
+                          onClick={() => setAddressType("delivery")}
+                        >
                           <div
                             className={`list-none cursor-pointer block py-1  text-2xl font-bold ${
                               activeKey === "1"
@@ -205,7 +258,7 @@ const Checkout = () => {
                         <div>
                           <div>
                             <SelectAddress
-                              addressType="delivery"
+                              addressType={addressType}
                               toggleAccordion={toggleAccordion}
                               isExpanded={isExpanded}
                               confirmedAddress={confirmedDeliveryAddress}
@@ -222,13 +275,16 @@ const Checkout = () => {
                           </div>
                           <div>
                             <DeliveryTimeInCheckOut
-                              addressType="delivery"
+                              addressType={addressType}
                               toggleDeliveryTimeAccordion={
                                 toggleDeliveryTimeAccordion
                               }
                               isDeliveryTimeExpanded={isDeliveryTimeExpanded}
                               deliveryTimeDetails={deliveryTimeDetails}
                               openChooseHourWindow={openChooseHourWindow}
+                              handleDeliveryDetails={handleDeliveryDetails}
+                              selectDeliveryDetails={selectDeliveryDetails}
+                              onContinue={handleContinue}
                             />
                           </div>
                           <div>
@@ -245,7 +301,10 @@ const Checkout = () => {
                     <Tabs.TabPane
                       key="2"
                       tab={
-                        <button className="flex justify-center">
+                        <button
+                          className="flex justify-center"
+                          onClick={() => setAddressType("pickup")}
+                        >
                           <div
                             className={`list-none cursor-pointer block py-1  text-2xl font-bold ${
                               activeKey === "2"
@@ -263,7 +322,7 @@ const Checkout = () => {
                         <div>
                           <div>
                             <SelectAddress
-                              addressType="pickup"
+                              addressType={addressType}
                               toggleAccordion={toggleAccordion}
                               isExpanded={isExpanded}
                               confirmedAddress={confirmedPickupAddress}
@@ -278,13 +337,14 @@ const Checkout = () => {
 
                           <div>
                             <DeliveryTimeInCheckOut
-                              addressType="pickup"
+                              addressType={addressType}
                               toggleDeliveryTimeAccordion={
                                 toggleDeliveryTimeAccordion
                               }
                               isDeliveryTimeExpanded={isDeliveryTimeExpanded}
                               deliveryTimeDetails={deliveryTimeDetails}
                               openChooseHourWindow={openChooseHourWindow}
+                              onContinue={handleContinue}
                             />
                           </div>
                         </div>
@@ -360,7 +420,7 @@ const Checkout = () => {
               </div>
             </div>
           </div>
-          <SubTotalIncheckout />
+          <SubTotalIncheckout total={total} />
         </div>
       </div>
       <RegisterAddress
@@ -379,6 +439,7 @@ const Checkout = () => {
         chooseHourWindow={chooseHourWindow}
         onCancel={() => openChooseHourWindow(false)}
         deliveryTimeDetails={deliveryTimeDetails}
+        onChooseSlot={handleChooseSlot}
       />
     </>
   );

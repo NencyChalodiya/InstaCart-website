@@ -1,20 +1,13 @@
-import React from "react";
-
+import React, { useContext } from "react";
+import { TotalContext } from "../../pages/TotalContext/TotalContext";
 import MenuSvg from "../../assets/images/menuSvg.svg";
-const SubTotalIncheckout = () => {
+const SubTotalIncheckout = ({ total }) => {
+  // const { total } = useContext(TotalContext);
+  // console.log("TotalItems", total);
   return (
     <div className="col-span-2">
       <div className="relative">
-        <div>
-          <div>
-            <div className="p-2">
-              <button className="px-4 h-[54px] w-full rounded-[27px] relative bg-[#F6F7F8]">
-                <span className="mx-2">Continue</span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="px-4 pt-4 pb-2">
+        <div className="px-4 pt-8 pb-2">
           <div className="flex items-center mb-2">
             <img
               src="https://www.instacart.com/image-server/48x48/www.instacart.com/assets/checkout/quality_guarantee/ribbon-a93eef7e76db2d7610608da27c5a9f5cb489ba37932c9624309ea1756817018e.png"
@@ -50,7 +43,7 @@ const SubTotalIncheckout = () => {
                           </span>
                         </div>
                         <div>
-                          <span>$53.90</span>
+                          <span>{total?.actual_item_subtotal}</span>
                         </div>
                       </div>
                     </li>
@@ -58,14 +51,11 @@ const SubTotalIncheckout = () => {
                       <div className="flex justify-between">
                         <div className="flex items-center">
                           <span>
-                            <span>Service fees</span>
-                            <button className="align-middle">
-                              <img src={MenuSvg} alt="menu-svg" />
-                            </button>
+                            <span>Final Item subTotal</span>
                           </span>
                         </div>
                         <div>
-                          <span>$4.01</span>
+                          <span>{total?.final_item_subtotal}</span>
                         </div>
                       </div>
                     </li>
@@ -73,11 +63,35 @@ const SubTotalIncheckout = () => {
                       <div className="flex justify-between">
                         <div className="flex items-center">
                           <span>
-                            <span>Est.tax</span>
+                            <span>Service Fees</span>
                           </span>
                         </div>
                         <div>
-                          <span>$2.80</span>
+                          <span>{total?.service_fee}</span>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="flex justify-between">
+                        <div className="flex items-center">
+                          <span>
+                            <span>Pickup fees</span>
+                          </span>
+                        </div>
+                        <div>
+                          <span>{total?.pickup_fee}</span>
+                        </div>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="flex justify-between">
+                        <div className="flex items-center">
+                          <span>
+                            <span>Bag fees</span>
+                          </span>
+                        </div>
+                        <div>
+                          <span>{total?.bag_fee}</span>
                         </div>
                       </div>
                     </li>
@@ -89,7 +103,7 @@ const SubTotalIncheckout = () => {
                           </span>
                         </div>
                         <div>
-                          <span>-$20.00</span>
+                          <span>{total?.discount_applied}</span>
                         </div>
                       </div>
                     </li>
@@ -101,14 +115,14 @@ const SubTotalIncheckout = () => {
                           </span>
                         </div>
                         <div>
-                          <span>$40.71</span>
+                          <span>{total?.subtotal}</span>
                         </div>
                       </div>
                     </li>
                   </ul>
                 </div>
               </div>
-              <div>
+              {/* <div>
                 <div className="px-4 pb-3">
                   <div>
                     <div className="mb-1 mt-4">
@@ -123,8 +137,8 @@ const SubTotalIncheckout = () => {
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="px-4 pb-3">
+              </div> */}
+              {/* <div className="px-4 pb-3">
                 <div>
                   <div className="mb-1 mt-1">
                     <span className="text-sm">
@@ -132,7 +146,7 @@ const SubTotalIncheckout = () => {
                     </span>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

@@ -150,7 +150,7 @@ const CategoryProducts = ({
                               $
                             </span>
                             <span className="mr-[2px] font-bold text-2xl leading-5 text-gray-700">
-                              {product?.actual_price}
+                              {product?.selling_price}
                             </span>
                             <span className="text-sm font-bold text-gray-700 align-super">
                               49
@@ -158,7 +158,7 @@ const CategoryProducts = ({
                           </div>
                           <div>
                             <span className="text-gray-500 ml-2">
-                              <s>{product?.selling_price}</s>
+                              <s>{product?.actual_price}</s>
                             </span>
                           </div>
                         </div>

@@ -31,6 +31,8 @@ import ArrowSvg from "../../../assets/images/arrow.svg";
 import StoreFilteredProducts from "../../ProductsComponent/StoreFilteredProducts";
 import TopStoreFrontDetails from "../../ProductsComponent/TopStoreFrontDetails";
 import { productStoreSideBarData } from "../../../data/productStoreSideBarData";
+import Checkout from "../../../pages/CheckoutPage/Checkout";
+
 const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
   const { storeId, categoryId, productId, subcategoryId } = useParams();
   const navigate = useNavigate();
@@ -484,6 +486,7 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
         deliveryDetails={deliveryDetails}
         isLoading={isLoading}
       />
+      {productDetail && <Checkout productDetail={productDetail} />}
     </>
   );
 };
