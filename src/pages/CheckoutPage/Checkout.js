@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import API from "../../services/api";
+
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
 
 import EditAddress from "../StoreSidebarPages/Address/EditAddress";
 import RegisterAddress from "../StoreSidebarPages/Address/RegisterAddress";
@@ -19,16 +22,26 @@ import InstacartSvg from "../../assets/images/instacartLogo.svg";
 import { Tabs } from "antd";
 import { ConfigProvider } from "antd";
 import { useSelector } from "react-redux";
+import CheckOutFormModal from "../../components/CheckOutComponents/CheckOutFormModal";
 
 const Checkout = ({ productDetail }) => {
+  const [stripePromise, setStripePromise] = useState(null);
+  const [clientSecret, setClientSecret] = useState("");
+
   const customTabStyle = {
-    padding: "2px 75px", // Increase padding
-    fontSize: "24px", // Increase font size
+    padding: "2px 75px",
+    fontSize: "24px",
   };
-  const { cartItems } = useSelector((state) => state.cartItems);
-  console.log("checkout", cartItems);
+
+  useEffect(() => {
+    const publishableKey =
+      "pk_test_51Ot1cCSCHK44EDHwd48KVHRzzhud57MHdgGOkV1SVsNVvyygtSsciEnfgb0abJ3omQtDkvAYi6CfBwQPkGvix2aQ00iVRpVFUQ";
+    setStripePromise(loadStripe(publishableKey));
+  }, []);
 
   const { storeId } = useParams();
+  const { cartItems, giftOption } = useSelector((state) => state.cartItems);
+  const mobileNumberRef = useRef(null);
 
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDeliveryTimeExpanded, setIsDeliveryTimeExpanded] = useState(false);
@@ -38,7 +51,6 @@ const Checkout = ({ productDetail }) => {
   const [getUserAddressDetail, setUserAddressDetail] = useState([]);
   const [pickupAddresses, setPickupAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
-  //const [confirmedAddress, setConfirmedAddress] = useState(null);
   const [deliveryTimeDetails, setDeliveryTimeDetails] = useState([]);
   const [chooseHourWindow, openChooseHourWindow] = useState(false);
   const [giftImages, setGiftImages] = useState([]);
@@ -49,8 +61,24 @@ const Checkout = ({ productDetail }) => {
   const [confirmedPickupAddress, setConfirmedPickupAddress] = useState(null);
   const [activeKey, setActiveKey] = useState("1");
   const [selectDeliveryDetails, setSelectedDeliveryDetails] = useState(null);
+  const [selectPickupDetails, setSelectedPickupDetails] = useState(null);
   const [total, setTotal] = useState(null);
   const [addressType, setAddressType] = useState("delivery");
+  const [checkoutModal, openCheckoutModal] = useState(false);
+  const [showMobileInput, setShowMobileInput] = useState(false);
+  const [deliveryInstructions, setDeliveryInstructions] = useState("");
+  const [leaveAtMyDoor, setLeaveAtMyDoor] = useState(0);
+  const [mobileNumberDetails, setMobileNumberDetails] = useState({
+    mobile_number: "",
+    country_code: "+91",
+  });
+  const [giftUserDetails, setGiftUserDetails] = useState({
+    recipitentName: "",
+    recipitentCountryCode: "+91",
+    recipitentMobileNo: "",
+    senderName: "",
+    giftMessage: "",
+  });
 
   //Delivery Address api
   const fetchDeliveryAddresses = async () => {
@@ -84,11 +112,11 @@ const Checkout = ({ productDetail }) => {
     }
   }, [activeKey, storeId]);
 
-  //Delivery Time api
+  //Delivery Time and pickup time api
   const fetchDeliveryTime = async () => {
     try {
       const response = await API.deliveryTimeInCheckout(storeId);
-
+      // console.log(response);
       if (response.status === "success") {
         setDeliveryTimeDetails(response.data);
       }
@@ -98,12 +126,12 @@ const Checkout = ({ productDetail }) => {
   };
 
   useEffect(() => {
-    //console.log("storeId", storeId);
     if (storeId) {
       fetchDeliveryTime();
     }
   }, [storeId]);
 
+  //SubTotal Api
   const fetchSubTotal = async () => {
     const productIdFromDetail = productDetail?.product_id;
     const cartItemsPayload = cartItems.map((item) => ({
@@ -117,37 +145,34 @@ const Checkout = ({ productDetail }) => {
         store_id: storeId,
         cart_items: cartItemsPayload,
         ...(addressType === "delivery" && {
-          delivery_fee: selectDeliveryDetails?.price || 0,
+          delivery_fee: parseFloat(selectDeliveryDetails?.price) || 0,
         }),
-        ...(addressType === "pickup" && { pickup_fee: 2.99 }),
+        ...(addressType === "pickup" && {
+          pickup_fee: parseFloat(selectPickupDetails?.price) || 0,
+        }),
       };
-
+      console.log("payload", payload);
       const response = await API.calculateSubTotal(payload);
       console.log(response);
       setTotal(response.data);
+
       //setTotalContext(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleContinue = () => {
-    fetchSubTotal();
-  };
-
-  const handleEditAddress = (address) => {
-    setEditAddressModal(true);
-    setSelectedAddress({ ...address });
-  };
-
+  //handle address selection according to tab
   const handleAddressSelection = (addressId) => {
     if (activeKey === "1") {
       setSelectedDeliveryAddress(addressId);
     } else {
       setSelectedPickupAddress(addressId);
     }
+    localStorage.setItem("selectedAddressId", addressId);
   };
 
+  //handle confirm address selection
   const handleConfirmAddress = () => {
     if (activeKey === "1") {
       const confirmedAddress = getUserAddressDetail.addressDetails.find(
@@ -179,27 +204,130 @@ const Checkout = ({ productDetail }) => {
     fetchGiftImages();
   }, []);
 
+  const addCheckOutOrders = async () => {
+    try {
+      const productIdFromDetail = productDetail?.product_id;
+      const address_id = localStorage.getItem("selectedAddressId");
+      let payload = {
+        store_id: storeId,
+        cart_items: cartItems.map((item) => ({
+          product_id:
+            item.id === productIdFromDetail ? productIdFromDetail : item.id,
+          quantity: item.qty,
+        })),
+        address_id: address_id,
+        country_code: mobileNumberDetails.country_code,
+        mobile_number: mobileNumberDetails.mobile_number,
+        gift_option: giftOption,
+        gift_recipitent_name: giftUserDetails?.recipitentName,
+        recipitent_country_code: giftUserDetails.recipitentCountryCode,
+        recipitent_mobile: giftUserDetails.recipitentMobileNo,
+        gift_sender_name: giftUserDetails.senderName,
+        // gift_card_image_id: giftImages.giftCardImages.map(
+        //   (giftImg) => giftImg.id
+        // ),
+        gift_card_image_id: 1,
+        gift_message: giftUserDetails.giftMessage,
+        actual_subtotal: total?.actual_item_subtotal || 0,
+        final_subtotal: total?.final_item_subtotal || 0,
+        service_fee: total?.service_fee || 0,
+        bag_fee: total?.bag_fee,
+        subtotal: total?.subtotal,
+        discount_applied: total?.discount_applied,
+        payment_mode: "card",
+      };
+
+      if (addressType === "delivery" && selectDeliveryDetails) {
+        payload = {
+          ...payload,
+          delivery_type: selectDeliveryDetails.type,
+          delivery_day: selectDeliveryDetails.day,
+          delivery_slot: selectDeliveryDetails.time_slot,
+          delivery_fee: total?.delivery_fee,
+          delivery_instructions: deliveryInstructions,
+          is_leave_it_door: leaveAtMyDoor === 1 ? true : false,
+        };
+      }
+
+      if (addressType === "pickup" && selectPickupDetails) {
+        payload = {
+          ...payload,
+          pickup_address_id: confirmedPickupAddress?.id,
+          pickup_day: selectPickupDetails.day,
+          pickup_slot: selectPickupDetails.time_slot,
+          delivery_type: selectPickupDetails.type,
+          pickup_fee: parseFloat(selectPickupDetails?.price) || 0,
+        };
+      }
+      const response = await API.addOrder(payload);
+      if (response.status === "success") {
+        setClientSecret(response.data.paymentIntent_client_secret);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  //to handelContinue of SubTotal
+  const handleContinue = async () => {
+    await fetchSubTotal();
+    setShowMobileInput(true);
+    setTimeout(() => {
+      if (mobileNumberRef.current) {
+        mobileNumberRef.current.scrollIntoView({ behavior: "smooth" }); // Scroll into view
+        mobileNumberRef.current.focus(); // Focus on the input field
+      }
+    }, 100);
+  };
+
+  //handle edit Address
+  const handleEditAddress = (address) => {
+    setEditAddressModal(true);
+    setSelectedAddress({ ...address });
+  };
+
+  //tab change of delivery and pickup
   const handleTabChange = (key) => {
     setActiveKey(key);
   };
 
+  //toggle accordion of delivery address
   const toggleAccordion = () => {
     setIsExpanded(!isExpanded);
   };
+
+  //toggle accordion of delivery times
   const toggleDeliveryTimeAccordion = () => {
     setIsDeliveryTimeExpanded(!isDeliveryTimeExpanded);
   };
+
+  //toggle accordion of gift images
   const toggleGiftAccordion = () => {
     setIsGiftExpanded(!isGiftExpanded);
   };
 
+  //handle delivery details
   const handleDeliveryDetails = (details) => {
     setSelectedDeliveryDetails(details);
   };
 
+  //handle the slot of choose two window
   const handleChooseSlot = (details) => {
     setSelectedDeliveryDetails(details);
     openChooseHourWindow(false);
+  };
+
+  //handle the pickup detials slots
+  const handlePickupDetails = (pickupDetails) => {
+    setSelectedPickupDetails(pickupDetails);
+  };
+
+  const handleDeliveryInstructionsChange = (instructions) => {
+    setDeliveryInstructions(instructions);
+  };
+
+  const handleLeaveAtMyDoorChange = (checked) => {
+    setLeaveAtMyDoor(checked ? 1 : 0); // Convert true/false to 1/0
   };
 
   return (
@@ -271,7 +399,12 @@ const Checkout = ({ productDetail }) => {
                             />
                           </div>
                           <div>
-                            <DeliveryInstructions />
+                            <DeliveryInstructions
+                              onDeliveryInstructionsChange={
+                                handleDeliveryInstructionsChange
+                              }
+                              onLeaveAtMyDoorChange={handleLeaveAtMyDoorChange}
+                            />
                           </div>
                           <div>
                             <DeliveryTimeInCheckOut
@@ -292,6 +425,9 @@ const Checkout = ({ productDetail }) => {
                               toggleGiftAccordion={toggleGiftAccordion}
                               isGiftExpanded={isGiftExpanded}
                               giftImages={giftImages}
+                              giftOption={giftOption}
+                              giftUserDetails={giftUserDetails}
+                              setGiftUserDetails={setGiftUserDetails}
                             />
                           </div>
                         </div>
@@ -345,6 +481,8 @@ const Checkout = ({ productDetail }) => {
                               deliveryTimeDetails={deliveryTimeDetails}
                               openChooseHourWindow={openChooseHourWindow}
                               onContinue={handleContinue}
+                              selectPickupDetails={selectPickupDetails}
+                              handlePickupDetails={handlePickupDetails}
                             />
                           </div>
                         </div>
@@ -361,6 +499,56 @@ const Checkout = ({ productDetail }) => {
                         <img src={MobileNumberSvg} alt="mobileNumber-svg" />
                         <div className="mx-3 flex-grow">
                           <h2>Mobile Number</h2>
+                          {showMobileInput && (
+                            <form>
+                              <div>
+                                <div className="flex flex-row items-center w-full ">
+                                  <div className="cursor-pointer relative py-2 pr-[6px] pl-3 rounded-l-lg border h-14 flex items-center  outline-black ">
+                                    <span className="flex items-center h-full text-ellipsis">
+                                      <select
+                                        name="country_code"
+                                        value={mobileNumberDetails.country_code}
+                                        onChange={(e) =>
+                                          setMobileNumberDetails({
+                                            ...mobileNumberDetails,
+                                            country_code: e.target.value,
+                                          })
+                                        }
+                                      >
+                                        <option value="+91">+91 (India)</option>
+                                        <option value="+1">+1 (USA)</option>
+                                        <option value="+1">+1 (Canada)</option>
+                                      </select>
+                                    </span>
+                                  </div>
+
+                                  <div className="flex flex-row flex-nowrap items-center h-14 box-border max-w-[600px] rounded-r-lg border w-full  outline-black">
+                                    <div className="relative flex-grow w-full h-full">
+                                      <input
+                                        ref={mobileNumberRef}
+                                        className={`w-full h-full p-5 text-base leading-6 bg-transparent  rounded-lg outline-none  `}
+                                        placeholder="Phone number"
+                                        value={
+                                          mobileNumberDetails.mobile_number
+                                        }
+                                        onChange={(e) => {
+                                          setMobileNumberDetails({
+                                            ...mobileNumberDetails,
+                                            mobile_number: e.target.value,
+                                          });
+                                        }}
+                                      />
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              {/* {phoneError && (
+                            <span className="text-red-500 text-sm">
+                              {phoneError}
+                            </span>
+                          )} */}
+                            </form>
+                          )}
                         </div>
                       </div>
                     </div>
@@ -375,7 +563,10 @@ const Checkout = ({ productDetail }) => {
                       </div>
                     </div>
                     <div className="mt-2">
-                      <button className="mb-3 cursor-pointer relative h-auto w-full ">
+                      <button
+                        className="mb-3 cursor-pointer relative h-auto w-full "
+                        onClick={() => openCheckoutModal(true)}
+                      >
                         <span className="block">
                           <div className="block border box-border rounded-[12px] p-3">
                             <div className="flex justify-start items-center">
@@ -420,7 +611,7 @@ const Checkout = ({ productDetail }) => {
               </div>
             </div>
           </div>
-          <SubTotalIncheckout total={total} />
+          <SubTotalIncheckout total={total} addressType={addressType} />
         </div>
       </div>
       <RegisterAddress
@@ -440,6 +631,13 @@ const Checkout = ({ productDetail }) => {
         onCancel={() => openChooseHourWindow(false)}
         deliveryTimeDetails={deliveryTimeDetails}
         onChooseSlot={handleChooseSlot}
+      />
+      <CheckOutFormModal
+        checkoutModal={checkoutModal}
+        onCancel={() => openCheckoutModal(false)}
+        addCheckOutOrders={addCheckOutOrders}
+        stripePromise={stripePromise}
+        clientSecret={clientSecret}
       />
     </>
   );

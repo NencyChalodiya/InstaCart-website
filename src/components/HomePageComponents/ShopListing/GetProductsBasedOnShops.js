@@ -1,15 +1,25 @@
 import React, { useEffect, useState } from "react";
-import { Navigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import API from "../../../services/api";
 import AddToCart from "../../../pages/AddToCart/AddToCart";
 import HeaderProducts from "../HeaderOfProducts/HeaderProducts";
-import API from "../../../services/api";
-import { useNavigate } from "react-router-dom";
 import DeliveryTimesModal from "../../../pages/DeliveryTimesModal/DeliveryTimesModal";
-import { useDispatch, useSelector } from "react-redux";
 import { SetCategoryItems } from "../../../utils/Reducers/ProductSlice";
 import { SetCategoryItemsProducts } from "../../../utils/Reducers/CategorySlice";
 import { SetSubCategoryItemsProducts } from "../../../utils/Reducers/SubCategorySlice";
 import { AddItem, RemoveItem } from "../../../utils/Reducers/ProductSlice";
+import ShopProducts from "../../ProductsComponent/ShopProducts";
+import CategoryProducts from "../../ProductsComponent/CategoryProducts";
+import ProductsOfSubcategory from "../../ProductsComponent/ProductsOfSubcategory";
+import StoreFrontDetails from "../../ProductsComponent/StoreFrontDetails";
+import TickSvg from "../../../assets/images/tick.svg";
+import ArrowSvg from "../../../assets/images/arrow.svg";
+import StoreFilteredProducts from "../../ProductsComponent/StoreFilteredProducts";
+import TopStoreFrontDetails from "../../ProductsComponent/TopStoreFrontDetails";
+import { productStoreSideBarData } from "../../../data/productStoreSideBarData";
+import Checkout from "../../../pages/CheckoutPage/Checkout";
 import {
   AddCategoryItem,
   RemoveCategoryItem,
@@ -22,39 +32,24 @@ import {
   AddItemToCart,
   RemoveItemFromCart,
 } from "../../../utils/Reducers/CartSlice";
-import ShopProducts from "../../ProductsComponent/ShopProducts";
-import CategoryProducts from "../../ProductsComponent/CategoryProducts";
-import ProductsOfSubcategory from "../../ProductsComponent/ProductsOfSubcategory";
-import StoreFrontDetails from "../../ProductsComponent/StoreFrontDetails";
-import TickSvg from "../../../assets/images/tick.svg";
-import ArrowSvg from "../../../assets/images/arrow.svg";
-import StoreFilteredProducts from "../../ProductsComponent/StoreFilteredProducts";
-import TopStoreFrontDetails from "../../ProductsComponent/TopStoreFrontDetails";
-import { productStoreSideBarData } from "../../../data/productStoreSideBarData";
-import Checkout from "../../../pages/CheckoutPage/Checkout";
 
 const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
-  const { storeId, categoryId, productId, subcategoryId } = useParams();
+  const { storeId, categoryId, subcategoryId } = useParams();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [addToCartModal, setaddToCartModal] = useState(false);
   const [deliveryTimeModal, openDeliveryTimeModal] = useState(false);
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
   const [storeFrontDetails, setStoreFrontDetails] = useState([]);
-  const [storeSubcategory, setStoreSubCatgeory] = useState([]); //Catgeory products
+  const [hoveredProductId, setHoveredProductId] = useState(null);
   const [deliveryDetails, setDeliveryDetails] = useState([]);
   const [productDetail, setProductDetail] = useState([]);
   const [isLoading, setLoading] = useState(false);
-  const [storeProducts, setStoreProducts] = useState([]); //Shop products state
-  //const [isDataLoaded, setIsDataLoaded] = useState(false);
-  const [subCatProducts, setSubCatProducts] = useState([]);
+
   const { productItems } = useSelector((state) => state);
-  //console.log("productsItems", productItems.items);
   const { categoryItems } = useSelector((state) => state);
-  //console.log("categoryItems", categoryItems.categoryItems);
   const { subcategoryItems } = useSelector((state) => state);
-  //console.log("subcategoryItems", subcategoryItems.subCategoryItems);
-  const [hoveredProductId, setHoveredProductId] = useState(null);
 
   const handleMouseEnter = (productId) => {
     setHoveredProductId(productId);
@@ -81,6 +76,7 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
       })
     );
   };
+
   const RemoveFromCart = (e, product, subCategoryId, categoryId) => {
     e.stopPropagation();
     dispatch(
@@ -114,6 +110,7 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
       })
     );
   };
+
   const RemoveFromCartCategoryProducts = (e, product, subCategoryId) => {
     e.stopPropagation();
     dispatch(
@@ -165,7 +162,6 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
     const fetchStoreFrontDetails = async () => {
       try {
         const response = await API.getStoreFrontDetails(storeId);
-        //console.log(response);
         setStoreFrontDetails(response.data);
       } catch (error) {
         console.log(error);
@@ -173,23 +169,43 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
     };
     fetchStoreFrontDetails();
   }, [storeId]);
-  //console.log("storeFrontDetails", storeFrontDetails);
 
   useEffect(() => {
     const fetchProductsOfShop = async () => {
       try {
         const response = await API.getProductsOfShop(storeId);
         console.log(response);
-        //setStoreProducts(response.data);
         dispatch(SetCategoryItems(response.data));
-        //setIsDataLoaded(true);
       } catch (error) {
         console.log(error);
       }
     };
     if (storeId) fetchProductsOfShop();
   }, [storeId]);
-  //console.log("storeProducts", storeProducts);
+
+  useEffect(() => {
+    const fetchStoreSubCategory = async () => {
+      try {
+        const response = await API.getStoreSubCategory(categoryId);
+        dispatch(SetCategoryItemsProducts(response.data));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (categoryId) fetchStoreSubCategory();
+  }, [categoryId]);
+
+  useEffect(() => {
+    const fetchProductsOfSubCategory = async () => {
+      try {
+        const response = await API.getProductsOfSubCategory(subcategoryId);
+        dispatch(SetSubCategoryItemsProducts(response.data));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    if (subcategoryId) fetchProductsOfSubCategory();
+  }, [subcategoryId]);
 
   const handleSubCatClick = async (categoryId) => {
     setSelectedSubCategory(categoryId);
@@ -204,41 +220,10 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
     );
   };
 
-  useEffect(() => {
-    const fetchStoreSubCategory = async () => {
-      try {
-        const response = await API.getStoreSubCategory(categoryId);
-        //console.log(response); // Use the response data as needed
-        //setStoreSubCatgeory(response.data);
-        dispatch(SetCategoryItemsProducts(response.data));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    if (categoryId) fetchStoreSubCategory();
-  }, [categoryId]);
-
-  useEffect(() => {
-    const fetchProductsOfSubCategory = async () => {
-      try {
-        const response = await API.getProductsOfSubCategory(subcategoryId);
-        //console.log(response);
-        //setSubCatProducts(response.data);
-        dispatch(SetSubCategoryItemsProducts(response.data));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    if (subcategoryId) fetchProductsOfSubCategory();
-  }, [subcategoryId]);
-
-  //console.log("subCategory", storeSubcategory);
-
   const fetchStoreDeliveryDetails = async () => {
     try {
       setLoading(true);
       const response = await API.getStoreDeliveryDetails(storeId);
-      //console.log(response);
       setDeliveryDetails(response.data);
     } catch (error) {
       console.log(error);
@@ -249,27 +234,21 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
 
   const openModalWithApiCall = () => {
     openDeliveryTimeModal(true);
-
-    fetchStoreDeliveryDetails(); // Call the API when opening the modal
+    fetchStoreDeliveryDetails();
   };
 
   const fetchProductDetail = async (productId) => {
     try {
       const response = await API.getIndividualProductDetail(productId);
-      //console.log(response);
       setProductDetail(response.data);
     } catch (error) {
       console.log(error);
     }
   };
 
-  // console.log("Productdetail", productDetail);
-
   const openProductDetailModal = (productId) => {
     setaddToCartModal(true);
-
     fetchProductDetail(productId);
-    // navigate(`/product/${productId}`);
   };
 
   return (
@@ -367,12 +346,9 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
                             </span>
                           </button>
                         </div>
-                        <div className="flex items-center ml-4 mr-2 min-h-20">
-                          {/* Previous code for buttons */}
-                        </div>
+                        <div className="flex items-center ml-4 mr-2 min-h-20"></div>
                       </div>
                     </div>
-
                     <div>
                       <div className="relative flex flex-row">
                         <div className="w-full">
@@ -486,7 +462,9 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
         deliveryDetails={deliveryDetails}
         isLoading={isLoading}
       />
-      {productDetail && <Checkout productDetail={productDetail} />}
+      {productDetail && productDetail.length > 0 && (
+        <Checkout productDetail={productDetail} />
+      )}
     </>
   );
 };

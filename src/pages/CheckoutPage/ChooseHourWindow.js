@@ -34,7 +34,11 @@ const ChooseHourWindow = ({
 
   const handleSlotClick = (slot) => {
     setSelectedSlot(slot);
-    onChooseSlot({ day: selectedDay, time_slot: slot.time_slot });
+    onChooseSlot({
+      day: selectedDay,
+      time_slot: slot.time_slot,
+      price: slot.price,
+    });
   };
 
   return (

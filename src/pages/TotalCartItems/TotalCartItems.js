@@ -8,18 +8,29 @@ import { DeleteTotalItems } from "../../utils/Reducers/ItemSlice";
 import { DeleteTotalCategoryItems } from "../../utils/Reducers/CategorySlice";
 import { DeleteTotalSubCategoryItems } from "../../utils/Reducers/SubCategorySlice";
 import { Link, useParams } from "react-router-dom";
+import { UpdateGiftOption } from "../../utils/Reducers/CartSlice";
 import { TotalContext } from "../TotalContext/TotalContext";
-import API from "../../services/api";
 
-const TotalCartItems = ({ totalCartItemsModal, onCancel, productDetail }) => {
+const TotalCartItems = ({ totalCartItemsModal, onCancel }) => {
   const { storeId, categoryId, subcategoryId } = useParams();
 
   // const [total, setTotal] = useState(null);
   // const { setTotal: setTotalContext } = useContext(TotalContext);
-  const { cartItems } = useSelector((state) => state.cartItems);
+  const { cartItems, giftOption } = useSelector((state) => state.cartItems);
+
   // console.log("cartItems", cartItems);
   // console.log("TotalcartItemsProductsDetail", productDetail);
   const dispatch = useDispatch();
+  const [giftOptionState, setGiftOptionState] = useState(giftOption);
+
+  useEffect(() => {
+    setGiftOptionState(giftOption);
+  }, [giftOption]);
+
+  const handleGiftOptionChange = (checked) => {
+    setGiftOptionState(checked);
+    dispatch(UpdateGiftOption(checked));
+  };
 
   // const productIdFromDetail = productDetail?.product_id;
   // const cartItemsPayload = cartItems.map((item) => ({
@@ -606,7 +617,10 @@ const TotalCartItems = ({ totalCartItemsModal, onCancel, productDetail }) => {
               <div>
                 <Form>
                   <Form.Item valuePropName="checked">
-                    <Switch />
+                    <Switch
+                      onChange={handleGiftOptionChange}
+                      checked={giftOptionState}
+                    />
                   </Form.Item>
                 </Form>
               </div>

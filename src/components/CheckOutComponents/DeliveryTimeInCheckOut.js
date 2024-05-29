@@ -16,8 +16,11 @@ const DeliveryTimeInCheckOut = ({
   handleDeliveryDetails,
   selectDeliveryDetails,
   onContinue,
+  selectPickupDetails,
+  handlePickupDetails,
 }) => {
   const [selectedDay, setSelectedDay] = useState(null);
+  const [selectedSlot, setSelectedSlot] = useState(null);
   // const [selectDeliveryDetails, setSelectedDeliveryDetails] = useState(null);
   useEffect(() => {
     if (deliveryTimeDetails[0] && deliveryTimeDetails[0].pickup_time) {
@@ -37,6 +40,8 @@ const DeliveryTimeInCheckOut = ({
 
   const handleDayClick = (day) => {
     setSelectedDay(day);
+    setSelectedSlot(null);
+    handlePickupDetails(null);
     // setSelectedDeliveryDetails(null);
   };
 
@@ -86,7 +91,7 @@ const DeliveryTimeInCheckOut = ({
                       <div
                         className={`box-border cursor-pointer rounded-[12px] flex min-h-[78px] justify-between p-4 border-2 mt-4 ${
                           selectDeliveryDetails?.type === "priority"
-                            ? "border-black"
+                            ? "border-black bg-gray-100"
                             : "hover:bg-gray-100 hover:border-2 hover:border-black"
                         }`}
                         onClick={() =>
@@ -116,13 +121,18 @@ const DeliveryTimeInCheckOut = ({
                           </div>
                         </div>
                         <div className="self-center flex">
-                          <p>Free</p>
+                          <p>
+                            {
+                              delivery?.delivery_time?.next_delivery?.priority
+                                ?.price
+                            }
+                          </p>
                         </div>
                       </div>
                       <div
                         className={`box-border cursor-pointer rounded-[12px] flex min-h-[78px] justify-between p-4 border-2 mt-4 ${
                           selectDeliveryDetails?.type === "standard"
-                            ? "border-black"
+                            ? "border-black bg-gray-100"
                             : "hover:bg-gray-100 hover:border-2 hover:border-black"
                         }`}
                         onClick={() =>
@@ -152,13 +162,18 @@ const DeliveryTimeInCheckOut = ({
                           </div>
                         </div>
                         <div className="self-center flex">
-                          <p>Free</p>
+                          <p>
+                            {
+                              delivery?.delivery_time?.next_delivery?.standard
+                                ?.price
+                            }
+                          </p>
                         </div>
                       </div>
                       <div
                         className={`box-border cursor-pointer rounded-[12px] flex min-h-[78px] justify-between p-4 border-2 mt-4 ${
                           selectDeliveryDetails?.type === "chooseTwo"
-                            ? "border-black"
+                            ? "border-black bg-gray-100"
                             : "hover:bg-gray-100 hover:border-2 hover:border-black"
                         }`}
                         onClick={() => openChooseHourWindow(true)}
@@ -222,9 +237,29 @@ const DeliveryTimeInCheckOut = ({
                           .flatMap((detail) =>
                             detail.slots.map((slotDetail, slotIndex) => (
                               <li key={slotIndex} className="px-4">
-                                <button className="flex justify-between w-full py-6 cursor-pointer">
+                                <button
+                                  className={`flex justify-between w-full py-6 cursor-pointer ${
+                                    selectPickupDetails?.time_slot ===
+                                    slotDetail.time_slot
+                                  }`}
+                                  onClick={() => {
+                                    setSelectedSlot(slotDetail);
+                                    handlePickupDetails({
+                                      day: detail.day,
+                                      time_slot: slotDetail.time_slot,
+                                      price: slotDetail.price,
+                                    });
+                                  }}
+                                >
                                   <div className="flex items-center">
-                                    <Radio>{slotDetail.time_slot}</Radio>
+                                    <Radio
+                                      checked={
+                                        selectPickupDetails?.time_slot ===
+                                        slotDetail.time_slot
+                                      }
+                                    >
+                                      {slotDetail.time_slot}
+                                    </Radio>
                                   </div>
                                   <div>{slotDetail.price}</div>
                                 </button>

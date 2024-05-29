@@ -1,7 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 
 import DeliveryCar from "../../assets/images/deliveryCar.svg";
-const DeliveryInstructions = () => {
+const DeliveryInstructions = ({
+  onDeliveryInstructionsChange,
+  onLeaveAtMyDoorChange,
+}) => {
+  const [instructions, setInstructions] = useState("");
+  const [leaveAtMyDoor, setLeaveAtMyDoor] = useState(0);
+
+  const handleInstructionChange = (e) => {
+    setInstructions(e.target.value);
+    onDeliveryInstructionsChange(e.target.value);
+  };
+
+  const handleLeaveAtMyDoorChange = (e) => {
+    const checked = e.target.checked ? 1 : 0; // Convert boolean to 0 or 1
+    setLeaveAtMyDoor(checked);
+    onLeaveAtMyDoorChange(checked);
+  };
+
   return (
     <div className="p-6  border-b  mt-4 ">
       <div>
@@ -22,13 +39,20 @@ const DeliveryInstructions = () => {
                 className="px-3 pt-5 pb-3 w-full rounded-xl border"
                 placeholder="Add access code"
                 rows={3}
+                value={instructions}
+                onChange={handleInstructionChange}
               />
             </div>
           </div>
           <div className="flex justify-between py-3 relative cursor-pointer">
             <div className="flex pr-1">
               <div className="inline-block relative h-6 w-6 mr-2 mt-2">
-                <input type="checkbox" className="absolute h-full w-full " />
+                <input
+                  type="checkbox"
+                  className="absolute h-full w-full "
+                  checked={leaveAtMyDoor === 1}
+                  onChange={handleLeaveAtMyDoorChange}
+                />
               </div>
               <label>
                 <span className="flex flex-col mt-2">

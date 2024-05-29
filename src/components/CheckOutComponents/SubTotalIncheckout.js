@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { TotalContext } from "../../pages/TotalContext/TotalContext";
 import MenuSvg from "../../assets/images/menuSvg.svg";
-const SubTotalIncheckout = ({ total }) => {
+const SubTotalIncheckout = ({ total, addressType }) => {
   // const { total } = useContext(TotalContext);
   // console.log("TotalItems", total);
   return (
@@ -71,18 +71,34 @@ const SubTotalIncheckout = ({ total }) => {
                         </div>
                       </div>
                     </li>
-                    <li>
-                      <div className="flex justify-between">
-                        <div className="flex items-center">
-                          <span>
-                            <span>Pickup fees</span>
-                          </span>
+                    {addressType === "pickup" && (
+                      <li>
+                        <div className="flex justify-between">
+                          <div className="flex items-center">
+                            <span>
+                              <span>Pickup fees</span>
+                            </span>
+                          </div>
+                          <div>
+                            <span>{total?.pickup_fee}</span>
+                          </div>
                         </div>
-                        <div>
-                          <span>{total?.pickup_fee}</span>
+                      </li>
+                    )}
+                    {addressType === "delivery" && (
+                      <li>
+                        <div className="flex justify-between">
+                          <div className="flex items-center">
+                            <span>
+                              <span>Delivery fees</span>
+                            </span>
+                          </div>
+                          <div>
+                            <span>{total?.delivery_fee}</span>
+                          </div>
                         </div>
-                      </div>
-                    </li>
+                      </li>
+                    )}
                     <li>
                       <div className="flex justify-between">
                         <div className="flex items-center">

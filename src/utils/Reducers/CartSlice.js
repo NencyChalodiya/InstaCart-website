@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   cartItems: [],
+  giftOption: false,
 };
 const cartSlice = createSlice({
   name: "cart",
@@ -52,6 +53,9 @@ const cartSlice = createSlice({
       );
       state.cartItems = filterItems;
     },
+    UpdateGiftOption: (state, action) => {
+      state.giftOption = action.payload;
+    },
   },
 });
 
@@ -59,5 +63,6 @@ export const {
   AddItemToCart,
   RemoveItemFromCart,
   DeleteParticularItemFromCart,
+  UpdateGiftOption,
 } = cartSlice.actions;
 export default cartSlice.reducer;
