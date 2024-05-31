@@ -12,7 +12,7 @@ const ShopListing = ({ selectedCategoryId }) => {
     const fetchShopsByCategory = async (categoryId) => {
       try {
         const response = await API.getShopsByCategory(categoryId); // Pass category ID directly
-        setShops(response.data);
+        setShops(response.data.storeData);
       } catch (error) {
         console.log(error);
       }
@@ -24,12 +24,15 @@ const ShopListing = ({ selectedCategoryId }) => {
   useEffect(() => {
     const fetchShopsByCategory = async (categoryId) => {
       try {
-        const response = await API.getShopsByCategory(categoryId); // Pass category ID directly
-        setShops(response.data);
+        const response = await API.getShopsByCategory(categoryId);
+        console.log(response.data);
+        // Pass category ID directly
+        setShops(response.data.storeData);
       } catch (error) {
         console.log(error);
       }
     };
+    console.log(shops);
 
     if (selectedCategoryId !== null) {
       // Ensure selectedCategoryId is a number before passing it to fetchShopsByCategory

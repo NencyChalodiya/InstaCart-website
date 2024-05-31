@@ -13,6 +13,7 @@ import DeliveryInstructions from "../../components/CheckOutComponents/DeliveryIn
 import DeliveryTimeInCheckOut from "../../components/CheckOutComponents/DeliveryTimeInCheckOut";
 import SubTotalIncheckout from "../../components/CheckOutComponents/SubTotalIncheckout";
 import ApplyForGift from "../../components/CheckOutComponents/ApplyForGift";
+import CheckOutFormModal from "../../components/CheckOutComponents/CheckOutFormModal";
 
 import MobileNumberSvg from "../../assets/images/mobileNumber.svg";
 import PaywithSvg from "../../assets/images/paywithSvg.svg";
@@ -22,22 +23,12 @@ import InstacartSvg from "../../assets/images/instacartLogo.svg";
 import { Tabs } from "antd";
 import { ConfigProvider } from "antd";
 import { useSelector } from "react-redux";
-import CheckOutFormModal from "../../components/CheckOutComponents/CheckOutFormModal";
 
 const Checkout = ({ productDetail }) => {
-  const [stripePromise, setStripePromise] = useState(null);
-  const [clientSecret, setClientSecret] = useState("");
-
   const customTabStyle = {
     padding: "2px 75px",
     fontSize: "24px",
   };
-
-  useEffect(() => {
-    const publishableKey =
-      "pk_test_51Ot1cCSCHK44EDHwd48KVHRzzhud57MHdgGOkV1SVsNVvyygtSsciEnfgb0abJ3omQtDkvAYi6CfBwQPkGvix2aQ00iVRpVFUQ";
-    setStripePromise(loadStripe(publishableKey));
-  }, []);
 
   const { storeId } = useParams();
   const { cartItems, giftOption } = useSelector((state) => state.cartItems);
@@ -46,8 +37,10 @@ const Checkout = ({ productDetail }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDeliveryTimeExpanded, setIsDeliveryTimeExpanded] = useState(false);
   const [isGiftExpanded, setIsGiftExpanded] = useState(false);
+  const [isDeliveryInstructionExpanded, setIsDeliveryInstructionExpanded] =
+    useState(false);
   const [openRegisterAddressModal, setRegisterAddressModal] = useState(false);
-  const [openEditAddressModal, setEditAddressModal] = useState(true);
+  const [openEditAddressModal, setEditAddressModal] = useState(false);
   const [getUserAddressDetail, setUserAddressDetail] = useState([]);
   const [pickupAddresses, setPickupAddresses] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
@@ -68,6 +61,8 @@ const Checkout = ({ productDetail }) => {
   const [showMobileInput, setShowMobileInput] = useState(false);
   const [deliveryInstructions, setDeliveryInstructions] = useState("");
   const [leaveAtMyDoor, setLeaveAtMyDoor] = useState(0);
+  const [stripePromise, setStripePromise] = useState(null);
+  const [clientSecret, setClientSecret] = useState("");
   const [mobileNumberDetails, setMobileNumberDetails] = useState({
     mobile_number: "",
     country_code: "+91",
@@ -215,19 +210,10 @@ const Checkout = ({ productDetail }) => {
             item.id === productIdFromDetail ? productIdFromDetail : item.id,
           quantity: item.qty,
         })),
-        address_id: address_id,
+
         country_code: mobileNumberDetails.country_code,
         mobile_number: mobileNumberDetails.mobile_number,
-        gift_option: giftOption,
-        gift_recipitent_name: giftUserDetails?.recipitentName,
-        recipitent_country_code: giftUserDetails.recipitentCountryCode,
-        recipitent_mobile: giftUserDetails.recipitentMobileNo,
-        gift_sender_name: giftUserDetails.senderName,
-        // gift_card_image_id: giftImages.giftCardImages.map(
-        //   (giftImg) => giftImg.id
-        // ),
-        gift_card_image_id: 1,
-        gift_message: giftUserDetails.giftMessage,
+
         actual_subtotal: total?.actual_item_subtotal || 0,
         final_subtotal: total?.final_item_subtotal || 0,
         service_fee: total?.service_fee || 0,
@@ -235,11 +221,13 @@ const Checkout = ({ productDetail }) => {
         subtotal: total?.subtotal,
         discount_applied: total?.discount_applied,
         payment_mode: "card",
+        use_referral_bonus: false,
       };
 
       if (addressType === "delivery" && selectDeliveryDetails) {
         payload = {
           ...payload,
+          address_id: address_id,
           delivery_type: selectDeliveryDetails.type,
           delivery_day: selectDeliveryDetails.day,
           delivery_slot: selectDeliveryDetails.time_slot,
@@ -247,6 +235,23 @@ const Checkout = ({ productDetail }) => {
           delivery_instructions: deliveryInstructions,
           is_leave_it_door: leaveAtMyDoor === 1 ? true : false,
         };
+
+        if (giftOption) {
+          payload = {
+            ...payload,
+            gift_option: giftOption,
+            gift_recipitent_name: giftUserDetails?.recipitentName || null,
+            recipitent_country_code:
+              giftUserDetails.recipitentCountryCode || null,
+            recipitent_mobile: giftUserDetails.recipitentMobileNo || null,
+            gift_sender_name: giftUserDetails.senderName || null,
+            // gift_card_image_id: giftImages.giftCardImages.map(
+            //   (giftImg) => giftImg.id
+            // ),
+            gift_card_image_id: 1 || null,
+            gift_message: giftUserDetails.giftMessage || null,
+          };
+        }
       }
 
       if (addressType === "pickup" && selectPickupDetails) {
@@ -255,7 +260,7 @@ const Checkout = ({ productDetail }) => {
           pickup_address_id: confirmedPickupAddress?.id,
           pickup_day: selectPickupDetails.day,
           pickup_slot: selectPickupDetails.time_slot,
-          delivery_type: selectPickupDetails.type,
+
           pickup_fee: parseFloat(selectPickupDetails?.price) || 0,
         };
       }
@@ -267,6 +272,12 @@ const Checkout = ({ productDetail }) => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const publishableKey =
+      "pk_test_51Ot1cCSCHK44EDHwd48KVHRzzhud57MHdgGOkV1SVsNVvyygtSsciEnfgb0abJ3omQtDkvAYi6CfBwQPkGvix2aQ00iVRpVFUQ";
+    setStripePromise(loadStripe(publishableKey));
+  }, []);
 
   //to handelContinue of SubTotal
   const handleContinue = async () => {
@@ -289,6 +300,9 @@ const Checkout = ({ productDetail }) => {
   //tab change of delivery and pickup
   const handleTabChange = (key) => {
     setActiveKey(key);
+    setAddressType(key === "1" ? "delivery" : "pickup");
+    setMobileNumberDetails({ mobile_number: "", country_code: "+91" });
+    setClientSecret("");
   };
 
   //toggle accordion of delivery address
@@ -304,6 +318,10 @@ const Checkout = ({ productDetail }) => {
   //toggle accordion of gift images
   const toggleGiftAccordion = () => {
     setIsGiftExpanded(!isGiftExpanded);
+  };
+
+  const toggleDeliveryInstructionAcordion = () => {
+    setIsDeliveryInstructionExpanded(!isDeliveryInstructionExpanded);
   };
 
   //handle delivery details
@@ -350,8 +368,8 @@ const Checkout = ({ productDetail }) => {
                   theme={{
                     components: {
                       Tabs: {
-                        inkBarColor: "green", // Line color when tab is active
-                        itemActiveColor: "green", // Text color when tab is active
+                        inkBarColor: "green",
+                        itemActiveColor: "green",
                       },
                     },
                   }}
@@ -404,6 +422,12 @@ const Checkout = ({ productDetail }) => {
                                 handleDeliveryInstructionsChange
                               }
                               onLeaveAtMyDoorChange={handleLeaveAtMyDoorChange}
+                              toggleDeliveryInstructionAcordion={
+                                toggleDeliveryInstructionAcordion
+                              }
+                              isDeliveryInstructionExpanded={
+                                isDeliveryInstructionExpanded
+                              }
                             />
                           </div>
                           <div>

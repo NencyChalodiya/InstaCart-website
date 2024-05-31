@@ -4,6 +4,10 @@ import API from "../../../services/api";
 import Loader from "react-js-loader";
 import "../../Loading.css";
 import { useLocation } from "react-router-dom";
+
+import CrossSvg from "../../../assets/images/cross.svg";
+import LocationSvg from "../../../assets/images/location.svg";
+
 const EditAddress = ({
   openEditAddressModal,
   onCancel,
@@ -32,14 +36,17 @@ const EditAddress = ({
   const handleUpdateAddress = async () => {
     try {
       setLoading(true);
-      const { address_id, ...addressData } = updatedAddress;
-      // Make API call to update address
+      const { address_id, latitude, longitude, ...addressData } =
+        updatedAddress;
+      if (latitude) addressData.latitude = parseFloat(latitude);
+      if (longitude) addressData.longitude = parseFloat(longitude);
+
       const response = await API.editUserAddress(addressData, address_id);
       console.log(response);
       if (response.status === "success") {
         fetchUserAddressDetail();
       }
-      // Handle success (e.g., close modal)
+
       onCancel();
     } catch (error) {
       console.error("Error updating address:", error);
@@ -71,18 +78,7 @@ const EditAddress = ({
                 className="cursor-pointer hover:bg-gray-100 w-5 h-7 rounded"
                 onClick={onCancel}
               >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="#343538"
-                  xmlns="http://www.w3.org/2000/svg"
-                  size="20"
-                  class="e-1p1m6ki"
-                  aria-hidden="true"
-                >
-                  <path d="M12 10.415 6.292 4.707 4.708 6.291l5.708 5.708-5.708 5.708 1.584 1.584L12 13.583l5.708 5.708 1.584-1.584-5.708-5.708 5.708-5.708-1.584-1.584z"></path>
-                </svg>
+                <img src={CrossSvg} alt="cross-svg" />
               </button>
 
               <h2 className="pr-44">Edit Address</h2>
@@ -145,21 +141,7 @@ const EditAddress = ({
 
                   <div className="relative mt-3 mb-3 border box-border rounded-xl">
                     <div className="absolute top-5 left-3 z-10">
-                      <svg
-                        width="19"
-                        height="19"
-                        viewBox="0 0 24 24"
-                        fill="#343538"
-                        xmlns="http://www.w3.org/2000/svg"
-                        size="19"
-                        aria-hidden="true"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          clip-rule="evenodd"
-                          d="M5.714 12.561a7.1 7.1 0 0 1-.86-3.659 7.152 7.152 0 1 1 13.242 3.994L12.84 22h-1.679l-5.265-9.121a7 7 0 0 1-.183-.318m9.266-3.305a2.98 2.98 0 1 1-5.956-.208 2.98 2.98 0 0 1 5.956.208"
-                        ></path>
-                      </svg>
+                      <img src={LocationSvg} alt="location-svg" />
                     </div>
                     <div>
                       <div className="flex relative">
@@ -198,7 +180,7 @@ const EditAddress = ({
                       disabled={isLoading}
                     >
                       <span className="block text-xl font-semibold leading-5 text-white">
-                        update Address
+                        Update Address
                       </span>
                       {isLoading && (
                         <div className="ml-2 h-5 w-5 mt-[-20px]">

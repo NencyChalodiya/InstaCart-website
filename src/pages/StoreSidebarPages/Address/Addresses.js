@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../../components/LandingPageComponents/Navbar";
 import { Link } from "react-router-dom";
+import API from "../../../services/api";
+
 import { yourOrderSidebarData } from "../../../data/yourOrdersSidebarData";
 import RegisterAddress from "./RegisterAddress";
 import EditAddress from "./EditAddress";
-import API from "../../../services/api";
+
 const Addresses = () => {
   const [openRegisterAddressModal, setRegisterAddressModal] = useState(false);
-  const [openEditAddressModal, setEditAddressModal] = useState(true);
+  const [openEditAddressModal, setEditAddressModal] = useState(false);
   const [getUserAddressDetail, setUserAddressDetail] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [hoveredItem, setHoveredItem] = useState(null);

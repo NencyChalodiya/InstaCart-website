@@ -225,6 +225,18 @@ export const addOrder = (payload) => {
   return Ajax.Request(`/orders/checkout`, Ajax.POST, true, payload);
 };
 
+export const getOrder = () => {
+  return Ajax.Request(`/orders/my-orders`, Ajax.GET, true);
+};
+
+export const getOrderDetails = (orderId) => {
+  return Ajax.Request(
+    `/orders/my-orders/orderdetail?orderId=${orderId}`,
+    Ajax.GET,
+    true
+  );
+};
+
 let API = {
   SendOtpToRegister,
   VerifyOtpToRegister,
@@ -261,6 +273,8 @@ let API = {
   getPickUpAddress,
   calculateSubTotal,
   addOrder,
+  getOrder,
+  getOrderDetails,
 };
 
 export default API;

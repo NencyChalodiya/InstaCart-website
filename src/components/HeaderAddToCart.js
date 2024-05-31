@@ -1,15 +1,23 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+
 import { GiHamburgerMenu } from "react-icons/gi";
 import { CiSearch } from "react-icons/ci";
 import { IoLocationSharp } from "react-icons/io5";
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { FaShoppingCart } from "react-icons/fa";
-import { useSelector } from "react-redux";
+
 import TotalCartItems from "../pages/TotalCartItems/TotalCartItems";
+import Input from "./atoms/Input";
+
 const HeaderAddToCart = () => {
+
   const [totalCartItemsModal, setTotalCartItemsModal] = useState(false);
+
   const { cartItems } = useSelector((state) => state.cartItems);
+
   console.log("caerdasw", cartItems);
+
   return (
     <header className="fixed z-20 flex items-center justify-between pt-1 pb-1 bg-white border-gray-300 px-25">
       <div className="flex flex-row items-center w-full ">
@@ -29,6 +37,7 @@ const HeaderAddToCart = () => {
               <CiSearch className="w-6 h-6 text-gray-700" />
             </div>
             <div>
+              {/* <Input type="text" placeholder="Search products and stores and recipies"/> */}
               <input
                 type="text"
                 className="pl-10 pr-12 h-[50px] border-2 border-black rounded-full  text-lg bg-white text-gray-950 w-[80rem] shadow-lg  "
@@ -54,12 +63,11 @@ const HeaderAddToCart = () => {
           className="flex items-center gap-2 mt-4 justify-evenly"
           onClick={() => setTotalCartItemsModal(true)}
         >
-          <FaShoppingCart className="w-[28px] h-[28px]" />
+        <FaShoppingCart className="w-[28px] h-[28px]" />
           <span className="text-gray-400">{cartItems?.length || 0}</span>
         </div>
       </div>
 
-      <div></div>
       <TotalCartItems
         totalCartItemsModal={totalCartItemsModal}
         onCancel={() => setTotalCartItemsModal(false)}

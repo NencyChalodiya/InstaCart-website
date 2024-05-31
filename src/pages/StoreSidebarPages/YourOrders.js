@@ -1,140 +1,372 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../../components/LandingPageComponents/Navbar";
-import BrandStoreCategoryPage from "../BrandStoreCategoryPages/BrandStoreCategoryPage";
-
 import InnerSideBarData from "./InnerSideBarData";
+import { Tabs } from "antd";
+import { ConfigProvider } from "antd";
+import API from "../../services/api";
+import OrderDetailsModal from "./OrderDetailsModal";
+const { TabPane } = Tabs;
 const YourOrders = () => {
+  const customTabStyle = {
+    padding: "2px 45px",
+    fontSize: "20px",
+  };
+
+  const [orderType, setOrderType] = useState("current");
+  const [activeTab, setActiveTab] = useState("delivery");
+  const [getorder, setGetOrder] = useState([]);
+  const [orderDetailsModal, openOrderDetailsModal] = useState(false);
+  const [getAnOrderDetail, setAnOrderDetail] = useState([]);
+
+  const fetchAnOrder = async () => {
+    try {
+      let response = await API.getOrder();
+      if (response.status === "success") {
+        setGetOrder(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAnOrder();
+  }, []);
+
+  const fetchOrderDetails = async (orderId) => {
+    try {
+      const response = await API.getOrderDetails(orderId);
+      if (response.status === "success") {
+        setAnOrderDetail(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const openOrderDetail = (orderId) => {
+    openOrderDetailsModal(true);
+    fetchOrderDetails(orderId);
+  };
+  console.log("getAnOrderDetail", getAnOrderDetail);
+
+  const handleTabChange = (key) => {
+    setOrderType(key);
+  };
+  const handleTabClick = (key) => {
+    setActiveTab(key);
+  };
   return (
     <>
       <Navbar />
       <div className="h-full bg-white">
         <InnerSideBarData />
-        {/* <div
-          className="fixed z-10 w-64 overflow-y-auto bg-white border-r-2 top-20 max-md:hidden"
-          style={{ height: `calc(100% - 80px)` }} 
-        >
-          <ul className="w-full px-3 py-4 list-none">
-            <li>
-              <Link
-                to="/store"
-                className="box-border relative flex items-center w-full pl-3 pr-3 text-sm leading-5 rounded-lg cursor-pointer flex-nowrap "
-              >
-                <span className="flex items-center h-10">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="#343538"
-                    xmlns="http://www.w3.org/2000/svg"
-                    size="24"
-                    class="e-6su6fj"
-                    aria-hidden="true"
-                  >
-                    <path d="m12.292 6.79-1.584-1.583-6.792 6.792 6.792 6.792 1.584-1.584-4.088-4.088H20v-2.24H8.204z"></path>
-                  </svg>
-                </span>
-                <span className="pt-2 pb-2 ml-2">Back</span>
-              </Link>
-            </li>
-            <br />
-            <hr />
-            {yourOrderSidebarData.map((item , index)=>(
-               <li key={index}
-               onMouseEnter={() => handleMouseEnter(index)}
-                  onMouseLeave={handleMouseLeave}
-                  style={{
-                    backgroundColor:
-                      hoveredItem === index &&
-                      item.title !== "Your orders"
-                        ? "#f2f3f7"
-                        : item.title === "Your orders"
-                        ? "#343538" // Background becomes black for "Stores"
-                        : "white",
-                  }}
-                  className="mb-2 rounded-lg">
-               <Link
-                 to={`/store/${item.route}`}
-                 className="box-border relative flex items-center w-full pl-3 pr-3 text-sm leading-5 rounded-lg cursor-pointer flex-nowrap "
-                 style={{
-                  color:
-                    hoveredItem === index &&
-                    item.title !== "Your orders"
-                      ? "black"
-                      : item.title === "Your orders"
-                      ? "white" // Text becomes white for "Stores"
-                      : "black",
-                }}
-               >
-                 <span className="flex items-center h-10">
-                 {item.title === "Your orders" // Check if title is "Stores"
-                        ? item.selectedLogo
-                        : item.unselectedLogo}
-                 </span>
-                 <span className="pt-2 pb-2 ml-2">{item.title}</span>
-               </Link>
-             </li>
-            ))}
 
-           
-            <hr />
-            <br />
-            <li>
-              <a
-                href="/"
-                className="box-border relative flex items-center w-full pl-3 pr-3 text-sm leading-5 rounded-lg cursor-pointer flex-nowrap "
-              >
-                <span className="flex items-center h-10">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="#343538"
-                    xmlns="http://www.w3.org/2000/svg"
-                    size="24"
-                    class="e-6su6fj"
-                    aria-hidden="true"
-                  >
-                    <path d="M10.07 7.757 8.656 6.343 2.999 12l5.657 5.657 1.414-1.415L6.828 13H16v-2H6.827zM17 20v-2h2V6h-2V4h4v16z"></path>
-                  </svg>
-                </span>
-                <span className="pt-2 pb-2 ml-2">Log out</span>
-              </a>
-            </li>
-          </ul>
-        </div> */}
-
-        <div className="ml-64 max-md:ml-0 ">
+        <div className="ml-64 max-md:ml-0">
           <div className="h-14"></div>
 
-          <div className="w-full py-6 ">
+          <div className="w-full py-6">
             <div className="w-full px-8 mb-6">
-              <div className="flex items-center justify-between mt-6 ">
+              <div className="flex items-center justify-between mt-6">
                 <div>
                   <h2 className="flex mr-2">
-                    <div className="text-xl font-bold leading-5 ">
+                    <div className="text-xl font-bold leading-5">
                       Order history
                     </div>
                   </h2>
                 </div>
               </div>
 
-              <div className="text-center py-12">
-                <img
-                  src="https://d2guulkeunn7d8.cloudfront.net/assets/EmptyStateGroceries-1b9e4c0a4d8cefff697c0eb7d50f82ad.svg"
-                  alt="order-history"
-                  className="block mx-auto mb-3 max-w-[235px] max-h-[132px] w-full h-full"
-                />
-                <h1 className="text-[#72767E]">
-                  Empty Fridge? Start your first ordet
-                </h1>
-                <p className="text-[#7B7F87]">
-                  Current and past orders will appear here.
-                </p>
+              <div className="flex flex-col items-center justify-center bg-gray-100 p-4">
+                <div className="flex space-x-4 mb-4">
+                  <button
+                    className={`px-4 py-2 font-semibold rounded ${
+                      orderType === "current"
+                        ? "bg-[#319714] text-white"
+                        : "bg-gray-200"
+                    }`}
+                    onClick={() => handleTabChange("current")}
+                  >
+                    Current Orders
+                  </button>
+                  <button
+                    className={`px-4 py-2 font-semibold rounded ${
+                      orderType === "past"
+                        ? "bg-[#319714] text-white"
+                        : "bg-gray-200"
+                    }`}
+                    onClick={() => handleTabChange("past")}
+                  >
+                    Past Orders
+                  </button>
+                </div>
+
+                <div className="w-full max-w-2xl">
+                  <ConfigProvider
+                    theme={{
+                      components: {
+                        Tabs: {
+                          inkBarColor: "green",
+                          itemActiveColor: "green",
+                        },
+                      },
+                    }}
+                  >
+                    <Tabs
+                      defaultActiveKey="delivery"
+                      activeKey={activeTab}
+                      onChange={handleTabClick}
+                      centered
+                    >
+                      <TabPane
+                        tab={
+                          <span
+                            className={`${
+                              activeTab === "delivery"
+                                ? "text-[#319714]"
+                                : "text-[#939291]"
+                            }`}
+                            style={customTabStyle}
+                          >
+                            Delivery
+                          </span>
+                        }
+                        key="delivery"
+                      >
+                        {orderType === "current" ? (
+                          <div>
+                            {getorder &&
+                            getorder.current_orders &&
+                            getorder.current_orders.delivery_orders ? (
+                              getorder.current_orders.delivery_orders.length >
+                              0 ? (
+                                <>
+                                  {getorder.current_orders.delivery_orders.map(
+                                    (order) => (
+                                      <div
+                                        className="border border-gray-300 p-4 my-4 rounded-md  flex justify-between items-center"
+                                        key={order.order_id}
+                                      >
+                                        <div>
+                                          <div>
+                                            Items-count - {order?.items_count}
+                                          </div>
+                                          <div>
+                                            order-status - {order?.order_status}
+                                          </div>
+                                          <div>
+                                            subtotal - {order?.subtotal}
+                                          </div>
+                                          <div>
+                                            Delivery Day - {order?.delivery_day}
+                                          </div>
+                                          <div>
+                                            Delivery Slot -{" "}
+                                            {order?.delivery_slot}
+                                          </div>
+                                        </div>
+                                        <button
+                                          className="mt-4 text-[#319714] hover:underline"
+                                          onClick={() =>
+                                            openOrderDetail(order.order_id)
+                                          }
+                                        >
+                                          Open Order Details
+                                        </button>
+                                      </div>
+                                    )
+                                  )}
+                                </>
+                              ) : (
+                                <>No Delivery Current orders available</>
+                              )
+                            ) : (
+                              <>Loading...</>
+                            )}
+                          </div>
+                        ) : (
+                          <div>
+                            {getorder &&
+                            getorder.past_orders &&
+                            getorder.past_orders.delivery_orders ? (
+                              getorder.past_orders.delivery_orders.length >
+                              0 ? (
+                                <>
+                                  {getorder.past_orders.delivery_orders.map(
+                                    (order) => (
+                                      <div
+                                        className="border border-gray-300 p-4 my-4 rounded-md  flex justify-between items-center"
+                                        key={order.order_id}
+                                      >
+                                        <div>
+                                          <div>
+                                            Items-count - {order?.items_count}
+                                          </div>
+                                          <div>
+                                            order-status - {order?.order_status}
+                                          </div>
+                                          <div>
+                                            subtotal - {order?.subtotal}
+                                          </div>
+                                          <div>
+                                            Delivery Day - {order?.delivery_day}
+                                          </div>
+                                          <div>
+                                            Delivery Slot -{" "}
+                                            {order?.delivery_slot}
+                                          </div>
+                                        </div>
+                                        <button
+                                          className="mt-4 text-[#319714] hover:underline"
+                                          onClick={() =>
+                                            openOrderDetail(order.order_id)
+                                          }
+                                        >
+                                          Open Order Details
+                                        </button>
+                                      </div>
+                                    )
+                                  )}
+                                </>
+                              ) : (
+                                <>No Delivery Past orders available</>
+                              )
+                            ) : (
+                              <>Loading...</>
+                            )}
+                          </div>
+                        )}
+                      </TabPane>
+                      <TabPane
+                        tab={
+                          <span
+                            className={`${
+                              activeTab === "pickup"
+                                ? "text-[#319714]"
+                                : "text-[#939291]"
+                            }`}
+                            style={customTabStyle}
+                          >
+                            Pickup
+                          </span>
+                        }
+                        key="pickup"
+                      >
+                        {orderType === "current" ? (
+                          <div>
+                            {getorder &&
+                            getorder.current_orders &&
+                            getorder.current_orders.pickup_orders ? (
+                              getorder.current_orders.pickup_orders.length >
+                              0 ? (
+                                <>
+                                  {getorder.current_orders.pickup_orders.map(
+                                    (order) => (
+                                      <div
+                                        className="border border-gray-300 p-4 my-4 rounded-md  flex justify-between items-center"
+                                        key={order.order_id}
+                                      >
+                                        <div>
+                                          <div>
+                                            Items-count - {order?.items_count}
+                                          </div>
+                                          <div>
+                                            order-status - {order?.order_status}
+                                          </div>
+                                          <div>
+                                            subtotal - {order?.subtotal}
+                                          </div>
+                                          <div>
+                                            Pickup Day - {order?.pickup_day}
+                                          </div>
+                                          <div>
+                                            Pickup Slot - {order?.pickup_slot}
+                                          </div>
+                                        </div>
+                                        <button
+                                          className="mt-4 text-[#319714] hover:underline"
+                                          onClick={() =>
+                                            openOrderDetail(order.order_id)
+                                          }
+                                        >
+                                          Open Order Details
+                                        </button>
+                                      </div>
+                                    )
+                                  )}
+                                </>
+                              ) : (
+                                <>No Pickup Current orders available</>
+                              )
+                            ) : (
+                              <>Loading...</>
+                            )}
+                          </div>
+                        ) : (
+                          <div>
+                            {getorder &&
+                            getorder.past_orders &&
+                            getorder.past_orders.pickup_orders ? (
+                              getorder.past_orders.pickup_orders.length > 0 ? (
+                                <>
+                                  {getorder.past_orders.pickup_orders.map(
+                                    (order) => (
+                                      <div
+                                        className="border border-gray-300 p-4 my-4 rounded-md  flex justify-between items-center"
+                                        key={order.order_id}
+                                      >
+                                        <div>
+                                          <div>
+                                            Items-count - {order?.items_count}
+                                          </div>
+                                          <div>
+                                            order-status - {order?.order_status}
+                                          </div>
+                                          <div>
+                                            subtotal - {order?.subtotal}
+                                          </div>
+                                          <div>
+                                            Pickup Day - {order?.pickup_day}
+                                          </div>
+                                          <div>
+                                            Pickup Slot - {order?.pickup_slot}
+                                          </div>
+                                        </div>
+                                        <button
+                                          className="mt-4 text-[#319714] hover:underline"
+                                          onClick={() =>
+                                            openOrderDetail(order.order_id)
+                                          }
+                                        >
+                                          Open Order Details
+                                        </button>
+                                      </div>
+                                    )
+                                  )}
+                                </>
+                              ) : (
+                                <>No Pickup Past orders available</>
+                              )
+                            ) : (
+                              <>Loading...</>
+                            )}
+                          </div>
+                        )}
+                      </TabPane>
+                    </Tabs>
+                  </ConfigProvider>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <OrderDetailsModal
+        orderDetailsModal={orderDetailsModal}
+        onCancel={() => openOrderDetailsModal(false)}
+        getAnOrderDetail={getAnOrderDetail}
+      />
     </>
   );
 };

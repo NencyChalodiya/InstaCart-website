@@ -7,7 +7,13 @@ import CheckoutForm from "../../pages/CheckoutPage/CheckoutForm";
 import CrossSvg from "../../assets/images/cross.svg";
 import SideArrowSvg from "../../assets/images/sideArrowSvg.svg";
 
-const CheckOutFormModal = ({ checkoutModal, onCancel, addCheckOutOrders,stripePromise,clientSecret }) => {
+const CheckOutFormModal = ({
+  checkoutModal,
+  onCancel,
+  addCheckOutOrders,
+  stripePromise,
+  clientSecret,
+}) => {
   return (
     <Modal
       title={
@@ -27,7 +33,7 @@ const CheckOutFormModal = ({ checkoutModal, onCancel, addCheckOutOrders,stripePr
       closable={false}
       footer={false}
     >
-      <div className="h-[525px]">
+      <div className="h-[575px]">
         <div className="flex-grow flex-shrink overflow-y-auto px-4 pb-4 mt-4">
           <h2 className="text-xl">Saved payment methods</h2>
           <button className="cursor-pointer relative py-4 px-2 w-full rounded-[12px]">
