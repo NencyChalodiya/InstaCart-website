@@ -182,7 +182,8 @@ const TotalCartItems = ({ totalCartItemsModal, onCancel }) => {
                 </Form>
               </div>
             </label>
-            <footer className="fixed bottom-0 left-[555px] p-2 bg-white w-[500px] ">
+
+            <div className="fixed bottom-0 right-0 p-2 bg-white w-[500px] ">
               <Link to={`/store/checkout/${storeId}`}>
                 <span className="flex justify-between items-center bg-[#2C890F] rounded-[27px] h-[54px] w-full text-white">
                   <div className="pl-40 text-lg">Go to checkout</div>
@@ -191,7 +192,7 @@ const TotalCartItems = ({ totalCartItemsModal, onCancel }) => {
                   </div>
                 </span>
               </Link>
-            </footer>
+            </div>
           </div>
         )}
       </Drawer>

@@ -29,6 +29,22 @@ const OrderDetailsModal = ({
     setActiveKey(key);
   };
   console.log("getAnOrderDetail", getAnOrderDetail);
+
+  const {
+    gift_recipitent_name,
+    recipitent_mobile,
+    recipitent_country_code,
+    gift_sender_name,
+    gift_message,
+  } = getAnOrderDetail?.orderData || {};
+
+  const hasGiftDetails =
+    gift_recipitent_name ||
+    recipitent_country_code ||
+    recipitent_mobile ||
+    gift_sender_name ||
+    gift_message;
+
   return (
     <Modal
       title={
@@ -118,7 +134,9 @@ const OrderDetailsModal = ({
                               "delivery" ? (
                                 <>
                                   <p>
-                                    Street:
+                                    <span className="font-semibold text-base">
+                                      Street:
+                                    </span>
                                     {
                                       getAnOrderDetail?.orderData?.address
                                         ?.street
@@ -306,7 +324,7 @@ const OrderDetailsModal = ({
                               <p className="mb-3 mt-4 text-lg font-semibold pl-4">
                                 Available Slots Details
                               </p>
-                              <div className="px-4">
+                              <div className="px-4 mb-3">
                                 <div className="border border-gray-200 rounded-lg px-4 py-4">
                                   <>
                                     <p>
@@ -327,57 +345,60 @@ const OrderDetailsModal = ({
                                   </>
                                 </div>
                               </div>
-                              <p className="mb-3 mt-4 text-lg font-semibold pl-4">
-                                Gift Details
-                              </p>
-                              <div className="px-4">
-                                <div className="border border-gray-200 rounded-lg px-4 py-4">
-                                  <>
-                                    <p>
-                                      Gift Recipitent Name:
-                                      {
-                                        getAnOrderDetail?.orderData
-                                          ?.gift_recipitent_name
-                                      }
-                                    </p>
-                                    <div className="my-2" />
-                                    <p>
-                                      Recipitent mobile Number:
-                                      {
-                                        getAnOrderDetail?.orderData
-                                          ?.recipitent_country_code
-                                      }
-                                      {
-                                        getAnOrderDetail?.orderData
-                                          ?.recipitent_mobile
-                                      }
-                                    </p>
-                                    <div className="my-2" />
-                                    <p>
-                                      Gift Sender Name:
-                                      {
-                                        getAnOrderDetail?.orderData
-                                          ?.gift_sender_name
-                                      }
-                                    </p>
-                                    <div className="my-2" />
-                                    <p>
-                                      Gift Message:
-                                      {
-                                        getAnOrderDetail?.orderData
-                                          ?.gift_message
-                                      }
-                                    </p>
-                                  </>
-                                </div>
-                              </div>
+
+                              {hasGiftDetails && (
+                                <>
+                                  <p className="mb-3 mt-4 text-lg font-semibold pl-4">
+                                    Gift Details
+                                  </p>
+                                  <div className="px-4">
+                                    <div className="border border-gray-200 rounded-lg px-4 py-4">
+                                      <p>
+                                        Gift Recipitent Name:
+                                        {
+                                          getAnOrderDetail?.orderData
+                                            ?.gift_recipitent_name
+                                        }
+                                      </p>
+                                      <div className="my-2" />
+                                      <p>
+                                        Recipitent mobile Number:
+                                        {
+                                          getAnOrderDetail?.orderData
+                                            ?.recipitent_country_code
+                                        }
+                                        {
+                                          getAnOrderDetail?.orderData
+                                            ?.recipitent_mobile
+                                        }
+                                      </p>
+                                      <div className="my-2" />
+                                      <p>
+                                        Gift Sender Name:
+                                        {
+                                          getAnOrderDetail?.orderData
+                                            ?.gift_sender_name
+                                        }
+                                      </p>
+                                      <div className="my-2" />
+                                      <p>
+                                        Gift Message:
+                                        {
+                                          getAnOrderDetail?.orderData
+                                            ?.gift_message
+                                        }
+                                      </p>
+                                    </div>
+                                  </div>
+                                </>
+                              )}
                             </>
                           ) : (
                             <>
                               <p className="mb-3 mt-4 text-lg font-semibold pl-4">
                                 Available Slots Details
                               </p>
-                              <div className="px-4">
+                              <div className="px-4 mb-3">
                                 <div className="border border-gray-200 rounded-lg px-4 py-4">
                                   <>
                                     <p>
