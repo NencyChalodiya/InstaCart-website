@@ -3,9 +3,9 @@ import { useParams } from "react-router-dom";
 import { brandStoresData } from "../../../BrandStoreData/brandStoreData";
 import { Link } from "react-router-dom";
 //import Carousel from "@itseasy21/react-elastic-carousel";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
+// import useMediaQuery from "@mui/material/useMediaQuery";
+// import Carousel from "react-multi-carousel";
+// import "react-multi-carousel/lib/styles.css";
 
 const BrandStores = () => {
   const { id } = useParams();
