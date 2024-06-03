@@ -11,7 +11,7 @@ const ShopListing = ({ selectedCategoryId }) => {
   useEffect(() => {
     const fetchShopsByCategory = async (categoryId) => {
       try {
-        const response = await API.getShopsByCategory(categoryId); // Pass category ID directly
+        const response = await API.getShopsByCategory(categoryId);
         setShops(response.data.storeData);
       } catch (error) {
         console.log(error);

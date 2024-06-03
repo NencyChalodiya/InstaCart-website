@@ -137,11 +137,12 @@ const YourOrders = () => {
                           <div>
                             {getorder &&
                             getorder.current_orders &&
-                            getorder.current_orders.delivery_orders ? (
-                              getorder.current_orders.delivery_orders.length >
-                              0 ? (
+                            getorder.current_orders.delivery_orders &&
+                            getorder.current_orders.delivery_orders.orders ? (
+                              getorder.current_orders.delivery_orders.orders
+                                .length > 0 ? (
                                 <>
-                                  {getorder.current_orders.delivery_orders.map(
+                                  {getorder.current_orders.delivery_orders.orders.map(
                                     (order) => (
                                       <div
                                         className="border border-gray-300 p-4 my-4 rounded-md  flex justify-between items-center"
@@ -188,11 +189,12 @@ const YourOrders = () => {
                           <div>
                             {getorder &&
                             getorder.past_orders &&
-                            getorder.past_orders.delivery_orders ? (
-                              getorder.past_orders.delivery_orders.length >
-                              0 ? (
+                            getorder.past_orders.delivery_orders &&
+                            getorder.past_orders.delivery_orders.orders ? (
+                              getorder.past_orders.delivery_orders.orders
+                                .length > 0 ? (
                                 <>
-                                  {getorder.past_orders.delivery_orders.map(
+                                  {getorder.past_orders.delivery_orders.orders.map(
                                     (order) => (
                                       <div
                                         className="border border-gray-300 p-4 my-4 rounded-md  flex justify-between items-center"
@@ -256,11 +258,12 @@ const YourOrders = () => {
                           <div>
                             {getorder &&
                             getorder.current_orders &&
-                            getorder.current_orders.pickup_orders ? (
-                              getorder.current_orders.pickup_orders.length >
-                              0 ? (
+                            getorder.current_orders.pickup_orders &&
+                            getorder.current_orders.pickup_orders.orders ? (
+                              getorder.current_orders.pickup_orders.orders
+                                .length > 0 ? (
                                 <>
-                                  {getorder.current_orders.pickup_orders.map(
+                                  {getorder.current_orders.pickup_orders.orders.map(
                                     (order) => (
                                       <div
                                         className="border border-gray-300 p-4 my-4 rounded-md  flex justify-between items-center"
@@ -306,10 +309,12 @@ const YourOrders = () => {
                           <div>
                             {getorder &&
                             getorder.past_orders &&
-                            getorder.past_orders.pickup_orders ? (
-                              getorder.past_orders.pickup_orders.length > 0 ? (
+                            getorder.past_orders.pickup_orders &&
+                            getorder.past_orders.pickup_orders.orders ? (
+                              getorder.past_orders.pickup_orders.orders.length >
+                              0 ? (
                                 <>
-                                  {getorder.past_orders.pickup_orders.map(
+                                  {getorder.past_orders.pickup_orders.orders.map(
                                     (order) => (
                                       <div
                                         className="border border-gray-300 p-4 my-4 rounded-md  flex justify-between items-center"

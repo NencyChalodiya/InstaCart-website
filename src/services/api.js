@@ -237,6 +237,18 @@ export const getOrderDetails = (orderId) => {
   );
 };
 
+export const googleAuth = () => {
+  return Ajax.Request(`/auth/google`, Ajax.GET, true);
+};
+
+export const getListCoverImages = () => {
+  return Ajax.Request(`/store/lists/cover-images`, Ajax.GET, true);
+};
+
+export const createList = (payload) => {
+  return Ajax.Request(`/store/lists/createlist`, Ajax.POST, true, payload);
+};
+
 let API = {
   SendOtpToRegister,
   VerifyOtpToRegister,
@@ -275,6 +287,9 @@ let API = {
   addOrder,
   getOrder,
   getOrderDetails,
+  getListCoverImages,
+  createList,
+  googleAuth,
 };
 
 export default API;

@@ -9,18 +9,10 @@ const Home = () => {
   return (
     <>
       <Header />
-
-      {/* <div className="bg-white">
-        <div className="px-16 max-w-7xl">
-          <BrandStores />
-        </div>
-      </div> */}
-
       <BrandStores />
       <Offers />
       <StoreToHelpYouSave />
       <StoreFooter />
-     
     </>
   );
 };

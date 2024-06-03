@@ -5,6 +5,7 @@ import EmailSvg from "../../assets/images/emailIcon.svg";
 import PhoneSvg from "../../assets/images/phoneIcon.svg";
 import Loader from "react-js-loader";
 import "../../pages/Loading.css";
+import API from "../../services/api";
 const ScreenOne = ({
   setIsEmailLogin,
   isEmailLogin,
@@ -22,8 +23,14 @@ const ScreenOne = ({
   phoneError,
   loginUser,
 }) => {
+  const getGoothAuth = async () => {
+    try {
+      let response = await API.googleAuth();
+      console.log(response);
+    } catch (error) {}
+  };
   const handleGoogleAuth = () => {
-    window.location.href = "https://instacart-xqwi.onrender.com/auth/google";
+    getGoothAuth();
   };
 
   return (

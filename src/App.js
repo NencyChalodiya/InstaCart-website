@@ -38,24 +38,7 @@ function App() {
       }
     }
   }, [accessToken]);
-  // console.log(accessToken);
-
-  // const location = useLocation();
-  // //console.log(location);
-  // const userData = JSON.parse(localStorage.getItem("userData"));
-  // //console.log(userData);
-  //const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   if (!location.pathname.includes("/change-password")) {
-  //     if (!userData || !userData?.id) {
-  //       navigate("/"); // Redirect to login if userData is not present
-  //     } else {
-  //       navigate("/store");
-  //     }
-  //   }
-  // }, []);
-
+  console.log("AccessToken set:", localStorage.getItem("accessToken"));
   return (
     <>
       <Routes>

@@ -15,7 +15,10 @@ const YourLists = () => {
                   Your lists
                 </div>
                 <div className="px-16 pt-12 pb-1 max-md:px-5">
-                  <button className="ml-2  cursor-pointer relative rounded-[27px] w-[186px] h-14 px-4 pt-[14px] pb-4 bg-[#343538] text-xl text-white max-md:w-[150px]  ">
+                  <button
+                    className="ml-2  cursor-pointer relative rounded-[27px] w-[186px] h-14 px-4 pt-[14px] pb-4 bg-[#343538] text-xl text-white max-md:w-[150px] hover:bg-gray-700"
+                    onClick={() => setOpenList(true)}
+                  >
                     <span className="">Create new</span>
                   </button>
                 </div>
