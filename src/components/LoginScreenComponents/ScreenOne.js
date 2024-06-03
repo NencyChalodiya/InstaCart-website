@@ -22,13 +22,20 @@ const ScreenOne = ({
   phoneError,
   loginUser,
 }) => {
+  const handleGoogleAuth = () => {
+    window.location.href = "https://instacart-xqwi.onrender.com/auth/google";
+  };
+
   return (
     <>
       <div className="h-[525px]">
         <div className="min-h-[525px] static ">
           <div className="w-full h-48 ">
             <div className="w-full h-52">
-              <div className="flex items-center w-full mt-3 mb-4 border rounded-full cursor-pointer h-11 gap-11">
+              <div
+                className="flex items-center w-full mt-3 mb-4 border rounded-full cursor-pointer h-11 gap-11"
+                onClick={handleGoogleAuth}
+              >
                 <div>
                   <img
                     className="h-6 ml-2 rounded-full w-25"
