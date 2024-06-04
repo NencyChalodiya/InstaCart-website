@@ -107,7 +107,6 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
           password: loginUserDetails.password,
         };
         const response = await API.LoginUser(payload);
-        // console.log(response);
         if (response.status === "success") {
           localStorage.setItem(
             "accessToken",

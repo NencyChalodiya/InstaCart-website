@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import Navbar from "../../components/LandingPageComponents/Navbar";
 import CreateListModal from "./CreateListModal";
+
+import SideArrowSvg from "../../assets/images/sideArrowSvg.svg";
+
 const YourLists = () => {
   const [openList, setOpenList] = useState(false);
   return (
@@ -23,21 +26,6 @@ const YourLists = () => {
                   </button>
                 </div>
               </div>
-              {/* <div>
-                <div className="flex pb-7">
-                  <span className="px-16 ">
-                    <button className="  box-border border-[2px] min-w-[58px] h-8 rounded-[18px] m-1 relative px-4 bg-[#E8E9EB]">
-                      All
-                    </button>
-                  </span>
-                  <span className="pr-16">
-                    <button className="box-border border-[2px] min-w-[58px] h-8 rounded-[18px] m-1 relative px-4 bg-[#E8E9EB] font-normal">
-                      Created by me
-                    </button>
-                  </span>
-                </div>
-              </div> */}
-
               <div>
                 <div className="flex px-16 max-md:flex-col max-md:px-5">
                   <span className="">
@@ -70,6 +58,40 @@ const YourLists = () => {
                   <a href="#" onClick={() => setOpenList(true)}>
                     Create a list
                   </a>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2">
+                <div className="py-2 pr-4">
+                  <div className="p-4 box-border  rounded-[12px] min-h-[391px] min-w-[343px] relative shadow-xl bg-white">
+                    <div>
+                      <a href="#">
+                        <div className="flex justify-between">
+                          <div className="flex justify-start flex-grow ">
+                            <img
+                              src="https://s3.amazonaws.com/instacart-media/7NEMb9vWSGiyRN5VyytK_user_placeholder_circle.png"
+                              alt="logo"
+                              className="mr-2 h-[45px] w-[45px] border rounded-[50%]"
+                            />
+                            <div className="flex flex-col justify-around flex-grow">
+                              <h2 className="pb-1">Costco</h2>
+                              <h3>Nency Chalodiya</h3>
+                            </div>
+                          </div>
+                          <div className="flex justify-between">
+                            <div className="flex justify-end items-center">
+                              <span className="mr-2">Show item</span>
+                              <img src={SideArrowSvg} alt="side-arrow-svg" />
+                            </div>
+                          </div>
+                        </div>
+                      </a>
+                      <div className="my-4"></div>
+                      <div className="flex">
+                        <div className="relative h-full "></div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

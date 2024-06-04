@@ -30,7 +30,7 @@ const Header = () => {
   const fetchCategoryFilter = async () => {
     try {
       const response = await API.getCategoryFilter();
-      console.log(response);
+      //console.log(response);
       setCategoryList(response.data.categoryList);
     } catch (error) {
       console.log(error);

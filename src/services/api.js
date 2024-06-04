@@ -1,19 +1,5 @@
 import Ajax from "./base";
 
-// export const GetCaloriesAdherence = (payload) => {
-//   // return Ajax.Request(`/patient_hc/calories_adherence`, Ajax.POST, true, payload);
-//   return Ajax.Request(
-//     `/diet/calories_adherence_patient`,
-//     Ajax.POST,
-//     true,
-//     payload
-//   );
-// };
-
-// export const RegisterUser = (payload) => {
-//   return Ajax.Request(`/register/`, Ajax.POST, false, payload);
-// };
-
 export const SendOtpToRegister = (payload) => {
   return Ajax.Request(`/register`, Ajax.POST, false, payload);
 };
@@ -29,10 +15,6 @@ export const LoginUser = (payload) => {
 export const VerifyOtpToLogin = (payload) => {
   return Ajax.Request(`/login/verify`, Ajax.POST, false, payload);
 };
-
-// export const LoginUser = (payload) => {
-//   return Ajax.Request(`/login/`, Ajax.POST, false, payload);
-// };
 
 export const refreshToken = (payload) => {
   return Ajax.Request("/refreshAccessToken", Ajax.POST, true, payload);
@@ -89,14 +71,6 @@ export const verifyChangedPhoneNumber = (payload) => {
   );
 };
 
-// export const CreateNewPassword = (payload) => {
-//   return Ajax.Request("/change_password/", Ajax.POST, true, payload);
-// };
-
-// export const ShopListCategory = () => {
-//   return Ajax.Request(`/shop/list-category/`, Ajax.GET, true);
-// };
-
 export const getCategoryFilter = () => {
   return Ajax.Request(`/store/categorylist`, Ajax.GET, true);
 };
@@ -104,10 +78,6 @@ export const getCategoryFilter = () => {
 export const getShopsByCategory = (id) => {
   return Ajax.Request(`/store/category?main_category_id=${id}`, Ajax.GET, true);
 };
-
-// export const getProductsBasedShops = (id) => {
-//   return Ajax.Request(`/product/ListProduct/?id=${id}`, Ajax.GET, true);
-// };
 
 export const getStoreFrontDetails = (storeId) => {
   return Ajax.Request(`/store/${storeId}/front`, Ajax.GET, true);
@@ -144,9 +114,6 @@ export const addToSavedProducts = (payload) => {
 export const delSavedProducts = (productId) => {
   return Ajax.Request(`/products/saved/remove/${productId}`, Ajax.DELETE, true);
 };
-// export const getProductsOfSubCategory = (id) => {
-//   return Ajax.Request(`/product/subcategory/${id}/`, Ajax.GET, true);
-// };
 
 export const Search = (filter) => {
   return Ajax.Request(
@@ -249,6 +216,18 @@ export const createList = (payload) => {
   return Ajax.Request(`/store/lists/createlist`, Ajax.POST, true, payload);
 };
 
+export const getListDetails = (storeId) => {
+  return Ajax.Request(
+    `/store/lists/list-details?storeId=${storeId}`,
+    Ajax.GET,
+    true
+  );
+};
+
+export const addProductListItems = (payload) => {
+  return Ajax.Request(`/store/lists/add-list-items`, Ajax.POST, true, payload);
+};
+
 let API = {
   SendOtpToRegister,
   VerifyOtpToRegister,
@@ -290,6 +269,8 @@ let API = {
   getListCoverImages,
   createList,
   googleAuth,
+  getListDetails,
+  addProductListItems,
 };
 
 export default API;

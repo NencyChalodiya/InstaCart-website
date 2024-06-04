@@ -26,8 +26,12 @@ const ScreenOne = ({
   const getGoothAuth = async () => {
     try {
       let response = await API.googleAuth();
-      console.log(response);
-    } catch (error) {}
+      if (response.status === 200) {
+        console.log("Redirecting to Google Auth...");
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
   };
   const handleGoogleAuth = () => {
     getGoothAuth();
@@ -41,7 +45,7 @@ const ScreenOne = ({
             <div className="w-full h-52">
               <div
                 className="flex items-center w-full mt-3 mb-4 border rounded-full cursor-pointer h-11 gap-11"
-                onClick={handleGoogleAuth}
+                onClick={() => handleGoogleAuth()}
               >
                 <div>
                   <img

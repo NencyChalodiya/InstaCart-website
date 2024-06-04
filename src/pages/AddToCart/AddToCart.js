@@ -1,21 +1,34 @@
 import React, { useRef, useState, useEffect } from "react";
+import API from "../../services/api";
+import { offersCategory } from "../../data/offers";
+
 import { Modal } from "antd";
 import { IoArrowBackOutline } from "react-icons/io5";
-import { offersCategory } from "../../data/offers";
-import API from "../../services/api";
+
+import UpsideArrowSvg from "../../assets/images/upsideArrow.svg";
+import DownSideArrowSvg from "../../assets/images/downSideArrow.svg";
+import BoldedDownArrow from "../../assets/images/boldedDownSideArrow.svg";
+import ListIconSvg from "../../assets/images/listIcon.svg";
+import TickSvg from "../../assets/images/tick.svg";
+import AddproductToListModal from "../StoreSidebarPages/AddproductToListModal";
 
 const AddToCart = ({
   addToCartModal,
   onBackClick,
   itemsAdd,
   productDetail,
+  storeId,
 }) => {
   const [mainImage, setMainImage] = useState(null);
   const [selectedValue, setSelectedValue] = useState("1");
   const [isSaved, setIsSaved] = useState(false);
+  const [addProductListModal, openAddProductListModal] = useState(false);
+  const [listDetails, setListDetails] = useState([]);
+
   const detailRef = useRef(null);
   const IngredientRef = useRef(null);
   const directionRef = useRef(null);
+
   const scrollToDetail = () => {
     if (detailRef.current) {
       detailRef.current.scrollIntoView({ behavior: "smooth" });
@@ -34,7 +47,6 @@ const AddToCart = ({
         productId: productDetail.product_id,
       };
       const response = await API.addToSavedProducts(payload);
-      //console.log(response);
       if (response.status === "success") {
         setIsSaved(true);
       }
@@ -46,7 +58,6 @@ const AddToCart = ({
   const deleteSavedProduct = async (productId) => {
     try {
       const response = await API.delSavedProducts(productId);
-      //console.log(response);
       if (response.status === "success") {
         setIsSaved(false);
       }
@@ -55,13 +66,21 @@ const AddToCart = ({
     }
   };
 
-  const handleClick = () => {
-    if (isSaved) {
-      deleteSavedProduct(productDetail.product_id);
-    } else {
-      saveProducts();
+  const fetchListDetails = async () => {
+    try {
+      const response = await API.getListDetails(storeId);
+      //console.log(response);
+      if (response.status === "success") {
+        setListDetails(response.data);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
+
+  useEffect(() => {
+    fetchListDetails();
+  }, []);
 
   useEffect(() => {
     if (
@@ -72,32 +91,29 @@ const AddToCart = ({
     }
   }, [productDetail]);
 
+  const handleClick = () => {
+    if (isSaved) {
+      deleteSavedProduct(productDetail.product_id);
+    } else {
+      saveProducts();
+    }
+  };
+
   const handleImageClick = (imageSrc) => {
     setMainImage(imageSrc);
   };
 
   const handleButtonClick = (e) => {
-    // Prevent the default dropdown action
     e.preventDefault();
-    // Trigger the select dropdown click
     document.getElementById("dropdown").click();
   };
 
   const handleSelectChange = (e) => {
     setSelectedValue(e.target.value);
   };
-  // console.log("Productdetail", productDetail);
+
   return (
     <Modal
-      // title={
-      //   <div className="flex items-center px-4 pb-8 ">
-      //     <IoArrowBackOutline
-      //       className="w-5 h-5 mr-2 cursor-pointer"
-      //       onClick={onBackClick}
-      //     />
-      //     <span className="text-base">Back</span>
-      //   </div>
-      // }
       centered
       open={addToCartModal}
       closable={false}
@@ -122,44 +138,20 @@ const AddToCart = ({
                       <div className="mb-6 max-lg:hidden">
                         <button className="w-[30px] h-[30px] rounded-[24px] border-[2px] flex items-center justify-center ">
                           <span className="block">
-                            <svg
-                              width="1em"
-                              height="1em"
-                              viewBox="0 0 24 24"
-                              fill="#343538"
-                              xmlns="http://www.w3.org/2000/svg"
-                              aria-hidden="true"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                clipRule="evenodd"
-                                d="m12 11.48 4.208 4.208 1.584-1.584L12 8.312l-5.792 5.792 1.584 1.584z"
-                              ></path>
-                            </svg>
+                            <img src={UpsideArrowSvg} alt="upsideArrow-svg" />
                           </span>
                         </button>
                       </div>
                       <div>
                         <ul className="flex flex-col  justify-center w-full h-full max-lg:flex-row">
-                          {/* Your list of images */}
                           <li className="lg:hidden">
                             <div className="mb-6">
                               <button className="w-[30px] h-[30px] rounded-[24px] border-[2px] flex items-center justify-center ">
                                 <span className="block">
-                                  <svg
-                                    width="1em"
-                                    height="1em"
-                                    viewBox="0 0 24 24"
-                                    fill="#343538"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    aria-hidden="true"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      clipRule="evenodd"
-                                      d="m12 11.48 4.208 4.208 1.584-1.584L12 8.312l-5.792 5.792 1.584 1.584z"
-                                    ></path>
-                                  </svg>
+                                  <img
+                                    src={DownSideArrowSvg}
+                                    alt="downSideArrow-svg"
+                                  />
                                 </span>
                               </button>
                             </div>
@@ -196,20 +188,10 @@ const AddToCart = ({
                             <div className="mt-6 lg:hidden">
                               <button className="w-[30px] h-[30px] rounded-[24px] border-[2px] flex items-center justify-center">
                                 <span className="block">
-                                  <svg
-                                    width="1em"
-                                    height="1em"
-                                    viewBox="0 0 24 24"
-                                    fill="#343538"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    aria-hidden="true"
-                                  >
-                                    <path
-                                      fillRule="evenodd"
-                                      clipRule="evenodd"
-                                      d="M12 12.52 7.792 8.314 6.208 9.896 12 15.688l5.792-5.792-1.584-1.584z"
-                                    ></path>
-                                  </svg>
+                                  <img
+                                    src={UpsideArrowSvg}
+                                    alt="upsideArrow-svg"
+                                  />
                                 </span>
                               </button>
                             </div>
@@ -218,20 +200,10 @@ const AddToCart = ({
                         <div className="mt-6 max-lg:hidden">
                           <button className="w-[30px] h-[30px] rounded-[24px] border-[2px] flex items-center justify-center">
                             <span className="block">
-                              <svg
-                                width="1em"
-                                height="1em"
-                                viewBox="0 0 24 24"
-                                fill="#343538"
-                                xmlns="http://www.w3.org/2000/svg"
-                                aria-hidden="true"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  clipRule="evenodd"
-                                  d="M12 12.52 7.792 8.314 6.208 9.896 12 15.688l5.792-5.792-1.584-1.584z"
-                                ></path>
-                              </svg>
+                              <img
+                                src={DownSideArrowSvg}
+                                alt="downSideArrow-svg"
+                              />
                             </span>
                           </button>
                         </div>
@@ -292,22 +264,10 @@ const AddToCart = ({
                                 <div className="text-base leading-4">
                                   Details
                                 </div>
-                                <svg
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 24 24"
-                                  fill="#242529"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  color="systemGrayscale80"
-                                  size="16"
-                                  aria-hidden="true"
-                                >
-                                  <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
-                                    d="M12 12.52 7.792 8.314 6.208 9.896 12 15.688l5.792-5.792-1.584-1.584z"
-                                  ></path>
-                                </svg>
+                                <img
+                                  src={DownSideArrowSvg}
+                                  alt="downSideArrow-svg"
+                                />
                               </div>
                             </div>
                           </div>
@@ -320,22 +280,10 @@ const AddToCart = ({
                                 <div className="text-base leading-4">
                                   Ingredients
                                 </div>
-                                <svg
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 24 24"
-                                  fill="#242529"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  color="systemGrayscale80"
-                                  size="16"
-                                  aria-hidden="true"
-                                >
-                                  <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
-                                    d="M12 12.52 7.792 8.314 6.208 9.896 12 15.688l5.792-5.792-1.584-1.584z"
-                                  ></path>
-                                </svg>
+                                <img
+                                  src={DownSideArrowSvg}
+                                  alt="downSideArrow-svg"
+                                />
                               </div>
                             </div>
                           </div>
@@ -348,22 +296,10 @@ const AddToCart = ({
                                 <div className="text-base leading-4">
                                   Directions
                                 </div>
-                                <svg
-                                  width="16"
-                                  height="16"
-                                  viewBox="0 0 24 24"
-                                  fill="#242529"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  color="systemGrayscale80"
-                                  size="16"
-                                  aria-hidden="true"
-                                >
-                                  <path
-                                    fill-rule="evenodd"
-                                    clip-rule="evenodd"
-                                    d="M12 12.52 7.792 8.314 6.208 9.896 12 15.688l5.792-5.792-1.584-1.584z"
-                                  ></path>
-                                </svg>
+                                <img
+                                  src={DownSideArrowSvg}
+                                  alt="downSideArrow-svg"
+                                />
                               </div>
                             </div>
                           </div>
@@ -438,18 +374,10 @@ const AddToCart = ({
                                     <option value="8">8</option>
                                     <option value="9">9</option>
                                   </select>
-                                  <svg
-                                    width="24"
-                                    height="24"
-                                    viewBox="0 0 24 24"
-                                    fill="#343538"
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    size="24"
-                                    color="systemGrayscale70"
-                                    aria-hidden="true"
-                                  >
-                                    <path d="M6 8h12l-6 8z"></path>
-                                  </svg>
+                                  <img
+                                    src={BoldedDownArrow}
+                                    alt="bolded-arrow"
+                                  />
                                 </div>
                               </span>
                             </button>
@@ -504,21 +432,16 @@ const AddToCart = ({
 
                             <div className="mx-3 my-2">
                               <div>
-                                <button className="relative m-auto leading-5 text-black bg-white cursor-pointer">
+                                <button
+                                  className="relative m-auto leading-5 text-black bg-white cursor-pointer"
+                                  onClick={() => openAddProductListModal(true)}
+                                >
                                   <span className="block overflow-hidden text-ellipsis">
                                     <div className="flex items-center">
-                                      <svg
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="#242529"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        size="24"
-                                        color="systemGrayscale80"
-                                        aria-hidden="true"
-                                      >
-                                        <path d="M10 6h10v2H10zM7 11H4v2h3zM20 11H10v2h10zM10 16h10v2H10zM7 16H4v2h3zM7 6H4v2h3z"></path>
-                                      </svg>
+                                      <img
+                                        src={ListIconSvg}
+                                        alt="listIcon-svg"
+                                      />
                                       <span className="ml-1">Add to list</span>
                                     </div>
                                   </span>
@@ -532,22 +455,7 @@ const AddToCart = ({
 
                         <div className="mb-2">
                           <div className="flex items-center justify-center">
-                            <svg
-                              width="16"
-                              height="16"
-                              viewBox="0 0 24 24"
-                              fill="#2B78C6"
-                              xmlns="http://www.w3.org/2000/svg"
-                              color="brandHighlightRegular"
-                              size="16"
-                              aria-hidden="true"
-                            >
-                              <path
-                                fill-rule="evenodd"
-                                clip-rule="evenodd"
-                                d="M14.534 4.201 12 2 9.466 4.201 6.122 3.91l-.756 3.27-2.877 1.73L3.8 12l-1.31 3.09 2.877 1.73.756 3.27 3.344-.291L12 22l2.534-2.201 3.344.291.756-3.27 2.876-1.73L20.2 12l1.31-3.09-2.876-1.73-.756-3.27zM11.1 15.604l5.847-5.858-1.416-1.412-4.474 4.482-2.373-2.234-1.37 1.456z"
-                              ></path>
-                            </svg>
+                            <img src={TickSvg} alt="tick-svg" />
                             <a
                               href="/"
                               className="mx-1 leading-4 text-sm underline text-[#343538] font-semibold "
@@ -632,79 +540,6 @@ const AddToCart = ({
             </div>
           </div>
 
-          <div class="w-full py-2  ">
-            <div class="w-full px-4 mb-6">
-              <div class="flex items-center justify-between mt-4 mb-8">
-                <div>
-                  <h2 class="flex mr-2">
-                    <div class="text-3xl font-bold leading-5">Related</div>
-                  </h2>
-                </div>
-              </div>
-
-              <div>
-                <div>
-                  <div className="relative flex flex-row">
-                    <div className="w-full">
-                      <ul className="grid justify-between w-full h-full grid-cols-4 gap-4 mt-2 isolate">
-                        <li>
-                          <div className="relative">
-                            <div className="absolute top-[10px] right-6 ">
-                              <svg
-                                width="24"
-                                height="24"
-                                viewBox="0 0 24 24"
-                                fill="#72767E"
-                                xmlns="http://www.w3.org/2000/svg"
-                                tabindex="0"
-                                size="24"
-                                aria-label="save recipe"
-                                data-testid="save-recipe-button"
-                                role="button"
-                                color="systemGrayscale50"
-                                class="e-e0dnmk"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
-                                  d="M5.163 3.319C5 3.639 5 4.059 5 4.9v13.717c0 1.285 0 1.928.27 2.316a1.5 1.5 0 0 0 1.01.624c.468.069 1.043-.219 2.193-.794l2.811-1.405c.263-.131.394-.197.532-.223a1 1 0 0 1 .368 0c.138.026.27.092.532.223l2.81 1.405c1.15.575 1.726.863 2.193.794a1.5 1.5 0 0 0 1.01-.624c.271-.387.271-1.03.271-2.316V4.9c0-.84 0-1.26-.163-1.581a1.5 1.5 0 0 0-.656-.656c-.32-.163-.74-.163-1.581-.163H7.4c-.84 0-1.26 0-1.581.163a1.5 1.5 0 0 0-.656.656"
-                                  fill="#343538"
-                                  fill-opacity="0.8"
-                                ></path>
-                                <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
-                                  d="M7 4.5v14.117c0 .254 0 .465.002.644q.238-.117.577-.287l2.811-1.405.051-.026c.187-.095.573-.292 1.006-.373a3 3 0 0 1 1.106 0c.433.08.82.278 1.006.373l.051.026 2.811 1.406.577.286c.002-.179.002-.39.002-.644V4.5H7M5.164 3.32C5 3.639 5 4.059 5 4.9v13.717c0 1.285 0 1.928.27 2.316a1.5 1.5 0 0 0 1.01.624c.468.069 1.043-.219 2.193-.794l2.811-1.405c.263-.131.394-.197.532-.223a1 1 0 0 1 .368 0c.138.026.27.092.532.223l2.81 1.405c1.15.575 1.726.863 2.193.794a1.5 1.5 0 0 0 1.01-.624c.271-.387.271-1.03.271-2.316V4.9c0-.84 0-1.26-.163-1.581a1.5 1.5 0 0 0-.656-.656c-.32-.163-.74-.163-1.581-.163H7.4c-.84 0-1.26 0-1.581.163a1.5 1.5 0 0 0-.656.656"
-                                  fill="#fff"
-                                ></path>
-                              </svg>
-                            </div>
-                            <a className="relative block" href="/">
-                              <div className="min-h-[246px]">
-                                <div>
-                                  <div className="mb-1">
-                                    <div
-                                      className="relative"
-                                      //style={{ paddingTop: "calc(100%)" }}
-                                    >
-                                      <div className="flex items-center justify-center w-full h-full ">
-                                        <img src="https://www.instacart.com/image-server/240x240/d3s8tbcesxr4jm.cloudfront.net/recipe-images/v3/soothing-hot-toddy/2_medium.jpg" />
-                                      </div>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            </a>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
           <hr />
 
           <div className="flex flex-wrap gap-4 px-4 border-b">
@@ -750,6 +585,12 @@ const AddToCart = ({
           </div>
         </div>
       </div>
+      <AddproductToListModal
+        addProductListModal={addProductListModal}
+        onCancel={() => openAddProductListModal(false)}
+        listDetails={listDetails}
+        productDetail={productDetail}
+      />
     </Modal>
   );
 };

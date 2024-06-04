@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Modal, message } from "antd";
 import API from "../../../../services/api";
+
+import { Modal, message } from "antd";
+import CrossSvg from "../../../../assets/images/cross.svg";
+
 const EditName = ({
   editName,
   onCancel,
@@ -72,17 +75,7 @@ const EditName = ({
               onClick={onCancel}
             >
               <span className="block leading-none">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="#343538"
-                  xmlns="http://www.w3.org/2000/svg"
-                  size="24"
-                  aria-hidden="true"
-                >
-                  <path d="M12 10.415 6.292 4.707 4.708 6.291l5.708 5.708-5.708 5.708 1.584 1.584L12 13.583l5.708 5.708 1.584-1.584-5.708-5.708 5.708-5.708-1.584-1.584z"></path>
-                </svg>
+                <img src={CrossSvg} alt="cross-svg" />
               </span>
             </button>
           </div>

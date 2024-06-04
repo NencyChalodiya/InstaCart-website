@@ -1,7 +1,6 @@
 import API from "../services/api";
 
 export const BASE_API = `${process.env.REACT_APP_API_URL}`;
-// export const BASE_API = `http://192.168.1.5:8080/api/v8`;
 
 const POST = "post";
 const GET = "get";
@@ -10,7 +9,6 @@ const PATCH = "patch";
 const DELETE = "delete";
 
 const INVALID_TOKEN = "invalid or expired jwt";
-// const HEALTH_SECRET = "SfUyfAztruqg92sbm30rEIyHLNV7f5";
 
 const jsonToUrlParams = (json) => {
   return Object.keys(json)
@@ -35,50 +33,83 @@ const getToken = () => {
   return "";
 };
 
-let isRefreshing = false;
-let refreshQueue = [];
+// let isRefreshing = false;
+// let refreshQueue = [];
 
-const refreshToken = async () => {
-  // Check if already refreshing
-  if (isRefreshing) {
-    // Queue the request
-    return new Promise((resolve, reject) => {
-      refreshQueue.push({ resolve, reject });
-    });
-  }
+// const refreshToken = async () => {
+//   // Check if already refreshing
+//   if (isRefreshing) {
+//     // Queue the request
+//     return new Promise((resolve, reject) => {
+//       refreshQueue.push({ resolve, reject });
+//     });
+//   }
 
-  isRefreshing = true;
+//   isRefreshing = true;
 
-  try {
-    const refreshToken = localStorage.getItem("refreshToken");
-    if (!refreshToken) {
-      throw new Error("No refresh token available.");
-    }
-    const payload = {
-      refreshToken: refreshToken,
-    };
+//   try {
+//     const refreshToken = localStorage.getItem("refreshToken");
+//     if (!refreshToken) {
+//       // throw new Error("No refresh token available.");
+//     }
+//     const payload = {
+//       refreshToken: refreshToken,
+//     };
 
-    const response = await API.refreshToken(payload);
-    localStorage.setItem("accessToken", response?.data?.accessToken);
+//     const response = await API.refreshToken(payload);
+//     localStorage.setItem("accessToken", response?.data?.accessToken);
 
-    // Process queued requests
-    refreshQueue.forEach((req) => req.resolve(response));
+//     // Process queued requests
+//     refreshQueue.forEach((req) => req.resolve(response));
 
-    refreshQueue = [];
-    isRefreshing = false;
+//     refreshQueue = [];
+//     isRefreshing = false;
 
-    return response;
-  } catch (error) {
-    console.error("Error refreshing token:", error);
-    isRefreshing = false;
+//     return response;
+//   } catch (error) {
+//     console.error("Error refreshing token:", error);
+//     isRefreshing = false;
 
-    // Reject queued requests
-    refreshQueue.forEach((req) => req.reject(error));
+//     // Reject queued requests
+//     refreshQueue.forEach((req) => req.reject(error));
 
-    refreshQueue = [];
-    throw error;
-  }
-};
+//     refreshQueue = [];
+//     throw error;
+//   }
+// };
+// const refreshToken = async () => {
+//   const refreshtoken = localStorage.getItem("refreshtoken");
+//   if (!refreshtoken) {
+//     // throw new Error("No refresh token available.");
+//   }
+//   const payload = {
+//     refreshToken: refreshtoken,
+//   };
+//   let config = {
+//     method: POST,
+//     body: JSON.stringify(payload),
+//     headers: {
+//       "content-type": "application/json",
+//     },
+//   };
+//   const response = await fetch(`${BASE_API}/refreshAccessToken`, config);
+//   //console.log(response);
+//   if (!response.ok) {
+//     // throw new Error("Failed to refresh token.");
+//   }
+//   const data = await response.json();
+//   if (
+//     data.statusCode === 401 ||
+//     data.statusCode === INVALID_TOKEN ||
+//     data.status === INVALID_TOKEN
+//   ) {
+//     localStorage.removeItem("accessToken");
+//     localStorage.removeItem("refreshToken");
+//     window.location.href("/");
+//   } else {
+//     localStorage.setItem("accessToken", response?.data?.accessToken);
+//   }
+// };
 
 const handleResponse = async (response) => {
   //console.log(response);
@@ -142,6 +173,7 @@ const Request = async (
   return fetch(`${api_temp}${route}`, config)
     .then(async (res) => {
       const data = await handleResponse(res);
+      // console.log("data", data);
       return data;
     })
     .catch((err) => {
@@ -156,7 +188,7 @@ const handleTokenError = async (err) => {
     err?.statusText == INVALID_TOKEN
   ) {
     console.log(err);
-    await refreshToken();
+    // await refreshToken();
   }
   return err;
 };

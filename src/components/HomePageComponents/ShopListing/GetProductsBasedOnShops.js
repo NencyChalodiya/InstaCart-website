@@ -455,6 +455,7 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
         addToCartModal={addToCartModal}
         onBackClick={() => setaddToCartModal(false)}
         productDetail={productDetail}
+        storeId={storeId}
       />
       <DeliveryTimesModal
         deliveryTimeModal={deliveryTimeModal}

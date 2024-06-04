@@ -4,7 +4,9 @@ import API from "../../services/api";
 import { Modal } from "antd";
 import CrossSvg from "../../assets/images/cross.svg";
 import SideArrowSvg from "../../assets/images/sideArrowSvg.svg";
+import SearchSvg from "../../assets/images/search.svg";
 import { IoArrowBackOutline } from "react-icons/io5";
+import { Link } from "react-router-dom";
 
 const CreateListModal = ({ openList, onCancel }) => {
   const [getCoverImage, setCoverImage] = useState([]);
@@ -51,7 +53,10 @@ const CreateListModal = ({ openList, onCancel }) => {
         cover_photo_id: selectedCoverImage,
       };
       const response = await API.createList(payload);
-      console.log(response);
+      //console.log(response);
+      if (response.status === "success") {
+        setScreen(3);
+      }
     } catch (error) {
       console.log(error);
     }
@@ -98,6 +103,17 @@ const CreateListModal = ({ openList, onCancel }) => {
                 onClick={handleBack}
               />
               <span className="mb-2 text-3xl font-bold">Choose store</span>
+            </div>
+          )}
+
+          {screen === 3 && (
+            <div className="border-b mb-2">
+              <button className="cursor-pointer" onClick={onCancel}>
+                <img src={CrossSvg} alt="crossIconImg" />
+              </button>
+              <div>
+                <h2 className="text-xl ">Add items to List</h2>
+              </div>
             </div>
           )}
         </div>
@@ -220,7 +236,7 @@ const CreateListModal = ({ openList, onCancel }) => {
                 </div>
               </ul>
 
-              <div>
+              <div className="absolute bottom-0 bg-white z-10 left-0 right-0 my-3 border-t pt-3">
                 <button
                   type="submit"
                   className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-full "
@@ -262,6 +278,63 @@ const CreateListModal = ({ openList, onCancel }) => {
                 </button>
               </div>
             ))}
+          </>
+        )}
+
+        {screen === 3 && (
+          <>
+            <div className="pb-[50px] bg-white">
+              <div className=" w-full">
+                <button className="cursor-pointer flex relative w-full h-[40px] rounded-[8px] items-center bg-[#F6F7F8] mt-2">
+                  <span className="ml-3">Search CVS...</span>
+                  <span className="flex ml-auto mr-3">
+                    <img src={SearchSvg} alt="searchSvg" />
+                  </span>
+                </button>
+                <div className="flex mt-3 ">
+                  <span className="relative">
+                    <button className="box-border border min-w-[58px] h-[32px] rounded-[18px] px-4 relative m-1 cursor-pointer">
+                      Current List
+                    </button>
+                  </span>
+                  <span className="relative">
+                    <button className="box-border border min-w-[58px] h-[32px] rounded-[18px] px-4 relative m-1 cursor-pointer">
+                      Buy it again
+                    </button>
+                  </span>
+                </div>
+                <div className="text-center py-12 ">
+                  <img
+                    src="https://www.instacart.com/assets/recipes/no_items_bia-215c7c6ec26a6a0af4f87134b677bf6505850b1340cfbf39bd9e603968fbb6cb.png"
+                    alt="logo-image"
+                    className="block mx-auto mb-3 max-w-[235px] max-h-[132px] w-full h-full "
+                  />
+                  <h1>Reordering will be easy</h1>
+                  <p>
+                    Items you order will show up here so you can buy them again
+                    easily
+                  </p>
+                  <Link
+                    to={`/store/${selectedStore.store_id}/front`}
+                    className="iniline-block mt-6 text-[#2C890F] hover:text-[#2C890F]"
+                  >
+                    Browse categories
+                  </Link>
+                </div>
+              </div>
+            </div>
+            <div className="absolute bottom-0 bg-white z-10 left-0 right-0 my-3 border-t pt-3">
+              <button
+                type="submit"
+                className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-full "
+              >
+                <div className="flex items-center justify-center">
+                  <span className="block text-xl font-semibold leading-5 text-white">
+                    Done Editing list
+                  </span>
+                </div>
+              </button>
+            </div>
           </>
         )}
       </div>
