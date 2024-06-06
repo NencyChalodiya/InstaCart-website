@@ -204,10 +204,6 @@ export const getOrderDetails = (orderId) => {
   );
 };
 
-export const googleAuth = () => {
-  return Ajax.Request(`/auth/google`, Ajax.GET, true);
-};
-
 export const getListCoverImages = () => {
   return Ajax.Request(`/store/lists/cover-images`, Ajax.GET, true);
 };
@@ -217,11 +213,11 @@ export const createList = (payload) => {
 };
 
 export const getListDetails = (storeId) => {
-  return Ajax.Request(
-    `/store/lists/list-details?storeId=${storeId}`,
-    Ajax.GET,
-    true
-  );
+  let url = "/store/lists/list-details";
+  if (storeId) {
+    url += `?storeId=${storeId}`;
+  }
+  return Ajax.Request(url, Ajax.GET, true);
 };
 
 export const addProductListItems = (payload) => {
@@ -268,7 +264,7 @@ let API = {
   getOrderDetails,
   getListCoverImages,
   createList,
-  googleAuth,
+
   getListDetails,
   addProductListItems,
 };

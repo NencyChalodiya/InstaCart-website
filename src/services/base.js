@@ -77,39 +77,40 @@ const getToken = () => {
 //     throw error;
 //   }
 // };
-// const refreshToken = async () => {
-//   const refreshtoken = localStorage.getItem("refreshtoken");
-//   if (!refreshtoken) {
-//     // throw new Error("No refresh token available.");
-//   }
-//   const payload = {
-//     refreshToken: refreshtoken,
-//   };
-//   let config = {
-//     method: POST,
-//     body: JSON.stringify(payload),
-//     headers: {
-//       "content-type": "application/json",
-//     },
-//   };
-//   const response = await fetch(`${BASE_API}/refreshAccessToken`, config);
-//   //console.log(response);
-//   if (!response.ok) {
-//     // throw new Error("Failed to refresh token.");
-//   }
-//   const data = await response.json();
-//   if (
-//     data.statusCode === 401 ||
-//     data.statusCode === INVALID_TOKEN ||
-//     data.status === INVALID_TOKEN
-//   ) {
-//     localStorage.removeItem("accessToken");
-//     localStorage.removeItem("refreshToken");
-//     window.location.href("/");
-//   } else {
-//     localStorage.setItem("accessToken", response?.data?.accessToken);
-//   }
-// };
+
+const refreshToken = async () => {
+  const refreshtoken = localStorage.getItem("refreshToken");
+  if (!refreshtoken) {
+    throw new Error("No refresh token available.");
+  }
+  const payload = {
+    refreshToken: refreshtoken,
+  };
+  let config = {
+    method: POST,
+    body: JSON.stringify(payload),
+    headers: {
+      "content-type": "application/json",
+    },
+  };
+  const response = await fetch(`${BASE_API}/refreshAccessToken`, config);
+  //console.log(response);
+  if (!response.ok) {
+    throw new Error("Failed to refresh token.");
+  }
+  const data = await response.json();
+  if (
+    data.statusCode === 401 ||
+    data.statusCode === INVALID_TOKEN ||
+    data.status === INVALID_TOKEN
+  ) {
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    window.location.href("/");
+  } else {
+    localStorage.setItem("accessToken", response?.data?.accessToken);
+  }
+};
 
 const handleResponse = async (response) => {
   //console.log(response);
@@ -188,7 +189,7 @@ const handleTokenError = async (err) => {
     err?.statusText == INVALID_TOKEN
   ) {
     console.log(err);
-    // await refreshToken();
+    await refreshToken();
   }
   return err;
 };

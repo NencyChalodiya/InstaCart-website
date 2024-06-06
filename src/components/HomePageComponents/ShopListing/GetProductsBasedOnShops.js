@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import API from "../../../services/api";
@@ -18,8 +18,10 @@ import TickSvg from "../../../assets/images/tick.svg";
 import ArrowSvg from "../../../assets/images/arrow.svg";
 import StoreFilteredProducts from "../../ProductsComponent/StoreFilteredProducts";
 import TopStoreFrontDetails from "../../ProductsComponent/TopStoreFrontDetails";
-import { productStoreSideBarData } from "../../../data/productStoreSideBarData";
 import Checkout from "../../../pages/CheckoutPage/Checkout";
+import ShopIconSvg from "../../../assets/images/shopIcon.svg";
+import BuySvg from "../../../assets/images/buyAgain.svg";
+import ListIconSvg from "../../../assets/images/listIcon.svg";
 import {
   AddCategoryItem,
   RemoveCategoryItem,
@@ -35,6 +37,27 @@ import {
 
 const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
   const { storeId, categoryId, subcategoryId } = useParams();
+  const productStoreSideBarData = [
+    {
+      id: 1,
+      iconSvg: ShopIconSvg,
+      title: "Shop",
+      route: `/store/${storeId}/front`,
+    },
+    {
+      id: 2,
+      iconSvg: BuySvg,
+      title: "Buy it again",
+      route: "#",
+    },
+    {
+      id: 3,
+      iconSvg: ListIconSvg,
+      title: "Lists",
+      route: `/store/your-lists/${storeId}`,
+    },
+  ];
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -288,7 +311,8 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
           <ul className="w-full px-3 py-4 list-none">
             {productStoreSideBarData.map((data) => (
               <li key={data.id}>
-                <button
+                <Link
+                  to={`${data.route}`}
                   className={`box-border relative flex items-center w-full pl-3 pr-3 text-sm leading-5 rounded-lg cursor-pointer flex-nowrap hover:bg-gray-100 
                    
                   `}
@@ -297,7 +321,7 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
                     <img src={data.iconSvg} alt="shopIconSvg" />
                   </span>
                   <span className="pt-2 pb-2 ml-2">{data.title}</span>
-                </button>
+                </Link>
               </li>
             ))}
           </ul>

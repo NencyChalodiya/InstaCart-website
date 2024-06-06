@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import API from "../../services/api";
 import { offersCategory } from "../../data/offers";
+import AddproductToListModal from "../StoreSidebarPages/List/AddproductToListModal";
 
 import { Modal } from "antd";
 import { IoArrowBackOutline } from "react-icons/io5";
@@ -10,7 +11,6 @@ import DownSideArrowSvg from "../../assets/images/downSideArrow.svg";
 import BoldedDownArrow from "../../assets/images/boldedDownSideArrow.svg";
 import ListIconSvg from "../../assets/images/listIcon.svg";
 import TickSvg from "../../assets/images/tick.svg";
-import AddproductToListModal from "../StoreSidebarPages/AddproductToListModal";
 
 const AddToCart = ({
   addToCartModal,
@@ -590,6 +590,7 @@ const AddToCart = ({
         onCancel={() => openAddProductListModal(false)}
         listDetails={listDetails}
         productDetail={productDetail}
+        storeId={storeId}
       />
     </Modal>
   );

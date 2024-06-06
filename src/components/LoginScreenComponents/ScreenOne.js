@@ -23,18 +23,8 @@ const ScreenOne = ({
   phoneError,
   loginUser,
 }) => {
-  const getGoothAuth = async () => {
-    try {
-      let response = await API.googleAuth();
-      if (response.status === 200) {
-        console.log("Redirecting to Google Auth...");
-      }
-    } catch (error) {
-      console.log("error", error);
-    }
-  };
   const handleGoogleAuth = () => {
-    getGoothAuth();
+    window.location.href = "https://instacart-xqwi.onrender.com/auth/google";
   };
 
   return (

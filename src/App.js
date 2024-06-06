@@ -6,7 +6,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import BrandStoreCategoryPage from "./pages/BrandStoreCategoryPages/BrandStoreCategoryPage";
 import OffersCategoryPage from "./pages/OffersCategoryPage/OffersCategoryPage";
 import YourOrders from "./pages/StoreSidebarPages/YourOrders";
-import YourLists from "./pages/StoreSidebarPages/YourLists";
+import YourLists from "./pages/StoreSidebarPages/List/YourLists";
 import YourRecipes from "./pages/StoreSidebarPages/YourRecipes";
 import AccountSettings from "./pages/StoreSidebarPages/AccountSettings/AccountSettings";
 import InstaCart_Plus from "./pages/StoreSidebarPages/InstaCart_Plus";
@@ -24,6 +24,7 @@ import SearchPageProducts from "./pages/SearchPageProducts/SearchPageProducts";
 import StoreSidebar from "./components/HomePageComponents/StoreSidebar.js/StoreSidebar";
 import AddToCart from "./pages/AddToCart/AddToCart";
 import FilteredStoreProducts from "./pages/FilteredStoreProducts/FilteredStoreProducts";
+import ListProductDetails from "./pages/StoreSidebarPages/List/ListProductDetails";
 function App() {
   const [storeFilteredProducts, setStoreFilteredProducts] = useState([]);
   const location = useLocation();
@@ -55,6 +56,7 @@ function App() {
             />
             <Route path="/store/orders" element={<YourOrders />} />
             <Route path="/store/your-lists" element={<YourLists />} />
+            <Route path="/store/your-lists/:storeId" element={<YourLists />} />
             <Route path="/store/recipes" element={<YourRecipes />} />
             <Route path="/store/account" element={<AccountSettings />} />
             <Route path="/store/instacart-plus" element={<InstaCart_Plus />} />
@@ -95,6 +97,10 @@ function App() {
                   storeFilteredProducts={storeFilteredProducts}
                 />
               }
+            />
+            <Route
+              path="/store/your-lists/listProductDetail/:list_id"
+              element={<ListProductDetails />}
             />
           </>
         ) : (

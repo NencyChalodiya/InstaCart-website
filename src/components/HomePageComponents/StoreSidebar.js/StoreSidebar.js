@@ -1,11 +1,12 @@
 import { Drawer } from "antd";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { storeSidbarData } from "../../../data/StoreSidebardata";
 import { Link, Navigate } from "react-router-dom";
 import { creditsAndPromos } from "../../../data/StoreSidebardata";
 import { support } from "../../../data/StoreSidebardata";
 import { ourApps } from "../../../data/StoreSidebardata";
 import { useNavigate } from "react-router-dom";
+import API from "../../../services/api";
 const StoreSidebar = ({ open, onCancel }) => {
   const navigate = useNavigate();
   const [hoveredFirstItem, setHoveredFirstItem] = useState(null);
@@ -13,6 +14,25 @@ const StoreSidebar = ({ open, onCancel }) => {
   const [hoveredThirdItem, setHoveredThirdItem] = useState(null);
   const [hoveredFourthItem, setHoveredFourthItem] = useState(null);
   const [hoveredFifthItem, setHoveredFifthItem] = useState(null);
+  const [userSettingsDetail, setUserSettingsDetail] = useState(null);
+
+  const getAccountSettingsDetails = async () => {
+    try {
+      //console.log("dkjasnd");
+      const response = await API.GetUserDetails();
+      console.log(response);
+      if (response.status === "success") {
+        //console.log(response.user);
+        setUserSettingsDetail(response.data.userData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    getAccountSettingsDetails();
+  }, []);
+
   const handleMouseFirstEnter = (index) => {
     setHoveredFirstItem(index);
   };
@@ -58,10 +78,13 @@ const StoreSidebar = ({ open, onCancel }) => {
       >
         <nav>
           <ul className="list-none ">
-            <div className="relative mb-3">
+            <div className="relative mb-1">
               <div className="pl-3 pr-3 ">
                 <div className="flex flex-row justify-between">
-                  <h1 className="text-2xl font-semibold leading-7">Nency C.</h1>
+                  <h1 className="text-2xl font-semibold leading-7">
+                    {userSettingsDetail?.firstName}{" "}
+                    {userSettingsDetail?.lastName || "-"}
+                  </h1>
 
                   <img
                     src="https://www.instacart.com/assets/express/profile_menu/peach-395cdd46a3b267de59e3c744d42cea40e4aba9f33d58482e61e9db30e33bc06e.png"
@@ -69,7 +92,7 @@ const StoreSidebar = ({ open, onCancel }) => {
                     className="h-12 w-12 rounded-[50%] border-2 max-w-full "
                   />
                 </div>
-                <p className="inline-block mb-4 text-xs leading-5">
+                <p className="inline-block mb-1 text-xs leading-5">
                   Instacart customer since February 2024
                 </p>
                 <div className="mb-4">

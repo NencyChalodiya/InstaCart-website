@@ -4,14 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { Modal } from "antd";
 import { Checkbox } from "antd";
 
-import CrossSvg from "../../assets/images/cross.svg";
-import API from "../../services/api";
+import CrossSvg from "../../../assets/images/cross.svg";
+import API from "../../../services/api";
 
 const AddproductToListModal = ({
   addProductListModal,
   onCancel,
   listDetails,
   productDetail,
+  storeId,
 }) => {
   const navigate = useNavigate();
 
@@ -25,7 +26,7 @@ const AddproductToListModal = ({
       };
       const response = await API.addProductListItems(payload);
       if (response.status === "success") {
-        navigate(`/store/your-lists`);
+        navigate(`/store/your-lists/${storeId}`);
       }
     } catch (error) {
       console.log(error);
@@ -73,7 +74,7 @@ const AddproductToListModal = ({
                           <Checkbox
                             onChange={() => handleCheckboxChange(list.list_id)}
                           >
-                            {list.title}
+                            {list?.title}
                           </Checkbox>
                         </div>
                       ))}
