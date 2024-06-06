@@ -25,6 +25,7 @@ const ScreenOne = ({
 }) => {
   const handleGoogleAuth = () => {
     window.location.href = "https://instacart-xqwi.onrender.com/auth/google";
+    // window.location.href = "https://thankgreen.onrender.com/api/auth/google";
   };
 
   return (
