@@ -212,16 +212,59 @@ export const createList = (payload) => {
   return Ajax.Request(`/store/lists/createlist`, Ajax.POST, true, payload);
 };
 
-export const getListDetails = (storeId) => {
-  let url = "/store/lists/list-details";
-  if (storeId) {
-    url += `?storeId=${storeId}`;
-  }
-  return Ajax.Request(url, Ajax.GET, true);
+// export const getListDetails = (storeId) => {
+//   let url = "/store/lists/list-details";
+//   if (storeId) {
+//     url += `?storeId=${storeId}`;
+//   }
+//   return Ajax.Request(url, Ajax.GET, true);
+// };
+
+export const getListDetails = (storelist) => {
+  // let url = "/store/lists/list-details";
+  // const queryParams = [];
+
+  // if (storeId) {
+  //   queryParams.push(`storeId=${storeId}`);
+  // }
+  // if (listId) {
+  //   queryParams.push(`listId=${listId}`);
+  // }
+
+  // if (queryParams.length > 0) {
+  //   url += `?${queryParams.join("&")}`;
+  // }
+
+  return Ajax.Request(
+    `/store/lists/list-details/`,
+    Ajax.GET,
+    true,
+    null,
+    null,
+    null,
+    storelist
+  );
 };
 
 export const addProductListItems = (payload) => {
   return Ajax.Request(`/store/lists/add-list-items`, Ajax.POST, true, payload);
+};
+
+export const deleteList = (listId) => {
+  return Ajax.Request(`/store/lists/${listId}/delete`, Ajax.DELETE, true);
+};
+
+export const editListDetails = (listId, payload) => {
+  return Ajax.Request(`/store/lists/${listId}/edit`, Ajax.POST, true, payload);
+};
+
+export const editListItems = (payload) => {
+  return Ajax.Request(
+    `/store/lists/edit-list-items`,
+    Ajax.DELETE,
+    true,
+    payload
+  );
 };
 
 let API = {
@@ -264,9 +307,11 @@ let API = {
   getOrderDetails,
   getListCoverImages,
   createList,
-
   getListDetails,
   addProductListItems,
+  deleteList,
+  editListDetails,
+  editListItems,
 };
 
 export default API;

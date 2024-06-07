@@ -111,7 +111,7 @@ const SubTotalIncheckout = ({ total, addressType }) => {
                         </div>
                       </div>
                     </li>
-                    <li className="border-b">
+                    <li>
                       <div className="flex justify-between">
                         <div className="flex items-center">
                           <span>
@@ -120,6 +120,18 @@ const SubTotalIncheckout = ({ total, addressType }) => {
                         </div>
                         <div>
                           <span>{total?.discount_applied}</span>
+                        </div>
+                      </div>
+                    </li>
+                    <li className="border-b">
+                      <div className="flex justify-between">
+                        <div className="flex items-center">
+                          <span>
+                            <span>Referral bonus</span>
+                          </span>
+                        </div>
+                        <div>
+                          <span>{total?.referral_bonus}</span>
                         </div>
                       </div>
                     </li>

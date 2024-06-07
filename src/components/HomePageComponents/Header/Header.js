@@ -36,27 +36,13 @@ const Header = () => {
       console.log(error);
     }
   };
-  //console.log(categoryList);
-
-  // const fetchShopsByCategory = async (id) => {
-  //   try {
-  //     const response = await API.getShopsByCategory({ id });
-  //     console.log(response.Shops);
-  //     setShops(response.Shops);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   useEffect(() => {
     fetchCategoryFilter();
   }, []);
-  //console.log(shopListCategory);
 
   const handleCategoryClick = (id) => {
     setSelectedCategoryId(id);
-
-    //fetchShopsByCategory(id);
   };
 
   const onClosebutton = () => {

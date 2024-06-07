@@ -3,12 +3,12 @@ import Navbar from "../../../components/LandingPageComponents/Navbar";
 import CreateListModal from "../List/CreateListModal";
 
 import SideArrowSvg from "../../../assets/images/sideArrowSvg.svg";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import API from "../../../services/api";
-import ListProductDetails from "./ListProductDetails";
 
 const YourLists = () => {
-  const { storeId } = useParams();
+  const navigate = useNavigate();
+  const { storeId, listId } = useParams();
   const [openList, setOpenList] = useState(false);
   const [getCoverImage, setCoverImage] = useState([]);
   const [shopsStore, setShopStore] = useState([]);
@@ -66,8 +66,15 @@ const YourLists = () => {
   };
 
   const fetchListDetails = async () => {
+    const queryParams = {};
+    if (storeId) {
+      queryParams.storeId = storeId;
+    }
+    if (listId) {
+      queryParams.listId = listId;
+    }
     try {
-      const response = await API.getListDetails(storeId);
+      const response = await API.getListDetails(queryParams);
 
       if (response.status === "success") {
         setListDetails(response.data);
@@ -76,13 +83,14 @@ const YourLists = () => {
       console.log(error);
     }
   };
-  console.log("listDetails", listDetails);
+
+  const handleListProductDetailPage = (listId) => {
+    navigate(`/store/your-lists/listProductDetail/${listId}`);
+  };
 
   useEffect(() => {
-    if (storeId !== null) {
-      fetchListDetails();
-    }
-  }, [storeId]);
+    fetchListDetails();
+  }, [storeId, listId]);
 
   const getAccountSettingsDetails = async () => {
     try {
@@ -159,8 +167,10 @@ const YourLists = () => {
                   listDetails.lists.length > 0 ? (
                     <>
                       {listDetails.lists.map((list) => (
-                        <Link
-                          to={`/store/your-lists/listProductDetail/${list.list_id}`}
+                        <button
+                          onClick={() =>
+                            handleListProductDetailPage(list.list_id)
+                          }
                           className="py-2 pr-4"
                           key={list.list_id}
                         >
@@ -276,7 +286,7 @@ const YourLists = () => {
                               </div>
                             </div>
                           </div>
-                        </Link>
+                        </button>
                       ))}
                     </>
                   ) : (
@@ -329,9 +339,6 @@ const YourLists = () => {
           selectedCoverImage={selectedCoverImage}
           screen={screen}
         />
-        {openList && (
-          <ListProductDetails handleListClick={() => setOpenList(true)} />
-        )}
       </div>
     </>
   );

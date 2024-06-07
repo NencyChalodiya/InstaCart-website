@@ -1,18 +1,23 @@
 // ShopListing.js
 import React, { useEffect, useState } from "react";
 import API from "../../../services/api";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import PickupIconSvg from "../../../assets/images/pickup.svg";
 const ShopListing = ({ selectedCategoryId }) => {
   const navigate = useNavigate();
   const [shops, setShops] = useState([]);
-  // const [productsWithImages, setProductsWithImages] = useState([]);
+  const [giftBannerImages, setGiftBannerImages] = useState([]);
 
   useEffect(() => {
     const fetchShopsByCategory = async (categoryId) => {
       try {
         const response = await API.getShopsByCategory(categoryId);
         setShops(response.data.storeData);
+        if (categoryId === 8 && response.data.giftBannerImages) {
+          setGiftBannerImages(response.data.giftBannerImages);
+        } else {
+          setGiftBannerImages([]);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -26,8 +31,12 @@ const ShopListing = ({ selectedCategoryId }) => {
       try {
         const response = await API.getShopsByCategory(categoryId);
         console.log(response.data);
-        // Pass category ID directly
-        setShops(response.data.storeData);
+        setShops(response.data.storeData || []);
+        if (categoryId === 8 && response.data.giftBannerImages) {
+          setGiftBannerImages(response.data.giftBannerImages);
+        } else {
+          setGiftBannerImages([]);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -35,25 +44,13 @@ const ShopListing = ({ selectedCategoryId }) => {
     console.log(shops);
 
     if (selectedCategoryId !== null) {
-      // Ensure selectedCategoryId is a number before passing it to fetchShopsByCategory
       if (!isNaN(selectedCategoryId)) {
         fetchShopsByCategory(selectedCategoryId);
       }
     }
   }, [selectedCategoryId]);
 
-  //console.log(shops);
   const handleShopClick = async (storeId) => {
-    // try {
-    //   const response = await API.getProductsBasedShops(shopId);
-    //   const productsWithImages = response.products.map((product) => ({
-    //     ...product,
-    //     images: response.images[product.id] || [], // Get images for the current product
-    //   }));
-    //   setProductsWithImages(productsWithImages);
-    // } catch (error) {
-    //   console.log(error);
-    // }
     navigate(`/store/${storeId}/front`);
   };
 
@@ -103,18 +100,20 @@ const ShopListing = ({ selectedCategoryId }) => {
                             </span>
                           </div>
                           <ul className="flex flex-wrap gap-1 text-sm leading-4 list-none">
-                            {shop.store_categories.map((category, index) => (
-                              <li key={index} className="text-sm leading-4">
-                                {category}
-                              </li>
-                            ))}
+                            {shop.store_categories &&
+                              shop.store_categories.map((category, index) => (
+                                <li key={index} className="text-sm leading-4">
+                                  {category}
+                                </li>
+                              ))}
                           </ul>
                           <ul className="flex flex-wrap gap-1 text-xs leading-4 list-none">
-                            {shop.messages.map((message, index) => (
-                              <li key={index} className="text-sm leading-4">
-                                {message}
-                              </li>
-                            ))}
+                            {shop.messages &&
+                              shop.messages.map((message, index) => (
+                                <li key={index} className="text-sm leading-4">
+                                  {message}
+                                </li>
+                              ))}
                           </ul>
                         </div>
                       </button>
@@ -123,6 +122,64 @@ const ShopListing = ({ selectedCategoryId }) => {
                 </li>
               ))}
             </ul>
+            {giftBannerImages.length > 0 && (
+              <div className="mb-8">
+                <div className="flex justify-between items-center mb-2">
+                  <div>
+                    <h2 className="text-2xl">Shop popular gifts</h2>
+                    <Link
+                      to={"/store/hub/popular_gifts"}
+                      className="flex items-center mt-2"
+                    >
+                      <div className="flex items-center mt-1">
+                        <div className="mr-1">
+                          <div className="box-border border flex justify-center relative w-[40px] h-[30px] rounded-[6px]">
+                            <img
+                              src="https://www.instacart.com/assets/domains/warehouse/logo/205/3e0e5623-e36a-4d07-9474-c7eac09f8e33.png"
+                              className="w-[36px] h-[28px]"
+                            />
+                          </div>
+                        </div>
+                        <div className="mr-1">
+                          <div className="box-border border flex justify-center relative w-[40px] h-[30px] rounded-[6px]">
+                            <img
+                              src="https://www.instacart.com/assets/domains/warehouse/logo/205/3e0e5623-e36a-4d07-9474-c7eac09f8e33.png"
+                              className="w-[36px] h-[28px]"
+                            />
+                          </div>
+                        </div>
+                        <div className="mr-1">
+                          <div className="box-border border flex justify-center relative w-[40px] h-[30px] rounded-[6px]">
+                            <img
+                              src="https://www.instacart.com/assets/domains/warehouse/logo/205/3e0e5623-e36a-4d07-9474-c7eac09f8e33.png"
+                              className="w-[36px] h-[28px]"
+                            />
+                          </div>
+                        </div>
+                        <div className="text-gray-500">+11 stores</div>
+                      </div>
+                    </Link>
+                  </div>
+                </div>
+                <div className="relative w-full">
+                  <Link
+                    to={"/store/hub/popular_gifts"}
+                    className="relative flex flex-nowrap ml-[-8px]"
+                  >
+                    {giftBannerImages.map((image, index) => (
+                      <div key={index}>
+                        <a className="flex flex-col justify-between w-[216px] h-[284px] rounded-[12px] m-2 cursor-pointer">
+                          <img
+                            src={image}
+                            className="rounded-[12px] shadow-lg"
+                          />
+                        </a>
+                      </div>
+                    ))}
+                  </Link>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

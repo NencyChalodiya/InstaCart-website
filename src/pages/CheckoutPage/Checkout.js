@@ -19,10 +19,12 @@ import MobileNumberSvg from "../../assets/images/mobileNumber.svg";
 import PaywithSvg from "../../assets/images/paywithSvg.svg";
 import SideArrowSvg from "../../assets/images/sideArrowSvg.svg";
 import InstacartSvg from "../../assets/images/instacartLogo.svg";
+import ReferralSvg from "../../assets/images/referral.svg";
 
 import { Tabs } from "antd";
 import { ConfigProvider } from "antd";
 import { useSelector } from "react-redux";
+import { Checkbox } from "antd";
 
 const Checkout = ({ productDetail }) => {
   const customTabStyle = {
@@ -63,6 +65,7 @@ const Checkout = ({ productDetail }) => {
   const [leaveAtMyDoor, setLeaveAtMyDoor] = useState(0);
   const [stripePromise, setStripePromise] = useState(null);
   const [clientSecret, setClientSecret] = useState("");
+  const [useReferralBonus, setUseReferralBonus] = useState(false);
   const [mobileNumberDetails, setMobileNumberDetails] = useState({
     mobile_number: "",
     country_code: "+91",
@@ -221,7 +224,7 @@ const Checkout = ({ productDetail }) => {
         subtotal: total?.subtotal,
         discount_applied: total?.discount_applied,
         payment_mode: "card",
-        use_referral_bonus: false,
+        use_referral_bonus: useReferralBonus,
       };
 
       if (addressType === "delivery" && selectDeliveryDetails) {
@@ -579,6 +582,26 @@ const Checkout = ({ productDetail }) => {
                   </div>
                 </div>
                 <div>
+                  <div className="p-6 border-b cursor-pointer">
+                    <div className="flex  relative cursor-pointer">
+                      <div className="flex justify-around items-center">
+                        <img src={ReferralSvg} alt="referral-logo" />
+                        <label>
+                          <span className=" mt-2 ml-1">
+                            <span>Want Referral bonus</span>
+                          </span>
+                        </label>
+                      </div>
+                      <input
+                        type="checkbox"
+                        className="  h-6 w-6 mt-2 ml-4"
+                        checked={useReferralBonus}
+                        onChange={(e) => setUseReferralBonus(e.target.checked)}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div>
                   <div className="p-6 border-b">
                     <div className="relative flex items-center">
                       <img src={PaywithSvg} alt="paywith-svg" />
@@ -623,13 +646,6 @@ const Checkout = ({ productDetail }) => {
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-                <div>
-                  <div className="p-2">
-                    <button className="px-4 h-[54px] w-full rounded-[27px] relative bg-[#F6F7F8]">
-                      <span className="mx-2">Continue</span>
-                    </button>
                   </div>
                 </div>
               </div>

@@ -1,6 +1,42 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
 import Navbar from "../../components/LandingPageComponents/Navbar";
+
+import API from "../../services/api";
 const Refferals = () => {
+  const [userSettingsDetail, setUserSettingsDetail] = useState(null);
+  const [isCodeCopied, setIsCodeCopied] = useState(false);
+
+  const getAccountSettingsDetails = async () => {
+    try {
+      const response = await API.GetUserDetails();
+      console.log(response);
+      if (response.status === "success") {
+        setUserSettingsDetail(response.data.userData);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getAccountSettingsDetails();
+  }, []);
+
+  const copyToClipboard = () => {
+    if (userSettingsDetail && userSettingsDetail.referral_code) {
+      navigator.clipboard.writeText(userSettingsDetail.referral_code).then(
+        () => {
+          console.log("Referral code copied to clipboard!");
+          setIsCodeCopied(true);
+        },
+        (err) => {
+          console.error("Could not copy text: ", err);
+        }
+      );
+    }
+  };
+
   return (
     <>
       <Navbar />
@@ -45,16 +81,32 @@ const Refferals = () => {
                       </button>
                     </div>
                     <div className="flex justify-center mb-4">
-                      <button className="cursor-pointer flex-grow flex-shrink pt-[14px] px-4 pb-4 max-w-full h-[56px] rounded-xl bg-[#F6F7F8] relative">
-                        <span className="cursor-pointer  text-[#10890F]">
+                      <button
+                        className="cursor-pointer flex-grow flex-shrink pt-[14px] px-4 pb-4 max-w-full h-[56px] rounded-xl  relative"
+                        onClick={() => copyToClipboard()}
+                      >
+                        <span
+                          className={`cursor-pointer   ${
+                            isCodeCopied ? "text-black" : "text-[#10890F]"
+                          }`}
+                        >
                           {" "}
-                          <span>Copy code</span>
+                          <span>
+                            {" "}
+                            {isCodeCopied
+                              ? `Code ${userSettingsDetail.referral_code} copied!`
+                              : "Copy code"}
+                          </span>
                         </span>
                       </button>
                     </div>
                     <hr />
                     <div>
-                      <span>$0 earned</span>
+                      <span>
+                        {userSettingsDetail
+                          ? `$${userSettingsDetail.total_earned_amt} earned`
+                          : "$0 earned"}
+                      </span>
                     </div>
                   </div>
                 </div>

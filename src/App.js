@@ -25,6 +25,7 @@ import StoreSidebar from "./components/HomePageComponents/StoreSidebar.js/StoreS
 import AddToCart from "./pages/AddToCart/AddToCart";
 import FilteredStoreProducts from "./pages/FilteredStoreProducts/FilteredStoreProducts";
 import ListProductDetails from "./pages/StoreSidebarPages/List/ListProductDetails";
+import GiftImagesProducts from "./components/HomePageComponents/ShopListing/GiftImagesProducts";
 function App() {
   const [storeFilteredProducts, setStoreFilteredProducts] = useState([]);
   const location = useLocation();
@@ -99,8 +100,12 @@ function App() {
               }
             />
             <Route
-              path="/store/your-lists/listProductDetail/:list_id"
+              path="/store/your-lists/listProductDetail/:listId"
               element={<ListProductDetails />}
+            />
+            <Route
+              path="/store/hub/popular_gifts"
+              element={<GiftImagesProducts />}
             />
           </>
         ) : (

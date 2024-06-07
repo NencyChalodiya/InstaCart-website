@@ -31,7 +31,6 @@ const EditName = ({
         lastName: userNewName.lastName,
       };
       const response = await API.changeName(payload);
-      console.log(response);
       if (response.status === "success") {
         message.success("Your name has been saved");
         onCancel();
@@ -44,27 +43,6 @@ const EditName = ({
     }
   };
 
-  // useEffect(() => {
-  //   setNewName(userName);
-  // }, [userName]);
-
-  // const updateAccountSettingsName = async () => {
-  //   const token = localStorage.getItem("token");
-  //   try {
-  //     let payload = {
-  //       name: newName,
-  //       access_token: token,
-  //     };
-  //     const response = await API.UpdateUserDetails(payload);
-  //     console.log(response);
-  //     message.success("Name is successfully updated");
-
-  //     onCancel();
-  //   } catch (error) {
-  //     console.log(error);
-  //     message.error("Could not able to update name");
-  //   }
-  // };
   return (
     <Modal centered open={editName} footer={false} width={540} closable={false}>
       <div>

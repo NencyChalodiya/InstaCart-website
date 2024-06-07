@@ -197,7 +197,7 @@ const GetProductsBasedOnShops = ({ storeFilteredProducts }) => {
     const fetchProductsOfShop = async () => {
       try {
         const response = await API.getProductsOfShop(storeId);
-        console.log(response);
+        // console.log(response);
         dispatch(SetCategoryItems(response.data));
       } catch (error) {
         console.log(error);
