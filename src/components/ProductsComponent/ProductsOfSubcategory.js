@@ -11,6 +11,7 @@ const ProductsOfSubcategory = ({
   handleMouseEnter,
   hoveredProductId,
   items,
+  storeId,
 }) => {
   return (
     <>
@@ -32,7 +33,8 @@ const ProductsOfSubcategory = ({
                           RemoveFromSubCartCategoryProducts(
                             e,
                             product,
-                            items.subcategory_id
+                            items.subcategory_id,
+                            storeId
                           )
                         }
                       >
@@ -52,7 +54,8 @@ const ProductsOfSubcategory = ({
                           AddtoCartSubCategoryProducts(
                             e,
                             product,
-                            items.subcategory_id
+                            items.subcategory_id,
+                            storeId
                           )
                         }
                       >
@@ -83,7 +86,8 @@ const ProductsOfSubcategory = ({
                       AddtoCartSubCategoryProducts(
                         e,
                         product,
-                        items.subcategory_id
+                        items.subcategory_id,
+                        storeId
                       )
                     }
                   >

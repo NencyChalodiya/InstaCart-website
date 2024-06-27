@@ -1,0 +1,17 @@
+.address-name .ant-skeleton-avatar {
+  width: 200px !important;
+  height: 10px !important;
+}
+
+.address-name .ant-skeleton-avatar-circle {
+  border-radius: 10% !important;
+}
+
+.address-info .ant-skeleton-avatar {
+  width: 270px !important;
+  height: 10px !important;
+}
+
+.address-info .ant-skeleton-avatar-circle {
+  border-radius: 10% !important;
+}

@@ -2,19 +2,20 @@ import React, { useState } from "react";
 
 import { Modal } from "antd";
 
+import Spinner from "../../../components/atoms/Spinner";
+
 import CrossSvg from "../../../assets/images/cross.svg";
 import EditIconSvg from "../../../assets/images/editIcon.svg";
 import DeleteIconSvg from "../../../assets/images/deleteIcon.svg";
-import CreateListModal from "./CreateListModal";
 
 const EditDeleteDetailsModal = ({
   editDeleteDetailsModal,
   onCancel,
   deleteTheList,
   handleEditDetail,
+  loading,
 }) => {
   const [screen, setScreen] = useState(1);
-  const [openList, setOpenList] = useState(false);
 
   const handleScreenChange = () => {
     setScreen(screen + 1);
@@ -119,10 +120,20 @@ const EditDeleteDetailsModal = ({
               </div>
               <div className="flex py-2 px-4">
                 <button
-                  className="px-4 cursor-pointer relative rounded-[27px] h-[54px] w-full bg-[#DE3534] hover:bg-red-600"
+                  className={`px-4 cursor-pointer relative rounded-[27px] h-[54px] w-full bg-[#DE3534] hover:bg-red-600 flex items-center justify-center ${
+                    loading ? "opacity-50" : ""
+                  }`}
                   onClick={() => deleteTheList()}
+                  disabled={loading}
                 >
-                  <span className="mx-2 text-white text-xl">Delete list</span>
+                  <span className="px-2 ml-2 text-white text-xl">
+                    Delete list
+                  </span>
+                  {loading && (
+                    <div className="">
+                      <Spinner fontsize={20} loaderColor="#FFFFFF" />
+                    </div>
+                  )}
                 </button>
               </div>
             </div>

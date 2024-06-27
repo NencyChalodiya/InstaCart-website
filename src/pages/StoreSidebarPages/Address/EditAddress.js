@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { Modal } from "antd";
-import API from "../../../services/api";
-import Loader from "react-js-loader";
-import "../../Loading.css";
 import { useLocation } from "react-router-dom";
+
+import API from "../../../services/api";
+
+import { Modal } from "antd";
 
 import CrossSvg from "../../../assets/images/cross.svg";
 import LocationSvg from "../../../assets/images/location.svg";
+
+import Spinner from "../../../components/atoms/Spinner";
 
 const EditAddress = ({
   openEditAddressModal,
@@ -15,27 +17,13 @@ const EditAddress = ({
   fetchUserAddressDetail,
 }) => {
   const location = useLocation();
+
   const [updatedAddress, setUpdatedAddress] = useState({ ...selectedAddress });
   const [isLoading, setLoading] = useState(false);
-  //console.log("sjahns", selectedAddress);
-  //console.log("updateAddress", updatedAddress);
-
-  useEffect(() => {
-    setUpdatedAddress(selectedAddress);
-  }, [selectedAddress]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUpdatedAddress((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
-  //console.log(updatedAddress);
 
   const handleUpdateAddress = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       const { address_id, latitude, longitude, ...addressData } =
         updatedAddress;
       if (latitude) addressData.latitude = parseFloat(latitude);
@@ -50,7 +38,6 @@ const EditAddress = ({
       onCancel();
     } catch (error) {
       console.error("Error updating address:", error);
-      // Handle error (e.g., show error message)
     } finally {
       setLoading(false);
     }
@@ -68,6 +55,19 @@ const EditAddress = ({
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    setUpdatedAddress(selectedAddress);
+  }, [selectedAddress]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUpdatedAddress((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
+
   return (
     <>
       <Modal
@@ -179,12 +179,12 @@ const EditAddress = ({
                       onClick={() => handleUpdateAddress()}
                       disabled={isLoading}
                     >
-                      <span className="block text-xl font-semibold leading-5 text-white">
+                      <span className="block text-xl font-semibold leading-5 text-white mr-3">
                         Update Address
                       </span>
                       {isLoading && (
-                        <div className="ml-2 h-5 w-5 mt-[-20px]">
-                          <Loader size={20} />
+                        <div className="">
+                          <Spinner fontsize={20} loaderColor="#FFFFFF" />
                         </div>
                       )}
                     </button>

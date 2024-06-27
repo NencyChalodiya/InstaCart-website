@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from "react";
+
 import API from "../../../../services/api";
 
 import { Modal, message } from "antd";
+
 import CrossSvg from "../../../../assets/images/cross.svg";
+
+import Spinner from "../../../../components/atoms/Spinner";
 
 const EditName = ({
   editName,
@@ -11,7 +15,7 @@ const EditName = ({
   userLastName,
   getAccountSettingsDetails,
 }) => {
-  // const [newName, setNewName] = useState(userName);
+  const [loading, setLoading] = useState(false);
   const [userNewName, setUserNewName] = useState({
     firstName: userFirstName,
     lastName: userLastName,
@@ -25,6 +29,7 @@ const EditName = ({
   }, [userFirstName, userLastName]);
 
   const ChangeNameOfUser = async () => {
+    setLoading(true);
     try {
       let payload = {
         firstName: userNewName.firstName,
@@ -40,6 +45,8 @@ const EditName = ({
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,7 +78,6 @@ const EditName = ({
                   className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
                   placeholder="First Name"
                   value={userNewName?.firstName}
-                  //value={userFirstName}
                   onChange={(e) =>
                     setUserNewName({
                       ...userNewName,
@@ -90,7 +96,6 @@ const EditName = ({
                   className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
                   placeholder="Last Name"
                   value={userNewName?.lastName}
-                  //value={userLastName}
                   onChange={(e) =>
                     setUserNewName({ ...userNewName, lastName: e.target.value })
                   }
@@ -111,13 +116,20 @@ const EditName = ({
               </span>
             </button>
             <button
-              className="cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 "
-              //onClick={() => updateAccountSettingsName()}
+              className={`cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 flex items-center ${
+                loading ? "opacity-50" : ""
+              }`}
               onClick={() => ChangeNameOfUser()}
+              disabled={loading}
             >
               <span className="block px-4 ml-5 text-xl text-ellipsis">
                 Save
               </span>
+              {loading && (
+                <div className="">
+                  <Spinner fontsize={20} loaderColor="#FFFFFF" />
+                </div>
+              )}
             </button>
           </div>
         </div>

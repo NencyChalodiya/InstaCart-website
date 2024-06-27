@@ -64,15 +64,14 @@ const CartEmpty = () => {
           </div>
         </button>
       </div>
-      <div className="fixed bottom-0 left-[555px] p-2 bg-white w-[500px] ">
-        <div className="h-[54px] w-full rounded-[27px] relative text-black bg-[#F6F7F8]">
-          <span className="mx-2 pt-2 flex justify-between items-center">
-            <div className="pl-40">Go to checkout</div>
-            <div className=" bg-[#E8E9EB] rounded-[27px] w-16 h-10 flex items-center pl-2  ">
-              $00.00
-            </div>
-          </span>
-        </div>
+
+      <div className="fixed bottom-0 right-0 p-2 bg-white w-[500px] border-t ">
+        <span className="flex justify-between items-center  rounded-[27px] h-[54px] w-full text-black bg-[#F6F7F8]">
+          <div className="pl-40 text-lg">Go to checkout</div>
+          <div className="bg-[#E8E9EB] rounded-[27px] w-16 h-10 flex items-center pl-2 ">
+            $00.00
+          </div>
+        </span>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ import PrioritySvg from "../../assets/images/prioritySvg.svg";
 import StandardSvg from "../../assets/images/standardSvg.svg";
 import ChooseTwoWindowSvg from "../../assets/images/chooseTwoWindowSvg.svg";
 import DownArrowSvg from "../../assets/images/downArrow.svg";
+import Spinner from "../atoms/Spinner";
 
 const DeliveryTimeInCheckOut = ({
   addressType,
@@ -18,6 +19,7 @@ const DeliveryTimeInCheckOut = ({
   onContinue,
   selectPickupDetails,
   handlePickupDetails,
+  loading,
 }) => {
   const [selectedDay, setSelectedDay] = useState(null);
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -45,20 +47,14 @@ const DeliveryTimeInCheckOut = ({
     // setSelectedDeliveryDetails(null);
   };
 
-  // const handleDeliveryDetails = (details) => {
-  //   setSelectedDeliveryDetails(details);
-  // };
-
-  // const handleChooseSlot = (details) => {
-  //   setSelectedDeliveryDetails(details);
-  //   openChooseHourWindow(false);
-  // };
-
   return (
     <div>
-      <div className="p-6 border-b mt-6 " onClick={toggleDeliveryTimeAccordion}>
+      <div
+        className="px-6 py-5 mt-1 border-b "
+        onClick={toggleDeliveryTimeAccordion}
+      >
         <div>
-          <div className="relative flex items-center">
+          <div className="relative flex items-center cursor-pointer">
             <img src={DeliveryTimeSvg} alt="deliveryTimeSvg" />
             <div className="mx-3 flex-grow">
               {isDeliveryTimeExpanded ? (
@@ -72,11 +68,13 @@ const DeliveryTimeInCheckOut = ({
                 </p>
               )}
             </div>
-            {!isDeliveryTimeExpanded && (
-              <button className="h-8 w-8 cursor-pointer pl-2">
-                <img src={DownArrowSvg} alt="downArrow-svg" />
-              </button>
-            )}
+            <div className="flex items-center  ">
+              {isDeliveryTimeExpanded ? (
+                <span>&#9650;</span>
+              ) : (
+                <span>&#9660;</span>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -277,10 +275,18 @@ const DeliveryTimeInCheckOut = ({
           )}
 
           <button
-            className="px-4 cursor-pointer relative rounded-[27px] h-14 w-full bg-[#2C890F] mt-4"
+            className={`px-4 cursor-pointer relative rounded-[27px] h-14 w-full bg-[#2C890F] mt-4 flex items-center justify-center ${
+              loading ? "opacity-50" : ""
+            }`}
             onClick={() => onContinue()}
+            disabled={loading}
           >
             <span className="text-white text-lg">Continue</span>
+            {loading && (
+              <div className="ml-6">
+                <Spinner fontsize={20} loaderColor="#FFFFFF" />
+              </div>
+            )}
           </button>
         </div>
       )}

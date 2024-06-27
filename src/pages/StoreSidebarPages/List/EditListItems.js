@@ -1,35 +1,44 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
+import Spinner from "../../../components/atoms/Spinner";
+import API from "../../../services/api";
+
 import { Modal } from "antd";
 
 import SearchSvg from "../../../assets/images/search.svg";
 import CrossSvg from "../../../assets/images/cross.svg";
-import API from "../../../services/api";
+import CircleSvg from "../../../assets/images/circle.svg";
 
 const EditListItems = ({
   editListItemModal,
   onCancel,
   productListDetail,
   listId,
+  storeId,
 }) => {
   const [activeButton, setActiveButton] = useState("currentList");
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   console.log("listId", listId);
 
   const editProductListItems = async () => {
+    setLoading(true);
     try {
       const payload = {
-        // list_id: parseInt(listId),
-        list_id: 10,
+        // list_id: parseInt(listId, 10),
+        list_id: 6,
         product_ids: selectedProducts,
       };
+      console.log(typeof payload.list_id);
       console.log("payload", payload);
       const response = await API.editListItems(payload);
       console.log(response);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -62,8 +71,8 @@ const EditListItems = ({
       closable={false}
       footer={false}
     >
-      <div className="h-[700px]">
-        <div className="pb-[50px] bg-white">
+      <div className="h-[650px] flex flex-col">
+        <div className="pb-[50px] bg-white flex-grow overflow-hidden ">
           <div className=" w-full">
             <button className="cursor-pointer flex relative w-full h-[40px] rounded-[8px] items-center bg-[#F6F7F8] mt-2">
               <span className="ml-3">Search CVS...</span>
@@ -98,7 +107,7 @@ const EditListItems = ({
               </span>
             </div>
             {activeButton === "currentList" ? (
-              <div className="py-4">
+              <div className="py-4 overflow-y-auto max-h-[550px]">
                 <ul>
                   {productListDetail && productListDetail.lists ? (
                     <>
@@ -161,22 +170,10 @@ const EditListItems = ({
                                                     )
                                                   }
                                                 >
-                                                  <svg
-                                                    width="18"
-                                                    height="18"
-                                                    viewBox="0 0 24 24"
-                                                    fill="#FFFFFF"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    color="systemGrayscale00"
-                                                    size="18"
-                                                    aria-hidden="true"
-                                                  >
-                                                    <path
-                                                      fill-rule="evenodd"
-                                                      clip-rule="evenodd"
-                                                      d="M20.792 6.79 9 18.584 3.208 12.79l1.584-1.584L9 15.415 19.208 5.207z"
-                                                    ></path>
-                                                  </svg>
+                                                  <img
+                                                    src={CircleSvg}
+                                                    alt="circle-svg"
+                                                  />
                                                 </div>
                                               </div>
                                             </div>
@@ -213,13 +210,13 @@ const EditListItems = ({
                   Items you order will show up here so you can buy them again
                   easily
                 </p>
-                <Link
-                  to={`/store/front`}
-                  // to={`/store/${selectedStore.store_id}/front`}
+                {/* <Link
+                  // to={`/store/front`}
+                  to={`/store/${storeId}/front`}
                   className="iniline-block mt-6 text-[#2C890F] hover:text-[#2C890F]"
                 >
                   Browse categories
-                </Link>
+                </Link> */}
               </div>
             )}
           </div>
@@ -227,13 +224,21 @@ const EditListItems = ({
         <div className="absolute bottom-0 bg-white z-10 left-0 right-0 my-3 border-t pt-3">
           <button
             type="submit"
-            className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-full "
+            className={`box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-full ${
+              loading ? "opacity-50" : ""
+            }`}
             onClick={() => editProductListItems()}
+            disabled={loading}
           >
             <div className="flex items-center justify-center">
               <span className="block text-xl font-semibold leading-5 text-white">
                 Done Editing list
               </span>
+              {loading && (
+                <div className="ml-4">
+                  <Spinner fontsize={20} loaderColor="#FFFFFF" />
+                </div>
+              )}
             </div>
           </button>
         </div>

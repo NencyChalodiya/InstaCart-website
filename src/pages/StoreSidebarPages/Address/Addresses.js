@@ -7,12 +7,43 @@ import { yourOrderSidebarData } from "../../../data/yourOrdersSidebarData";
 import RegisterAddress from "./RegisterAddress";
 import EditAddress from "./EditAddress";
 
+import LogoutSvg from "../../../assets/images/logoutSvg.svg";
+import BackDarkArrowSvg from "../../../assets/images/backDarkArrow.svg";
+
+import { Skeleton } from "antd";
+
+import "./Address.css";
+
 const Addresses = () => {
   const [openRegisterAddressModal, setRegisterAddressModal] = useState(false);
   const [openEditAddressModal, setEditAddressModal] = useState(false);
   const [getUserAddressDetail, setUserAddressDetail] = useState([]);
   const [selectedAddress, setSelectedAddress] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [hoveredItem, setHoveredItem] = useState(null);
+
+  const fetchUserAddressDetail = async () => {
+    setLoading(true);
+    try {
+      const response = await API.getUserAddress();
+      if (response.status === "success") {
+        setUserAddressDetail(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserAddressDetail();
+  }, []);
+
+  const handleEditAddress = (address) => {
+    setEditAddressModal(true);
+    setSelectedAddress({ ...address });
+  };
 
   const handleMouseEnter = (index) => {
     setHoveredItem(index);
@@ -21,32 +52,6 @@ const Addresses = () => {
   const handleMouseLeave = () => {
     setHoveredItem(null);
   };
-
-  const fetchUserAddressDetail = async () => {
-    try {
-      const response = await API.getUserAddress();
-      //console.log(response);
-      if (response.status === "success") {
-        setUserAddressDetail(response.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    fetchUserAddressDetail();
-  }, []);
-
-  //console.log("addressDetail", getUserAddressDetail);
-
-  const handleEditAddress = (address) => {
-    // Open the EditAddress modal and pass the address data
-    setEditAddressModal(true);
-    // Set the initial address data for the EditAddress modal
-    setSelectedAddress({ ...address });
-  };
-  //console.log("selectedAddress", selectedAddress);
 
   return (
     <>
@@ -63,18 +68,7 @@ const Addresses = () => {
                 className="box-border relative flex items-center w-full pl-3 pr-3 text-sm leading-5 rounded-lg cursor-pointer flex-nowrap "
               >
                 <span className="flex items-center h-10">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="#343538"
-                    xmlns="http://www.w3.org/2000/svg"
-                    size="24"
-                    class="e-6su6fj"
-                    aria-hidden="true"
-                  >
-                    <path d="m12.292 6.79-1.584-1.583-6.792 6.792 6.792 6.792 1.584-1.584-4.088-4.088H20v-2.24H8.204z"></path>
-                  </svg>
+                  <img src={BackDarkArrowSvg} alt="bakcDarkArrowSvg" />
                 </span>
                 <span className="pt-2 pb-2 ml-2">Back</span>
               </Link>
@@ -126,18 +120,7 @@ const Addresses = () => {
                 className="box-border relative flex items-center w-full pl-3 pr-3 text-sm leading-5 rounded-lg cursor-pointer flex-nowrap "
               >
                 <span className="flex items-center h-10">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="#343538"
-                    xmlns="http://www.w3.org/2000/svg"
-                    size="24"
-                    class="e-6su6fj"
-                    aria-hidden="true"
-                  >
-                    <path d="M10.07 7.757 8.656 6.343 2.999 12l5.657 5.657 1.414-1.415L6.828 13H16v-2H6.827zM17 20v-2h2V6h-2V4h4v16z"></path>
-                  </svg>
+                  <img src={LogoutSvg} alt="logoutSvg" />
                 </span>
                 <span className="pt-2 pb-2 ml-2">Log out</span>
               </a>
@@ -169,48 +152,65 @@ const Addresses = () => {
               </div>
 
               <div className="block relative text-left w-full rounded-xl">
-                <ul>
-                  {getUserAddressDetail &&
-                  getUserAddressDetail.addressDetails ? (
-                    <>
-                      {getUserAddressDetail.addressDetails.map((addr) => (
-                        <>
-                          <li
-                            className="flex mt-6 mb-4 justify-between"
-                            key={addr?.address_id}
-                          >
-                            <button className="pr-2 text-left relative">
-                              <span className="flex justify-between items-center text-ellipsis">
-                                <span className="flex-grow flex-shrink basis-auto">
-                                  <address>
-                                    <span className="text-lg">
-                                      {addr?.business_name}
-                                    </span>
-                                    <br />
-                                    <span className="text-base text-gray-400">
-                                      <span>{addr?.street},</span>
-                                      <span>
-                                        {addr?.floor},{addr?.zip_code}
-                                      </span>
-                                    </span>
-                                  </address>
-                                </span>
-                              </span>
-                            </button>
-                            <button
-                              className="cursor-pointer relative pr-52 text-[#2C890F] font-semibold"
-                              onClick={() => handleEditAddress(addr)}
+                {loading ? (
+                  <div className="mt-2">
+                    {Array.from({ length: 3 }).map((_, index) => (
+                      <div key={index} className="  flex flex-col p-6">
+                        <div>
+                          <div className="address-name">
+                            <Skeleton.Avatar active />
+                          </div>
+                          <div className="address-info">
+                            <Skeleton.Avatar active />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <ul>
+                    {getUserAddressDetail &&
+                    getUserAddressDetail.addressDetails ? (
+                      <>
+                        {getUserAddressDetail.addressDetails.map((addr) => (
+                          <>
+                            <li
+                              className="flex mt-6 mb-4 justify-between"
+                              key={addr?.address_id}
                             >
-                              <span>Edit</span>
-                            </button>
-                          </li>
-                        </>
-                      ))}
-                    </>
-                  ) : (
-                    <>No Address Found</>
-                  )}
-                </ul>
+                              <button className="pr-2 text-left relative">
+                                <span className="flex justify-between items-center text-ellipsis">
+                                  <span className="flex-grow flex-shrink basis-auto">
+                                    <address>
+                                      <span className="text-lg">
+                                        {addr?.business_name}
+                                      </span>
+                                      <br />
+                                      <span className="text-base text-gray-400">
+                                        <span>{addr?.street},</span>
+                                        <span>
+                                          {addr?.floor},{addr?.zip_code}
+                                        </span>
+                                      </span>
+                                    </address>
+                                  </span>
+                                </span>
+                              </button>
+                              <button
+                                className="cursor-pointer relative pr-52 text-[#2C890F] font-semibold"
+                                onClick={() => handleEditAddress(addr)}
+                              >
+                                <span>Edit</span>
+                              </button>
+                            </li>
+                          </>
+                        ))}
+                      </>
+                    ) : (
+                      <>No Address Found</>
+                    )}
+                  </ul>
+                )}
               </div>
             </div>
           </div>

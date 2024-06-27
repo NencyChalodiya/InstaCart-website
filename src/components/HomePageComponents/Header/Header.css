@@ -1,19 +1,59 @@
-.rec.rec-arrow {
+/* .rec.rec-arrow {
   border-radius: 50%;
   background-color: #f7f5f0;
 }
-/* round buttons on hover */
+
 .rec.rec-arrow:hover {
   border-radius: 50%;
   background-color: #ebd18f;
 }
-/* hide disabled buttons */
+
 .rec.rec-arrow:disabled {
   visibility: hidden;
 }
-/* disable default outline on focused items */
-/* add custom outline on focused items */
+
 .rec-carousel-item:focus {
   outline: none;
   box-shadow: inset 0 0 1px 1px lightgrey;
+} */
+
+.carousel-container {
+  position: relative;
+}
+
+.custom-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: "#ffffff";
+  padding: 8px 13px;
+  border-radius: 50%;
+  border: 1px solid rgb(189, 180, 180);
+  cursor: pointer;
+  z-index: 1;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.custom-arrow:hover {
+  background-color: green;
+}
+
+.custom-arrow.left {
+  left: -50px; /* Adjust based on how far outside you want the arrow */
+}
+
+.custom-arrow.right {
+  right: -50px; /* Adjust based on how far outside you want the arrow */
+}
+.react-multi-carousel-list {
+  position: static !important;
+}
+
+.address .ant-skeleton-avatar {
+  width: 120px !important;
+  height: 15px !important;
+}
+
+.address .ant-skeleton-avatar-circle {
+  border-radius: 5% !important;
 }

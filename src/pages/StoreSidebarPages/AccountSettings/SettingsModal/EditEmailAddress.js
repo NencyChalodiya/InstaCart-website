@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
+
 import { Modal, message } from "antd";
+
+import CrossSvg from "../../../../assets/images/cross.svg";
+
 import API from "../../../../services/api";
+
+import Spinner from "../../../../components/atoms/Spinner";
 
 const EditEmailAddress = ({
   editEmailAddress,
@@ -8,6 +14,7 @@ const EditEmailAddress = ({
   userEmail,
   getAccountSettingsDetails,
 }) => {
+  const [loading, setLoading] = useState(false);
   const [newEmailAddress, setNewEmailAdddress] = useState({
     updatedEmail: userEmail,
     confirmEmail: "",
@@ -23,6 +30,7 @@ const EditEmailAddress = ({
   }, [userEmail]);
 
   const ChangeEmailOfUser = async () => {
+    setLoading(true);
     try {
       if (newEmailAddress.updatedEmail !== newEmailAddress.confirmEmail) {
         message.error("Emails do not match");
@@ -42,30 +50,10 @@ const EditEmailAddress = ({
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
-
-  // useEffect(() => {
-  //   setNewEmailAdddress(userEmail);
-  // }, [userEmail]);
-
-  // const updateAccountSettingsEmail = async () => {
-  //   const token = localStorage.getItem("token");
-  //   try {
-  //     let payload = {
-  //       email: newEmailAddress,
-  //       access_token: token,
-  //     };
-  //     const response = await API.UpdateUserDetails(payload);
-  //     console.log(response);
-  //     message.success("Email is successfully updated");
-
-  //     onCancel();
-  //   } catch (error) {
-  //     console.log(error);
-  //     message.error("Could not able to update email");
-  //   }
-  // };
 
   return (
     <Modal
@@ -83,17 +71,7 @@ const EditEmailAddress = ({
               onClick={onCancel}
             >
               <span className="block leading-none">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="#343538"
-                  xmlns="http://www.w3.org/2000/svg"
-                  size="24"
-                  aria-hidden="true"
-                >
-                  <path d="M12 10.415 6.292 4.707 4.708 6.291l5.708 5.708-5.708 5.708 1.584 1.584L12 13.583l5.708 5.708 1.584-1.584-5.708-5.708 5.708-5.708-1.584-1.584z"></path>
-                </svg>
+                <img src={CrossSvg} alt="cross-svg" />
               </span>
             </button>
           </div>
@@ -110,7 +88,6 @@ const EditEmailAddress = ({
                   type="email"
                   className="pt-[8px] px-3 pb-2 w-full h-full rounded-xl bg-transparent outline-black border"
                   placeholder="Email Address"
-                  // value={newEmailAddress}
                   value={newEmailAddress?.updatedEmail}
                   onChange={(e) =>
                     setNewEmailAdddress({
@@ -118,7 +95,6 @@ const EditEmailAddress = ({
                       updatedEmail: e.target.value,
                     })
                   }
-                  //onChange={(e) => setNewEmailAdddress(e.target.value)}
                 />
               </div>
             </div>
@@ -165,13 +141,20 @@ const EditEmailAddress = ({
               </span>
             </button>
             <button
-              className="cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 "
-              //onClick={() => updateAccountSettingsEmail()}
+              className={`cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 flex items-center ${
+                loading ? "opacity-50" : ""
+              }`}
               onClick={() => ChangeEmailOfUser()}
+              disabled={loading}
             >
               <span className="block px-4 ml-5 text-xl text-ellipsis">
                 Save
               </span>
+              {loading && (
+                <div className="">
+                  <Spinner fontsize={20} loaderColor="#FFFFFF" />
+                </div>
+              )}
             </button>
           </div>
         </div>

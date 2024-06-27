@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { Routes, Route, useLocation, useNavigate } from "react-router-dom";
+
 import "./App.css";
-import LandingPage from "./pages/LandingPage";
+
 import Home from "./pages/Home";
-import { Routes, Route, useLocation } from "react-router-dom";
+import LandingPage from "./pages/LandingPage";
 import BrandStoreCategoryPage from "./pages/BrandStoreCategoryPages/BrandStoreCategoryPage";
 import OffersCategoryPage from "./pages/OffersCategoryPage/OffersCategoryPage";
 import YourOrders from "./pages/StoreSidebarPages/YourOrders";
@@ -14,22 +16,22 @@ import Refferals from "./pages/StoreSidebarPages/Refferals";
 import Gift_Cards from "./pages/StoreSidebarPages/Gift_Cards";
 import Manage_promos from "./pages/StoreSidebarPages/Manage_promos";
 import HelpCenter from "./pages/StoreSidebarPages/HelpCenter";
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import ForgotPassword from "./pages/ForgotPassword";
 import GetProductsBasedOnShops from "./components/HomePageComponents/ShopListing/GetProductsBasedOnShops";
 import Addresses from "./pages/StoreSidebarPages/Address/Addresses";
 import Checkout from "./pages/CheckoutPage/Checkout";
 import SearchPageProducts from "./pages/SearchPageProducts/SearchPageProducts";
-import StoreSidebar from "./components/HomePageComponents/StoreSidebar.js/StoreSidebar";
-import AddToCart from "./pages/AddToCart/AddToCart";
-import FilteredStoreProducts from "./pages/FilteredStoreProducts/FilteredStoreProducts";
 import ListProductDetails from "./pages/StoreSidebarPages/List/ListProductDetails";
-import GiftImagesProducts from "./components/HomePageComponents/ShopListing/GiftImagesProducts";
+import GiftImagesProducts from "./components/HomePageComponents/ShopListing/GiftImagesProducts/GiftImagesProducts";
+import ShowAll from "./components/HomePageComponents/BrandStores/ShowAll";
+
 function App() {
-  const [storeFilteredProducts, setStoreFilteredProducts] = useState([]);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const [storeFilteredProducts, setStoreFilteredProducts] = useState([]);
+  const [listDetails, setListDetails] = useState([]);
+
   const accessToken = localStorage.getItem("accessToken") ?? null;
   useEffect(() => {
     if (!location.pathname.includes("/change-password")) {
@@ -40,7 +42,6 @@ function App() {
       }
     }
   }, [accessToken]);
-  console.log("AccessToken set:", localStorage.getItem("accessToken"));
   return (
     <>
       <Routes>
@@ -107,6 +108,7 @@ function App() {
               path="/store/hub/popular_gifts"
               element={<GiftImagesProducts />}
             />
+            <Route path="/store/allStores" element={<ShowAll />} />
           </>
         ) : (
           <>

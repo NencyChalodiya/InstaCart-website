@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 
 import API from "../../../services/api";
+import Spinner from "../../../components/atoms/Spinner";
 
 import { Modal } from "antd";
 
@@ -18,6 +19,7 @@ const EditDetailModal = ({
   const [getCoverImage, setCoverImage] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const fetchCoverImages = async () => {
     try {
@@ -40,6 +42,7 @@ const EditDetailModal = ({
   }, [currentListDetails]);
 
   const handleEditListDetails = async () => {
+    setLoading(true);
     try {
       let payload = {
         title: title,
@@ -54,6 +57,8 @@ const EditDetailModal = ({
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -168,13 +173,20 @@ const EditDetailModal = ({
           <div className="absolute bottom-0 bg-white z-10 left-0 right-0 my-3 border-t pt-3">
             <button
               type="submit"
-              className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-full "
+              className={`first-line:box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-full ${
+                loading ? "opacity-50" : ""
+              }`}
               onClick={() => handleEditListDetails()}
             >
               <div className="flex items-center justify-center">
-                <span className="block text-xl font-semibold leading-5 text-white">
+                <span className="block text-xl font-semibold leading-5 text-white ">
                   Done
                 </span>
+                {loading && (
+                  <div className="ml-4">
+                    <Spinner fontsize={20} loaderColor="#FFFFFF" />
+                  </div>
+                )}
               </div>
             </button>
           </div>

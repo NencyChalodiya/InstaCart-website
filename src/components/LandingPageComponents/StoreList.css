@@ -1,0 +1,35 @@
+.shop-list .ant-skeleton-avatar {
+  width: 64px !important;
+  height: 56px !important;
+}
+
+.shop-list .ant-skeleton-avatar-circle {
+  border-radius: 20% !important;
+}
+
+.shop-list-name .ant-skeleton-avatar {
+  width: 200px !important;
+  height: 10px !important;
+}
+
+.shop-list-name .ant-skeleton-avatar-circle {
+  border-radius: 10% !important;
+}
+
+.shop-list-category .ant-skeleton-avatar {
+  width: 200px !important;
+  height: 10px !important;
+}
+
+.shop-list-category .ant-skeleton-avatar-circle {
+  border-radius: 10% !important;
+}
+
+.shop-list-message .ant-skeleton-avatar {
+  width: 250px !important;
+  height: 30px !important;
+}
+
+.shop-list-message .ant-skeleton-avatar-circle {
+  border-radius: 10% !important;
+}

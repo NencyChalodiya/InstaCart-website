@@ -11,12 +11,11 @@ import TotalCartItems from "../pages/TotalCartItems/TotalCartItems";
 import Input from "./atoms/Input";
 
 const HeaderAddToCart = () => {
-
   const [totalCartItemsModal, setTotalCartItemsModal] = useState(false);
 
   const { cartItems } = useSelector((state) => state.cartItems);
 
-  console.log("caerdasw", cartItems);
+  // console.log("caerdasw", cartItems);
 
   return (
     <header className="fixed z-20 flex items-center justify-between pt-1 pb-1 bg-white border-gray-300 px-25">
@@ -63,7 +62,7 @@ const HeaderAddToCart = () => {
           className="flex items-center gap-2 mt-4 justify-evenly"
           onClick={() => setTotalCartItemsModal(true)}
         >
-        <FaShoppingCart className="w-[28px] h-[28px]" />
+          <FaShoppingCart className="w-[28px] h-[28px]" />
           <span className="text-gray-400">{cartItems?.length || 0}</span>
         </div>
       </div>

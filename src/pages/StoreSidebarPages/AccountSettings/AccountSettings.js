@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from "react";
+
 import Navbar from "../../../components/LandingPageComponents/Navbar";
-import { Link } from "react-router-dom";
-import { Form } from "antd";
-import { Switch } from "antd";
 import EditEmailAddress from "./SettingsModal/EditEmailAddress";
 import CreatePassword from "./SettingsModal/CreatePassword";
 import EditName from "./SettingsModal/EditName";
 import Change_Verify_PhoneNum from "./SettingsModal/Change_Verify_PhoneNum";
 import API from "../../../services/api";
 import InnerSideBarData from "../InnerSideBarData";
+
+import unverifiedPhoneSvg from "../../../assets/images/unverifiedPhoneSvg.svg";
+
+import { Skeleton } from "antd";
+
 const AccountSettings = () => {
   const [editEmailAddress, openEditEmailAdress] = useState(false);
   const [changePassword, openChangePassword] = useState(false);
@@ -16,18 +19,20 @@ const AccountSettings = () => {
   const [verifyPhoneNumber, opneVerifyPhoneNumber] = useState(false);
   const [userSettingsDetail, setUserSettingsDetail] = useState(null);
   const [phoneNumberVerified, setPhoneNumberVerified] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const getAccountSettingsDetails = async () => {
+    setLoading(true);
     try {
-      //console.log("dkjasnd");
       const response = await API.GetUserDetails();
       console.log(response);
       if (response.status === "success") {
-        //console.log(response.user);
         setUserSettingsDetail(response.data.userData);
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -37,12 +42,6 @@ const AccountSettings = () => {
   const handleVerificationStatusChange = (status) => {
     setPhoneNumberVerified(status);
   };
-
-  //console.log(userSettingsDetail);
-
-  // const updateName = (newName) => {
-  //   setUserSettingsDetail({ ...userSettingsDetail, name: newName });
-  // };
 
   return (
     <>
@@ -72,9 +71,19 @@ const AccountSettings = () => {
                       <p className="text-sm leading-4 text-[#343538] ">
                         Email address
                       </p>
-                      <p className="mt-1 text-sm leading-4 text-[#83878E]">
-                        {userSettingsDetail?.email || "--"}
-                      </p>
+                      {loading ? (
+                        <div className="mt-1">
+                          <div className="address-name">
+                            <Skeleton.Avatar active />
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <p className="mt-1 text-sm leading-4 text-[#83878E]">
+                            {userSettingsDetail?.email || "--"}
+                          </p>
+                        </>
+                      )}
                     </div>
                     <button
                       className="pr-80 self-start cursor-pointer text-[#2C890F] max-lg:pr-0 "
@@ -106,10 +115,20 @@ const AccountSettings = () => {
                   <div className="flex flex-row justify-between">
                     <div className="flex flex-col mt-4">
                       <p className="text-sm leading-4 text-[#343538] ">Name</p>
-                      <p className="mt-1 text-sm leading-4 text-[#83878E]">
-                        {userSettingsDetail?.firstName}{" "}
-                        {userSettingsDetail?.lastName || "-"}
-                      </p>
+                      {loading ? (
+                        <div className="mt-1">
+                          <div className="address-name">
+                            <Skeleton.Avatar active />
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <p className="mt-1 text-sm leading-4 text-[#83878E]">
+                            {userSettingsDetail?.firstName}{" "}
+                            {userSettingsDetail?.lastName || "-"}
+                          </p>
+                        </>
+                      )}
                     </div>
                     <button
                       className="pr-80 self-start cursor-pointer text-[#2C890F] max-lg:pr-0  "
@@ -123,40 +142,37 @@ const AccountSettings = () => {
                       <p className="text-sm leading-4 text-[#343538] ">
                         Phone number
                       </p>
-                      <p className="mt-1 text-sm leading-4 text-[#83878E]">
-                        {userSettingsDetail?.phoneno || "--"}
-                        {phoneNumberVerified ? (
-                          "(Verified)"
-                        ) : (
-                          <>
-                            <span className="flex items-center ">
-                              <svg
-                                width="16"
-                                height="16"
-                                viewBox="0 0 24 24"
-                                fill="#DE3534"
-                                xmlns="http://www.w3.org/2000/svg"
-                                color="systemDetrimentalRegular"
-                                size="16"
-                                aria-hidden="true"
-                                className="mr-1"
-                              >
-                                <path
-                                  fillRule="evenodd"
-                                  clipRule="evenodd"
-                                  d="M22 21 12 3 2 21zm-9.137-5.42h-1.73c-.158-2.4-.262-4.378-.262-6.043V9h2.254v.537c0 1.658-.117 3.614-.26 6.012zm.432 2.32c0 .654-.498 1.1-1.284 1.1-.8 0-1.31-.42-1.31-1.114 0-.642.537-1.1 1.31-1.1s1.284.432 1.284 1.113"
-                                ></path>
-                              </svg>
-                              <span>Unverified</span>
-                            </span>
-                            <span>
-                              <span className="ml-1">
-                                Verify your number to secure your account
-                              </span>
-                            </span>
-                          </>
-                        )}
-                      </p>
+                      {loading ? (
+                        <div className="mt-1">
+                          <div className="address-name">
+                            <Skeleton.Avatar active />
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <p className="mt-1 text-sm leading-4 text-[#83878E]">
+                            {userSettingsDetail?.phoneno || "--"}
+                            {phoneNumberVerified ? (
+                              "(Verified)"
+                            ) : (
+                              <>
+                                <span className="flex items-center ">
+                                  <img
+                                    src={unverifiedPhoneSvg}
+                                    alt="unverified-phone-svg"
+                                  />
+                                  <span>Unverified</span>
+                                </span>
+                                <span>
+                                  <span className="ml-1">
+                                    Verify your number to secure your account
+                                  </span>
+                                </span>
+                              </>
+                            )}
+                          </p>
+                        </>
+                      )}
                     </div>
                     <button
                       className="pr-80 self-start cursor-pointer text-[#2C890F] max-lg:pr-0  "
@@ -169,7 +185,7 @@ const AccountSettings = () => {
                 <div className="my-3 border-b pr-80"></div>
               </div>
 
-              <div className="mt-5">
+              {/* <div className="mt-5">
                 <div className="flex flex-row items-center gap-1">
                   <h2 className="text-xl leading-5">EBT SNAP settings</h2>
                   <a href="#" className="flex items-center">
@@ -213,9 +229,9 @@ const AccountSettings = () => {
                   Add EBT SNAP card
                 </a>
                 <div className="my-3 border-b pr-80"></div>
-              </div>
+              </div> */}
 
-              <div className="mt-5">
+              {/* <div className="mt-5">
                 <div className="flex flex-row items-center gap-1">
                   <h2 className="text-xl leading-5">Accessibility</h2>
                   <a href="#" className="flex items-center">
@@ -275,7 +291,7 @@ const AccountSettings = () => {
                     </Form>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

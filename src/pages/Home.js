@@ -9,10 +9,6 @@ const Home = () => {
   return (
     <>
       <Header />
-      <BrandStores />
-      <Offers />
-      <StoreToHelpYouSave />
-      <StoreFooter />
     </>
   );
 };

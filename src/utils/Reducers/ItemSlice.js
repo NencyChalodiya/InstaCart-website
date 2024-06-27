@@ -9,7 +9,7 @@ const ItemSlice = createSlice({
   name: "item",
   initialState,
   reducers: {
-    AddItem(state, action) {
+    AddItemCat(state, action) {
       const itemIndex = state.items.findIndex(
         (item) => item.id === action?.payload?.id
       );
@@ -21,7 +21,7 @@ const ItemSlice = createSlice({
         }
       }
     },
-    RemoveItem(state, action) {
+    RemoveItemCat(state, action) {
       const itemIndex = state.items.findIndex(
         (item) => item.id === action?.payload?.id
       );
@@ -34,7 +34,7 @@ const ItemSlice = createSlice({
       }
     },
 
-    DeleteTotalItems(state, action) {
+    DeleteTotalItemsCat(state, action) {
       const itemIndex = state.items.findIndex(
         (item) => item.id === action?.payload?.id
       );
@@ -45,5 +45,6 @@ const ItemSlice = createSlice({
   },
 });
 
-export const { AddItem, RemoveItem, DeleteTotalItems } = ItemSlice.actions;
+export const { AddItemCat, RemoveItemCat, DeleteTotalItems } =
+  ItemSlice.actions;
 export default ItemSlice.reducer;

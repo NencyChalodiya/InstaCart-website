@@ -11,7 +11,6 @@ const DeliveryTimesModal = ({
   deliveryDetails,
   isLoading,
 }) => {
-  //console.log("StoreID----------", storeId);
   const [activeKey, setActiveKey] = useState("1");
   const [currentDayIndex, setCurrentDayIndex] = useState(1);
 
@@ -22,22 +21,6 @@ const DeliveryTimesModal = ({
   const handleMoreTimesClick = () => {
     setCurrentDayIndex((prevIndex) => prevIndex + 1);
   };
-
-  //console.log("sawdewasdasd", deliveryDetails);
-
-  //console.log("deliverygd", deliveryDetails);
-  // const fetchStoreDeliveryDetails = async () => {
-  //   try {
-  //     const response = await API.getStoreDeliveryDetails(storeId);
-  //     console.log(response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   fetchStoreDeliveryDetails();
-  // }, [storeId]);
 
   return (
     <>
@@ -237,7 +220,7 @@ const DeliveryTimesModal = ({
                                     </h3>
                                     {deliveryDetails ? (
                                       <>
-                                        {deliveryDetails.map((detail) => (
+                                        {deliveryDetails?.map((detail) => (
                                           <div className="flex">
                                             <i
                                               className="icon"
@@ -304,7 +287,7 @@ const DeliveryTimesModal = ({
                                       </h3>
                                       {deliveryDetails ? (
                                         <>
-                                          {deliveryDetails.map((detail) => (
+                                          {deliveryDetails?.map((detail) => (
                                             <div className="text-2xl font-semibold">
                                               {
                                                 detail?.delivery_time
@@ -430,7 +413,7 @@ const DeliveryTimesModal = ({
                                     <ul>
                                       {deliveryDetails ? (
                                         <>
-                                          {deliveryDetails.map((detail) => (
+                                          {deliveryDetails?.map((detail) => (
                                             <>
                                               <li className="flex pb-[10px]">
                                                 <div className="flex-grow">
@@ -531,31 +514,31 @@ const DeliveryTimesModal = ({
                                 <div>
                                   <ul className="list-disc">
                                     {deliveryDetails[0] &&
-                                    deliveryDetails[0].delivery_time &&
-                                    deliveryDetails[0].delivery_time
-                                      .delivery_timings ? (
+                                    deliveryDetails[0]?.delivery_time &&
+                                    deliveryDetails[0]?.delivery_time
+                                      ?.delivery_timings ? (
                                       <>
-                                        {deliveryDetails[0].delivery_time.delivery_timings
-                                          .slice(0, currentDayIndex)
-                                          .map((detail) => (
+                                        {deliveryDetails[0]?.delivery_time?.delivery_timings
+                                          ?.slice(0, currentDayIndex)
+                                          ?.map((detail) => (
                                             <li
                                               className="pb-2"
-                                              key={detail.day}
+                                              key={detail?.day}
                                             >
                                               <h3 className="text-base leading-5 underline">
-                                                {detail.day}
+                                                {detail?.day}
                                               </h3>
                                               <ul>
-                                                {detail.slots.map(
+                                                {detail?.slots.map(
                                                   (slot, index) => (
                                                     <li key={index}>
                                                       <div className="flex justify-between py-4">
                                                         <div>
-                                                          {slot.time_slot}
+                                                          {slot?.time_slot}
                                                         </div>
                                                         <div className="flex">
                                                           <div>
-                                                            {slot.price}
+                                                            {slot?.price}
                                                           </div>
                                                         </div>
                                                       </div>

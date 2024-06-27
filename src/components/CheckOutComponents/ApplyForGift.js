@@ -12,7 +12,7 @@ const ApplyForGift = ({
 }) => {
   return (
     <div>
-      <div className="p-6 border-b ">
+      <div className="px-6 py-5 mt-1 border-b ">
         <div>
           <div
             className="relative flex items-center cursor-pointer"

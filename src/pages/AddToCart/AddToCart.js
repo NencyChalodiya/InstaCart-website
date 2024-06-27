@@ -2,9 +2,12 @@ import React, { useRef, useState, useEffect } from "react";
 import API from "../../services/api";
 import { offersCategory } from "../../data/offers";
 import AddproductToListModal from "../StoreSidebarPages/List/AddproductToListModal";
+import { updateCartItem } from "../../utils/Reducers/ProductSlice";
 
 import { Modal } from "antd";
 import { IoArrowBackOutline } from "react-icons/io5";
+
+import { useDispatch, useSelector } from "react-redux";
 
 import UpsideArrowSvg from "../../assets/images/upsideArrow.svg";
 import DownSideArrowSvg from "../../assets/images/downSideArrow.svg";
@@ -18,16 +21,45 @@ const AddToCart = ({
   itemsAdd,
   productDetail,
   storeId,
+  AddtoCart,
 }) => {
-  const [mainImage, setMainImage] = useState(null);
-  const [selectedValue, setSelectedValue] = useState("1");
+  const dispatch = useDispatch();
+  const { cartItems } = useSelector((state) => state.cartItems);
+  const [mainImage, setMainImage] = useState(
+    productDetail?.image ? productDetail.image[0] : "default_image_path_here"
+  );
   const [isSaved, setIsSaved] = useState(false);
   const [addProductListModal, openAddProductListModal] = useState(false);
-  const [listDetails, setListDetails] = useState([]);
+  const [selectedValue, setSelectedValue] = useState(1);
 
+  console.log("cartItemssqwsqq", cartItems);
   const detailRef = useRef(null);
   const IngredientRef = useRef(null);
   const directionRef = useRef(null);
+
+  // console.log("productDetail:", productDetail);
+  // console.log("productDetail.id:", productDetail?.id);
+  // console.log("cartItems:", cartItems);
+  // console.log("selectedValue", selectedValue);
+
+  const item = cartItems.find((item) => item.id === productDetail?.id);
+  // console.log("item", item);
+  // if (item) {
+  //   console.log("cartItems.qty", item.qty);
+  // } else {
+  //   console.log(
+  //     "Product not found in cartItems or productDetail is undefined."
+  //   );
+  // }
+
+  useEffect(() => {
+    const item = cartItems.find((item) => item.id === productDetail?.id);
+    if (item) {
+      setSelectedValue(item?.qty);
+    } else {
+      setSelectedValue(1);
+    }
+  }, [cartItems, productDetail]);
 
   const scrollToDetail = () => {
     if (detailRef.current) {
@@ -44,7 +76,7 @@ const AddToCart = ({
   const saveProducts = async () => {
     try {
       let payload = {
-        productId: productDetail.product_id,
+        productId: productDetail.id,
       };
       const response = await API.addToSavedProducts(payload);
       if (response.status === "success") {
@@ -66,34 +98,15 @@ const AddToCart = ({
     }
   };
 
-  const fetchListDetails = async () => {
-    try {
-      const response = await API.getListDetails(storeId);
-      //console.log(response);
-      if (response.status === "success") {
-        setListDetails(response.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   useEffect(() => {
-    fetchListDetails();
-  }, []);
-
-  useEffect(() => {
-    if (
-      productDetail?.product_images &&
-      productDetail.product_images.length > 0
-    ) {
-      setMainImage(productDetail.product_images[0]);
+    if (productDetail?.image && productDetail.image.length > 0) {
+      setMainImage(productDetail.image[0]);
     }
   }, [productDetail]);
 
   const handleClick = () => {
     if (isSaved) {
-      deleteSavedProduct(productDetail.product_id);
+      deleteSavedProduct(productDetail.id);
     } else {
       saveProducts();
     }
@@ -109,9 +122,24 @@ const AddToCart = ({
   };
 
   const handleSelectChange = (e) => {
-    setSelectedValue(e.target.value);
+    const newQty = parseInt(e.target.value, 10);
+    console.log("newQty", newQty);
+    setSelectedValue(newQty);
+    // const updatedCartItems = cartItems.map((item) => {
+    //   if (item.id === productDetail.id) {
+    //     return { ...item, qty: newQty };
+    //   }
+    //   return item;
+    // });
+    // dispatch(updateCartItem(updatedCartItems));
   };
+  console.log("selected value", selectedValue);
 
+  if (selectedValue !== item?.qty) {
+    console.log("selectedValue == item?.qty");
+  } else {
+    console.log("dsfgklshgflagsf");
+  }
   return (
     <Modal
       centered
@@ -157,26 +185,24 @@ const AddToCart = ({
                             </div>
                           </li>
 
-                          {productDetail && productDetail.product_images ? (
+                          {productDetail && productDetail?.image ? (
                             <>
-                              {productDetail?.product_images.map(
-                                (productImg) => (
-                                  <li className="inline-block p-1">
-                                    <button
-                                      className="border p-1 m-[1px] bg-white cursor-pointer w-[46px] flex rounded-xl hover:border-2 hover:border-black "
-                                      onMouseEnter={() =>
-                                        handleImageClick(productImg)
-                                      }
-                                    >
-                                      <img
-                                        src={productImg}
-                                        alt="img-1"
-                                        className="h-auto max-w-full rounded-xl"
-                                      />
-                                    </button>
-                                  </li>
-                                )
-                              )}
+                              {productDetail?.image.map((productImg) => (
+                                <li className="inline-block p-1">
+                                  <button
+                                    className="border p-1 m-[1px] bg-white cursor-pointer w-[46px] flex rounded-xl hover:border-2 hover:border-black "
+                                    onMouseEnter={() =>
+                                      handleImageClick(productImg)
+                                    }
+                                  >
+                                    <img
+                                      src={productImg}
+                                      alt="img-1"
+                                      className="h-auto max-w-full rounded-xl"
+                                    />
+                                  </button>
+                                </li>
+                              ))}
                             </>
                           ) : (
                             <>
@@ -233,7 +259,7 @@ const AddToCart = ({
                       <div className="mb-[35px]  w-full ">
                         <h2 className="mt-2 mb-2 ">
                           <span className="text-2xl font-bold leading-5 ">
-                            {productDetail?.product_title}
+                            {productDetail?.title}
                           </span>
                         </h2>
                         <div>
@@ -304,7 +330,6 @@ const AddToCart = ({
                             </div>
                           </div>
                         </div>
-                        {/* Additional details for the whiskey can go here */}
                       </div>
                       <div className="w-full  ml-6 max-md:ml-0 mb-[5px]  ">
                         <div className="border rounded-xl px-4 mb-[35px]  lg:w-[450px]  ">
@@ -348,44 +373,126 @@ const AddToCart = ({
                             <div className="flex-grow"></div>
                           </div>
                           <div className="relative flex flex-col flex-wrap justify-between mt-4">
-                            <button
-                              className="mb-4 cursor-pointer relative min-w-[180px] w-full h-14 rounded-xl text-base leading-4 text-black bg-[#E8E9EB]"
-                              onClick={handleButtonClick}
-                            >
-                              <span className="cursor-pointer">
-                                <div className="flex items-center justify-between px-3">
-                                  <span className="cursor-pointer flex-grow ">
-                                    {selectedValue}
+                            {item && item?.qty >= 1 ? (
+                              <>
+                                <button
+                                  className={`mb-4 cursor-pointer relative min-w-[180px] w-full h-14 rounded-xl text-base leading-4  ${
+                                    selectedValue !== item?.qty
+                                      ? "text-black bg-[#E8E9EB]"
+                                      : "text-white bg-[#277D0F]"
+                                  }`}
+                                  onClick={handleButtonClick}
+                                >
+                                  <span className="cursor-pointer">
+                                    <div className="flex items-center justify-between px-3">
+                                      <span className="cursor-pointer flex-grow ">
+                                        {selectedValue !== item?.qty
+                                          ? `${selectedValue}`
+                                          : `${selectedValue} in cart`}
+                                      </span>
+                                      <select
+                                        id="dropdown"
+                                        name="items"
+                                        value={selectedValue}
+                                        onChange={(value) =>
+                                          handleSelectChange(value)
+                                        }
+                                        className="absolute inset-0 opacity-0 cursor-pointer"
+                                      >
+                                        <option value={1}>1</option>
+                                        <option value={2}>2</option>
+                                        <option value={3}>3</option>
+                                        <option value={4}>4</option>
+                                        <option value={5}>5</option>
+                                        <option value={6}>6</option>
+                                        <option value={7}>7</option>
+                                        <option value={8}>8</option>
+                                        <option value={9}>9</option>
+                                      </select>
+                                      <img
+                                        src={BoldedDownArrow}
+                                        alt="bolded-arrow"
+                                      />
+                                    </div>
                                   </span>
-                                  <select
-                                    id="dropdown"
-                                    name="items"
-                                    value={selectedValue}
-                                    onChange={handleSelectChange}
-                                    className="absolute inset-0 opacity-0 cursor-pointer"
+                                </button>
+                                {selectedValue !== item?.qty && (
+                                  <button
+                                    className="px-4 mb-4 cursor-pointer relative min-w-[180px] w-full h-14 rounded-[27px] text-white bg-[#277D0F]"
+                                    onClick={(e) =>
+                                      AddtoCart(
+                                        e,
+                                        productDetail,
+                                        productDetail.subcategory_id,
+                                        productDetail.category_id,
+                                        storeId,
+                                        selectedValue
+                                      )
+                                    }
                                   >
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                  </select>
-                                  <img
-                                    src={BoldedDownArrow}
-                                    alt="bolded-arrow"
-                                  />
-                                </div>
-                              </span>
-                            </button>
-                            <button className="px-4 mb-4 cursor-pointer relative min-w-[180px] w-full h-14 rounded-[27px] text-white bg-[#277D0F]">
-                              <span className="block mx-2 text-base leading-5">
-                                Add to cart
-                              </span>
-                            </button>
+                                    <span className="block mx-2 text-base leading-5">
+                                      Update quantity
+                                    </span>
+                                  </button>
+                                )}
+                              </>
+                            ) : (
+                              <>
+                                <button
+                                  className={`mb-4 cursor-pointer relative min-w-[180px] w-full h-14 rounded-xl text-base leading-4 text-black bg-[#E8E9EB] `}
+                                  onClick={handleButtonClick}
+                                >
+                                  <span className="cursor-pointer">
+                                    <div className="flex items-center justify-between px-3">
+                                      <span className="cursor-pointer flex-grow ">
+                                        {selectedValue} {""}
+                                      </span>
+                                      <select
+                                        id="dropdown"
+                                        name="items"
+                                        value={selectedValue}
+                                        onChange={(value) =>
+                                          handleSelectChange(value)
+                                        }
+                                        className="absolute inset-0 opacity-0 cursor-pointer"
+                                      >
+                                        <option value={1}>1</option>
+                                        <option value={2}>2</option>
+                                        <option value={3}>3</option>
+                                        <option value={4}>4</option>
+                                        <option value={5}>5</option>
+                                        <option value={6}>6</option>
+                                        <option value={7}>7</option>
+                                        <option value={8}>8</option>
+                                        <option value={9}>9</option>
+                                      </select>
+                                      <img
+                                        src={BoldedDownArrow}
+                                        alt="bolded-arrow"
+                                      />
+                                    </div>
+                                  </span>
+                                </button>
+
+                                <button
+                                  className="px-4 mb-4 cursor-pointer relative min-w-[180px] w-full h-14 rounded-[27px] text-white bg-[#277D0F]"
+                                  onClick={(e) =>
+                                    AddtoCart(
+                                      e,
+                                      productDetail,
+                                      productDetail.subcategory_id,
+                                      productDetail.category_id,
+                                      storeId,
+                                      selectedValue
+                                    )
+                                  }
+                                >
+                                  <span className="block mx-2 text-base leading-5">
+                                    Add to cart
+                                  </span>
+                                </button>
+                              </>
+                            )}
                           </div>
 
                           <div className="flex flex-wrap px-1 pt-3 pb-4">
@@ -588,7 +695,6 @@ const AddToCart = ({
       <AddproductToListModal
         addProductListModal={addProductListModal}
         onCancel={() => openAddProductListModal(false)}
-        listDetails={listDetails}
         productDetail={productDetail}
         storeId={storeId}
       />

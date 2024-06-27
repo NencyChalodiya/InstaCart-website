@@ -36,7 +36,7 @@ const DeliveryInstructions = ({
   }, [isDeliveryInstructionExpanded]);
 
   return (
-    <div className="p-6  border-b  mt-4 ">
+    <div className="px-6 py-4 mt-1  border-b  ">
       <div>
         <div>
           <div
@@ -54,9 +54,9 @@ const DeliveryInstructions = ({
 
             <div className="flex items-center">
               {isDeliveryInstructionExpanded ? (
-                <span>&#9650;</span> // Up arrow
+                <span>&#9650;</span>
               ) : (
-                <span>&#9660;</span> // Down arrow
+                <span>&#9660;</span>
               )}
             </div>
           </div>

@@ -75,6 +75,17 @@ export const getCategoryFilter = () => {
   return Ajax.Request(`/store/categorylist`, Ajax.GET, true);
 };
 
+// export const getShopsByCategory = (id) => {
+//   return Ajax.Request(
+//     `/store/category?main_category_id=1`,
+//     Ajax.GET,
+//     true,
+//     null,
+//     null,
+//     null,
+//     id
+//   );
+// };
 export const getShopsByCategory = (id) => {
   return Ajax.Request(`/store/category?main_category_id=${id}`, Ajax.GET, true);
 };
@@ -192,8 +203,16 @@ export const addOrder = (payload) => {
   return Ajax.Request(`/orders/checkout`, Ajax.POST, true, payload);
 };
 
-export const getOrder = () => {
-  return Ajax.Request(`/orders/my-orders`, Ajax.GET, true);
+export const getOrder = (orders) => {
+  return Ajax.Request(
+    `/orders/my-orders`,
+    Ajax.GET,
+    true,
+    null,
+    null,
+    null,
+    orders
+  );
 };
 
 export const getOrderDetails = (orderId) => {
@@ -267,6 +286,18 @@ export const editListItems = (payload) => {
   );
 };
 
+export const getProductsOfGift = (giftProducts) => {
+  return Ajax.Request(
+    `/store/category/populargifts`,
+    Ajax.GET,
+    true,
+    null,
+    null,
+    null,
+    giftProducts
+  );
+};
+
 let API = {
   SendOtpToRegister,
   VerifyOtpToRegister,
@@ -312,6 +343,7 @@ let API = {
   deleteList,
   editListDetails,
   editListItems,
+  getProductsOfGift,
 };
 
 export default API;

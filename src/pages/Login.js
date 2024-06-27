@@ -1,13 +1,17 @@
 import { Modal, message } from "antd";
 import React, { useState, useRef, useEffect } from "react";
-import API from "../services/api";
-import { IoArrowBackOutline } from "react-icons/io5";
-import "./Loading.css";
 import { useNavigate } from "react-router-dom";
-import CrossSvg from "../assets/images/cross.svg";
+
+import API from "../services/api";
 import ScreenOne from "../components/LoginScreenComponents/ScreenOne";
 import ScreenTwo from "../components/LoginScreenComponents/ScreenTwo";
 import ScreenThree from "../components/LoginScreenComponents/ScreenThree";
+
+import "./Loading.css";
+
+import { IoArrowBackOutline } from "react-icons/io5";
+import CrossSvg from "../assets/images/cross.svg";
+
 const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
   const navigate = useNavigate();
   const [loginUserDetails, setLoginUserDetails] = useState({

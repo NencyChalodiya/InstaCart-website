@@ -4,6 +4,9 @@ import ChooseReplacementSvg from "../../assets/images/chooseReplacement.svg";
 import RemoveSvg from "../../assets/images/removeSvg.svg";
 
 const ShopCartItems = ({ items, DeleteItemsFromCart }) => {
+  // const id = "1-1";
+  console.log("cart item data", items);
+  // const items = item[id];
   return (
     <li key={items.id}>
       <div>
@@ -34,13 +37,13 @@ const ShopCartItems = ({ items, DeleteItemsFromCart }) => {
                   <div className="absolute cursor-pointer top-1 right-1">
                     <div className="inline-block rounded-[8px] border">
                       <button className="cursor-pointer flex relative items-center justify-evenly min-w-9 py-[6px] px-1 whitespace-nowrap">
-                        <span>{items.qty} ct</span>
+                        <span>{items?.qty} ct</span>
                       </button>
                     </div>
                   </div>
                 </div>
                 <div className="h-9 flex flex-col basis-[54px] items-end justify-center">
-                  ${items.qty * items.selling_price}
+                  ${(items.qty * items.selling_price).toFixed(2)}
                 </div>
               </div>
             </div>

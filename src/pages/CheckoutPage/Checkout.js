@@ -24,7 +24,6 @@ import ReferralSvg from "../../assets/images/referral.svg";
 import { Tabs } from "antd";
 import { ConfigProvider } from "antd";
 import { useSelector } from "react-redux";
-import { Checkbox } from "antd";
 
 const Checkout = ({ productDetail }) => {
   const customTabStyle = {
@@ -77,6 +76,7 @@ const Checkout = ({ productDetail }) => {
     senderName: "",
     giftMessage: "",
   });
+  const [loading, setLoading] = useState(false);
 
   //Delivery Address api
   const fetchDeliveryAddresses = async () => {
@@ -131,6 +131,7 @@ const Checkout = ({ productDetail }) => {
 
   //SubTotal Api
   const fetchSubTotal = async () => {
+    setLoading(true);
     const productIdFromDetail = productDetail?.product_id;
     const cartItemsPayload = cartItems.map((item) => ({
       product_id:
@@ -157,6 +158,8 @@ const Checkout = ({ productDetail }) => {
       //setTotalContext(response.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -288,8 +291,8 @@ const Checkout = ({ productDetail }) => {
     setShowMobileInput(true);
     setTimeout(() => {
       if (mobileNumberRef.current) {
-        mobileNumberRef.current.scrollIntoView({ behavior: "smooth" }); // Scroll into view
-        mobileNumberRef.current.focus(); // Focus on the input field
+        mobileNumberRef.current.scrollIntoView({ behavior: "smooth" });
+        mobileNumberRef.current.focus();
       }
     }, 100);
   };
@@ -348,7 +351,7 @@ const Checkout = ({ productDetail }) => {
   };
 
   const handleLeaveAtMyDoorChange = (checked) => {
-    setLeaveAtMyDoor(checked ? 1 : 0); // Convert true/false to 1/0
+    setLeaveAtMyDoor(checked ? 1 : 0); 
   };
 
   return (
@@ -363,8 +366,8 @@ const Checkout = ({ productDetail }) => {
       </div>
 
       <div className="bg-[#F7F7F7]">
-        <div className="grid grid-rows-3 grid-flow-col gap-3 mx-auto py-8 max-w-[1040px] bg-white ">
-          <div className="row-span-3">
+        <div className="md:flex gap-3 mx-auto py-8 max-w-[1040px] bg-white ">
+          <div className="">
             <div className="relative ">
               <div>
                 <ConfigProvider
@@ -445,6 +448,7 @@ const Checkout = ({ productDetail }) => {
                               handleDeliveryDetails={handleDeliveryDetails}
                               selectDeliveryDetails={selectDeliveryDetails}
                               onContinue={handleContinue}
+                              loading={loading}
                             />
                           </div>
                           <div>
@@ -510,6 +514,7 @@ const Checkout = ({ productDetail }) => {
                               onContinue={handleContinue}
                               selectPickupDetails={selectPickupDetails}
                               handlePickupDetails={handlePickupDetails}
+                              loading={loading}
                             />
                           </div>
                         </div>
@@ -520,7 +525,7 @@ const Checkout = ({ productDetail }) => {
               </div>
               <div>
                 <div>
-                  <div className="p-6 border-b">
+                  <div className="px-6 py-5 mt-1 border-b">
                     <div>
                       <div className="relative flex items-center">
                         <img src={MobileNumberSvg} alt="mobileNumber-svg" />
@@ -582,7 +587,7 @@ const Checkout = ({ productDetail }) => {
                   </div>
                 </div>
                 <div>
-                  <div className="p-6 border-b cursor-pointer">
+                  <div className="px-6 py-5 mt-1 border-b cursor-pointer">
                     <div className="flex  relative cursor-pointer">
                       <div className="flex justify-around items-center">
                         <img src={ReferralSvg} alt="referral-logo" />

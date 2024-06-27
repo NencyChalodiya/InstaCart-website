@@ -4,7 +4,7 @@ const TopStoreFrontDetails = ({ store, openModalWithApiCall, ArrowSvg }) => {
   return (
     <>
       <div key={store.store_id} className="relative">
-        <a href="/" className="flex flex-col items-center no-underline">
+        <a href="/store" className="flex flex-col items-center no-underline">
           <img
             src={store?.logo}
             className="w-auto h-20 border rounded-full aspect-square"

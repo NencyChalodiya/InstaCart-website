@@ -27,90 +27,49 @@ const jsonToUrlParams = (json) => {
 const getToken = () => {
   const token = localStorage.getItem("accessToken");
   if (token !== null) {
-    // token previously stored
     return token;
   }
   return "";
 };
 
-// let isRefreshing = false;
-// let refreshQueue = [];
-
-// const refreshToken = async () => {
-//   // Check if already refreshing
-//   if (isRefreshing) {
-//     // Queue the request
-//     return new Promise((resolve, reject) => {
-//       refreshQueue.push({ resolve, reject });
-//     });
+// const RefreshToken = async () => {
+//   const refreshtoken = localStorage.getItem("refreshtoken");
+//   if (!refreshtoken) {
+//     throw new Error("No refresh token available.");
 //   }
-
-//   isRefreshing = true;
-
-//   try {
-//     const refreshToken = localStorage.getItem("refreshToken");
-//     if (!refreshToken) {
-//       // throw new Error("No refresh token available.");
-//     }
-//     const payload = {
-//       refreshToken: refreshToken,
-//     };
-
-//     const response = await API.refreshToken(payload);
-//     localStorage.setItem("accessToken", response?.data?.accessToken);
-
-//     // Process queued requests
-//     refreshQueue.forEach((req) => req.resolve(response));
-
-//     refreshQueue = [];
-//     isRefreshing = false;
-
-//     return response;
-//   } catch (error) {
-//     console.error("Error refreshing token:", error);
-//     isRefreshing = false;
-
-//     // Reject queued requests
-//     refreshQueue.forEach((req) => req.reject(error));
-
-//     refreshQueue = [];
-//     throw error;
+//   const payload = {
+//     refreshToken: refreshtoken,
+//   };
+//   let config = {
+//     method: POST,
+//     body: JSON.stringify(payload),
+//     headers: {
+//       "content-type": "application/json",
+//     },
+//   };
+//   console.log("refreshToken", refreshtoken);
+//   const response = await fetch(`${BASE_API}/refreshAccessToken`, config);
+//   //console.log(response);
+//   if (!response.ok) {
+//     throw new Error("Failed to refresh token.");
+//   }
+//   const data = await response.json();
+//   //console.log("data", data);
+//   if (
+//     data.statusCode === 401 ||
+//     data.statusCode === INVALID_TOKEN ||
+//     data.status === INVALID_TOKEN
+//   ) {
+//     localStorage.removeItem("accessToken");
+//     localStorage.removeItem("refreshToken");
+//     window.location.href("/");
+//   } else {
+//     const newAccessToken = data?.data?.accessToken;
+//     console.log("newAccessToken", newAccessToken);
+//     localStorage.setItem("accessToken", newAccessToken);
+//     return newAccessToken;
 //   }
 // };
-
-const refreshToken = async () => {
-  const refreshtoken = localStorage.getItem("refreshToken");
-  if (!refreshtoken) {
-    throw new Error("No refresh token available.");
-  }
-  const payload = {
-    refreshToken: refreshtoken,
-  };
-  let config = {
-    method: POST,
-    body: JSON.stringify(payload),
-    headers: {
-      "content-type": "application/json",
-    },
-  };
-  const response = await fetch(`${BASE_API}/refreshAccessToken`, config);
-  //console.log(response);
-  if (!response.ok) {
-    throw new Error("Failed to refresh token.");
-  }
-  const data = await response.json();
-  if (
-    data.statusCode === 401 ||
-    data.statusCode === INVALID_TOKEN ||
-    data.status === INVALID_TOKEN
-  ) {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    window.location.href("/");
-  } else {
-    localStorage.setItem("accessToken", response?.data?.accessToken);
-  }
-};
 
 const handleResponse = async (response) => {
   //console.log(response);
@@ -121,7 +80,6 @@ const handleResponse = async (response) => {
   const contentType = response.headers.get("Content-Type");
   if (contentType && contentType.indexOf("application/json") !== -1) {
     const data = await response.json();
-    //console.log(data);
     return data;
   } else {
     return response.text();
@@ -169,12 +127,24 @@ const Request = async (
   }
   let api_temp = BASE_API;
   // if (API_URL && API_URL !== "") {
-  // 	api_temp = API_URL;
+  //   api_temp = API_URL;
   // }
   return fetch(`${api_temp}${route}`, config)
     .then(async (res) => {
       const data = await handleResponse(res);
       // console.log("data", data);
+
+      // if (data.statusCode === 403 || data.msg === "Access token has expired") {
+      //   console.log("sdiadhn");
+      //   const refreshtoken = localStorage.getItem("refreshToken");
+      //   const payload = {
+      //     refreshToken: refreshtoken,
+      //   };
+      //   const response = await API.refreshToken(payload);
+      //   localStorage.setItem("accessToken", response.data.accessToken);
+      //   console.log("refresh token generated", response);
+      // }
+
       return data;
     })
     .catch((err) => {
@@ -188,8 +158,8 @@ const handleTokenError = async (err) => {
     err?.message == INVALID_TOKEN ||
     err?.statusText == INVALID_TOKEN
   ) {
-    console.log(err);
-    await refreshToken();
+    console.log("errordsdewfewq", err);
+    console.log("No refresh token generated");
   }
   return err;
 };

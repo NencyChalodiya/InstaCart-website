@@ -33,7 +33,7 @@ const CheckOutFormModal = ({
       closable={false}
       footer={false}
     >
-      <div className="h-[575px]">
+      <div className="h-[600px]">
         <div className="flex-grow flex-shrink overflow-y-auto px-4 pb-4 mt-4">
           <h2 className="text-xl">Saved payment methods</h2>
           <button className="cursor-pointer relative py-4 px-2 w-full rounded-[12px]">
@@ -74,6 +74,21 @@ const CheckOutFormModal = ({
               <CheckoutForm />
             </Elements>
           )}
+          <button className="cursor-pointer relative py-4 px-2 w-full rounded-[12px]">
+            <span className="flex justify-between items-center">
+              <div className="flex justify-start items-center">
+                <img
+                  src="https://www.instacart.com/assets/buyflow/ic-card-add-3e8e8e52303c205dbe326861bac6c4ebead31319ea6ae384085954482b78254b.png"
+                  alt="google-pay"
+                  className="w-[40px] mr-2"
+                />
+                <div className="text-left">
+                  <span>Paypal</span>
+                </div>
+              </div>
+              <img src={SideArrowSvg} alt="sidearrowSvg" />
+            </span>
+          </button>
         </div>
       </div>
     </Modal>

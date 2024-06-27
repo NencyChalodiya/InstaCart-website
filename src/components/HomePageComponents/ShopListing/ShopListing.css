@@ -1,0 +1,116 @@
+.shop-list .ant-skeleton-avatar {
+  width: 64px !important;
+  height: 56px !important;
+}
+
+.shop-list .ant-skeleton-avatar-circle {
+  border-radius: 20% !important;
+}
+
+.shop-list-name .ant-skeleton-avatar {
+  width: 200px !important;
+  height: 10px !important;
+}
+
+.shop-list-name .ant-skeleton-avatar-circle {
+  border-radius: 10% !important;
+}
+
+.shop-list-category .ant-skeleton-avatar {
+  width: 200px !important;
+  height: 10px !important;
+}
+
+.shop-list-category .ant-skeleton-avatar-circle {
+  border-radius: 10% !important;
+}
+
+.shop-list-message .ant-skeleton-avatar {
+  width: 250px !important;
+  height: 30px !important;
+}
+
+.shop-list-message .ant-skeleton-avatar-circle {
+  border-radius: 10% !important;
+}
+
+.gift-banner-images .ant-skeleton-avatar {
+  width: 216px !important;
+  height: 284px !important;
+}
+
+.gift-banner-images .ant-skeleton-avatar-circle {
+  border-radius: 10% !important;
+}
+
+.brand-store .ant-skeleton-avatar {
+  width: 96px !important;
+  height: 72px !important;
+}
+
+.brand-store .ant-skeleton-avatar-circle {
+  border-radius: 20% !important;
+}
+
+.circle .ant-skeleton-avatar {
+  width: 75px !important;
+  height: 75px !important;
+}
+
+.circle .ant-skeleton-avatar-circle {
+  border-radius: 50% !important;
+}
+
+.square .ant-skeleton-avatar {
+  width: 75px !important;
+  height: 75px !important;
+}
+
+.square .ant-skeleton-avatar-circle {
+  border-radius: 20% !important;
+}
+
+.line-1 .ant-skeleton-avatar {
+  width: 95px !important;
+  height: 15px !important;
+}
+
+.line-1 .ant-skeleton-avatar-circle {
+  border-radius: 20% !important;
+}
+
+.line-2 .ant-skeleton-avatar {
+  width: 150px !important;
+  height: 15px !important;
+}
+
+.line-2 .ant-skeleton-avatar-circle {
+  border-radius: 20% !important;
+}
+
+.line-3 .ant-skeleton-avatar {
+  width: 95px !important;
+  height: 15px !important;
+}
+
+.line-3 .ant-skeleton-avatar-circle {
+  border-radius: 20% !important;
+}
+
+.heading-1 .ant-skeleton-avatar {
+  width: 95px !important;
+  height: 15px !important;
+}
+
+.heading-1 .ant-skeleton-avatar-circle {
+  border-radius: 20% !important;
+}
+
+.line-4 .ant-skeleton-avatar {
+  width: 160px !important;
+  height: 18px !important;
+}
+
+.line-4 .ant-skeleton-avatar-circle {
+  border-radius: 5% !important;
+}

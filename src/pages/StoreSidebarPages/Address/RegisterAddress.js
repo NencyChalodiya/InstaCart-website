@@ -1,11 +1,13 @@
 import React, { useState } from "react";
-import { Modal } from "antd";
+
 import API from "../../../services/api";
-import Loader from "react-js-loader";
-import "../../Loading.css";
+
+import { Modal } from "antd";
 
 import CrossSvg from "../../../assets/images/cross.svg";
 import LocationSvg from "../../../assets/images/location.svg";
+
+import Spinner from "../../../components/atoms/Spinner";
 
 const RegisterAddress = ({
   openRegisterAddressModal,
@@ -18,11 +20,12 @@ const RegisterAddress = ({
     bussinessAddress: "",
     ZipCode: "",
   });
+
   const [isLoading, setLoading] = useState(false);
 
   const registerUserAddress = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
       let payload = {
         street: registerAddressDetails.streetAddress,
         floor: registerAddressDetails.apartAddress,
@@ -157,12 +160,12 @@ const RegisterAddress = ({
                       onClick={() => registerUserAddress()}
                       disabled={isLoading}
                     >
-                      <span className="block text-xl font-semibold leading-5 text-white">
+                      <span className="block text-xl font-semibold leading-5 text-white mr-3">
                         Save Address
                       </span>
                       {isLoading && (
-                        <div className="ml-2 h-5 w-5 mt-[-20px]">
-                          <Loader size={20} />
+                        <div className="">
+                          <Spinner fontsize={20} loaderColor="#FFFFFF" />
                         </div>
                       )}
                     </button>

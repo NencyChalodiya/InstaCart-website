@@ -16,70 +16,74 @@ const SelectAddress = ({
   addressType,
 }) => {
   return (
-    <div>
-      <div className="p-6 cursor-pointer" onClick={toggleAccordion}>
+    <div className="border-b">
+      <div className="px-6 py-3 cursor-pointer" onClick={toggleAccordion}>
         <div>
-          <div className="absolute flex items-center ">
-            <img src={DeliverySvg} alt="delivery-svg" />
-            <div className=" flex-grow min-h-11 flex flex-col justify-center">
-              {isExpanded ? (
-                <h2 className="text-xl">
-                  {addressType === "delivery"
-                    ? "Delivery Address"
-                    : "Pickup Address"}
-                </h2>
-              ) : (
-                <>
-                  {addressType === "delivery" ? (
-                    <>
-                      {confirmedAddress ? (
-                        <>
-                          <h2 className="text-xl">
-                            {confirmedAddress.street}, {confirmedAddress.floor}
-                          </h2>
-                          <div className="text-base text-gray-500">
-                            {confirmedAddress.business_name},{" "}
-                            {confirmedAddress.zip_code}
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <h2 className="text-xl">Delivery Address</h2>
-                        </>
-                      )}
-                    </>
-                  ) : (
-                    <>
-                      {confirmedAddress ? (
-                        <>
-                          <h2 className="text-base">
-                            {confirmedAddress.address}, {confirmedAddress.city}
-                          </h2>
-                          <div className="text-sm text-gray-500">
-                            {confirmedAddress.state}, {confirmedAddress.country}
-                            ,{confirmedAddress.zip_code}
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <h2 className="text-xl">Pickup Address</h2>
-                        </>
-                      )}
-                    </>
-                  )}
-                </>
-              )}
+          <div className="relative flex items-center justify-between">
+            <div className="flex items-center">
+              <img src={DeliverySvg} alt="delivery-svg" />
+              <div className=" flex-grow min-h-11 flex flex-col justify-center">
+                {isExpanded ? (
+                  <h2 className="text-xl">
+                    {addressType === "delivery"
+                      ? "Delivery Address"
+                      : "Pickup Address"}
+                  </h2>
+                ) : (
+                  <>
+                    {addressType === "delivery" ? (
+                      <>
+                        {confirmedAddress ? (
+                          <>
+                            <h2 className="text-xl">
+                              {confirmedAddress.street},{" "}
+                              {confirmedAddress.floor}
+                            </h2>
+                            <div className="text-base text-gray-500">
+                              {confirmedAddress.business_name},{" "}
+                              {confirmedAddress.zip_code}
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <h2 className="text-xl ml-3">Delivery Address</h2>
+                          </>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {confirmedAddress ? (
+                          <>
+                            <h2 className="text-base">
+                              {confirmedAddress.address},{" "}
+                              {confirmedAddress.city}
+                            </h2>
+                            <div className="text-sm text-gray-500">
+                              {confirmedAddress.state},{" "}
+                              {confirmedAddress.country},
+                              {confirmedAddress.zip_code}
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <h2 className="text-xl">Pickup Address</h2>
+                          </>
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+              </div>
             </div>
-            {!isExpanded && (
-              <button className="h-8 w-8 cursor-pointer pl-72">
-                <img src={DownArrowSvg} alt="downArrow-svg" />
-              </button>
-            )}
+
+            <div className="flex items-center  ">
+              {isExpanded ? <span>&#9650;</span> : <span>&#9660;</span>}
+            </div>
           </div>
         </div>
       </div>
       {isExpanded && (
-        <div className="p-4 mt-2 border-b">
+        <div className="px-4  ">
           {address && address.addressDetails ? (
             <>
               {addressType === "delivery"

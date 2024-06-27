@@ -24,6 +24,9 @@ const ListProductDetails = () => {
   const [editDetailModal, openEditDetailModal] = useState(false);
   const [currentListDetails, setCurrentListDetails] = useState(null);
   const [editListItemModal, openEditListItemModal] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  console.log("storeId", storeId);
 
   const fetchListDetails = async () => {
     const queryParams = {};
@@ -64,11 +67,9 @@ const ListProductDetails = () => {
 
   const getAccountSettingsDetails = async () => {
     try {
-      //console.log("dkjasnd");
       const response = await API.GetUserDetails();
       console.log(response);
       if (response.status === "success") {
-        //console.log(response.user);
         setUserSettingsDetail(response.data.userData);
       }
     } catch (error) {
@@ -81,6 +82,7 @@ const ListProductDetails = () => {
   }, []);
 
   const deleteTheList = async () => {
+    setLoading(true);
     try {
       const response = await API.deleteList(listId);
       console.log(response);
@@ -89,7 +91,11 @@ const ListProductDetails = () => {
         navigate("/store/your-lists");
         fetchListDetails();
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleEditDetailClick = (list) => {
@@ -102,11 +108,11 @@ const ListProductDetails = () => {
     <>
       <Navbar />
       <div className="bg-white">
-        {productListDetail && productListDetail.lists ? (
+        {productListDetail && productListDetail?.lists ? (
           <>
-            {productListDetail.lists.length > 0 ? (
+            {productListDetail?.lists?.length > 0 ? (
               <>
-                {productListDetail.lists.map((list) => (
+                {productListDetail?.lists?.map((list) => (
                   <div className="mt-28  mx-auto max-w-[1451px]">
                     <div>
                       <div className="grid grid-cols-2">
@@ -162,13 +168,17 @@ const ListProductDetails = () => {
                                   />
                                   <div className="flex-grow pl-3">
                                     <div>{list?.store_name}</div>
-                                    <div>Available in 1148</div>
+
                                     <div className="flex items-center text-[#3E9A39] text-sm gap-1 font-semibold">
                                       <span>
                                         <MdElectricBolt />
                                       </span>
-                                      <san>Delivery</san>
-                                      <span>{list?.next_delivery_time}</span>
+
+                                      <span>
+                                        {list?.next_delivery_time
+                                          ? `Delivery ${list.next_delivery_time}`
+                                          : "Delivery Not available"}
+                                      </span>
                                     </div>
                                   </div>
                                 </div>
@@ -280,6 +290,7 @@ const ListProductDetails = () => {
         onCancel={() => openEditDeleteDetailsModal(false)}
         deleteTheList={deleteTheList}
         handleEditDetail={() => handleEditDetailClick(currentListDetails)}
+        loading={loading}
       />
       <AddToCart
         addToCartModal={addToCartModal}
@@ -299,6 +310,7 @@ const ListProductDetails = () => {
         onCancel={() => openEditListItemModal(false)}
         productListDetail={productListDetail}
         listId={listId}
+        storeId={storeId}
       />
     </>
   );

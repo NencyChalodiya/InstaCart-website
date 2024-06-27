@@ -1,14 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+
 import { message, Modal } from "antd";
+
+import CrossSvg from "../../../../assets/images/cross.svg";
+
 import API from "../../../../services/api";
+
+import Spinner from "../../../../components/atoms/Spinner";
+
 const CreatePassword = ({ changePassword, onCancel }) => {
+  const [loading, setLoading] = useState(false);
   const [createNewPasswordDetails, setcreateNewPasswordDetails] = useState({
     newPassword: "",
     confirmPassword: "",
   });
 
   const createNewpassword = async () => {
-    //const token = localStorage.getItem("token");
+    setLoading(true);
     try {
       if (
         createNewPasswordDetails.newPassword !==
@@ -22,17 +30,20 @@ const CreatePassword = ({ changePassword, onCancel }) => {
         confirmNewPassword: createNewPasswordDetails.confirmPassword,
       };
       const response = await API.changePasswordOfUser(payload);
-      console.log(response);
       if (response.status === "success") {
         message.success("Your Password has been changed");
+
         onCancel();
       }
       //message.success("Name is successfully updated");
     } catch (error) {
       console.log(error);
       //message.error("Could not able to update name");
+    } finally {
+      setLoading(false);
     }
   };
+
   return (
     <Modal
       centered
@@ -49,17 +60,7 @@ const CreatePassword = ({ changePassword, onCancel }) => {
               onClick={onCancel}
             >
               <span className="block leading-none">
-                <svg
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="#343538"
-                  xmlns="http://www.w3.org/2000/svg"
-                  size="24"
-                  aria-hidden="true"
-                >
-                  <path d="M12 10.415 6.292 4.707 4.708 6.291l5.708 5.708-5.708 5.708 1.584 1.584L12 13.583l5.708 5.708 1.584-1.584-5.708-5.708 5.708-5.708-1.584-1.584z"></path>
-                </svg>
+                <img src={CrossSvg} alt="cross-svg" />
               </span>
             </button>
           </div>
@@ -111,12 +112,19 @@ const CreatePassword = ({ changePassword, onCancel }) => {
               </span>
             </button>
             <button
-              className="cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 "
+              className={`cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 flex items-center ${
+                loading ? "opacity-50" : ""
+              }`}
               onClick={() => createNewpassword()}
             >
               <span className="block px-4 ml-5 text-xl text-ellipsis">
                 Save
               </span>
+              {loading && (
+                <div className="">
+                  <Spinner fontsize={20} loaderColor="#FFFFFF" />
+                </div>
+              )}
             </button>
           </div>
         </div>

@@ -2,10 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 import { Modal } from "antd";
+import Loader from "react-js-loader";
+
 import CrossSvg from "../../../assets/images/cross.svg";
 import SideArrowSvg from "../../../assets/images/sideArrowSvg.svg";
 import SearchSvg from "../../../assets/images/search.svg";
 import { IoArrowBackOutline } from "react-icons/io5";
+import { MdElectricBolt } from "react-icons/md";
 
 const CreateListModal = ({
   openList,
@@ -24,6 +27,8 @@ const CreateListModal = ({
   selectedStore,
   selectedCoverImage,
   screen,
+  loading,
+  listId,
 }) => {
   return (
     <>
@@ -185,13 +190,21 @@ const CreateListModal = ({
                 <div className="absolute bottom-0 bg-white z-10 left-0 right-0 my-3 border-t pt-3">
                   <button
                     type="submit"
-                    className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-full "
+                    className={`box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-full ${
+                      loading ? "opacity-50" : ""
+                    }`}
                     onClick={() => addList()}
+                    disabled={loading}
                   >
                     <div className="flex items-center justify-center">
                       <span className="block text-xl font-semibold leading-5 text-white">
                         Next
                       </span>
+                      {loading && (
+                        <div className="ml-2 h-5 w-5 mt-[-20px]">
+                          <Loader size={20} />
+                        </div>
+                      )}
                     </div>
                   </button>
                 </div>
@@ -217,9 +230,21 @@ const CreateListModal = ({
                       <span>
                         <span className="inline">{store?.store_name}</span>
                       </span>
-                      <span>
-                        <span className="inline">{store.messages[2]}</span>
-                      </span>
+
+                      <div className="flex items-center text-[#3E9A39] text-sm gap-1 font-semibold">
+                        <span>
+                          <MdElectricBolt />
+                        </span>
+                        <span>Delivery available</span>
+                      </div>
+
+                      {/* <div className="flex items-center text-[#3E9A39] text-sm gap-1 font-semibold">
+                        <span>
+                          <MdElectricBolt />
+                        </span>
+
+                        <span>{store?.messages[2]}</span>
+                      </div> */}
                     </span>
                   </button>
                 </div>
@@ -270,7 +295,8 @@ const CreateListModal = ({
                 </div>
               </div>
               <div className="absolute bottom-0 bg-white z-10 left-0 right-0 my-3 border-t pt-3">
-                <button
+                <Link
+                  to={`/store/your-lists/listProductDetail/${listId}`}
                   type="submit"
                   className="box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-full "
                 >
@@ -279,7 +305,7 @@ const CreateListModal = ({
                       Done Editing list
                     </span>
                   </div>
-                </button>
+                </Link>
               </div>
             </>
           )}

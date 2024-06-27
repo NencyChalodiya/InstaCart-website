@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Modal, message } from "antd";
-import { DownOutlined } from "@ant-design/icons";
-import { Dropdown, Space } from "antd";
+
 import API from "../../../../services/api";
-import Loader from "react-js-loader";
-import "../../../Loading.css";
+
+import { Modal, message } from "antd";
+
+import CrossSvg from "../../../../assets/images/cross.svg";
+import Spinner from "../../../../components/atoms/Spinner";
+
 const Change_Verify_PhoneNum = ({
   verifyPhoneNumber,
   onCancel,
@@ -18,50 +20,12 @@ const Change_Verify_PhoneNum = ({
     otpid: "",
     enteredotp: "",
   });
-  // const [action, setAction] = useState("change");
+
   const [screen, setscreen] = useState(1);
   const [otp, setOTP] = useState(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState(600);
   const inputRefs = useRef([]);
-  const [isLoading, setLoading] = useState(false);
-
-  useEffect(() => {
-    // Start the timer when the component mounts
-    if (screen === 3 && timer > 0) {
-      const countdown = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1);
-      }, 1000);
-
-      // Clear the interval when the component unmounts
-      return () => clearInterval(countdown);
-    }
-  }, [screen, timer]);
-
-  useEffect(() => {
-    // Reset the timer when the screen changes
-    if (screen === 3) {
-      setTimer(600);
-    }
-  }, [screen]);
-
-  const handleInputChange = (index, value) => {
-    const newOTP = [...otp];
-    newOTP[index] = value;
-    setOTP(newOTP);
-    if (value !== "" && index < inputRefs.current.length - 1) {
-      inputRefs.current[index + 1].focus();
-    }
-
-    const enteredOtp = newOTP.join("");
-    setNewPhoneNumber({
-      ...newPhoneNumber,
-      enteredotp: enteredOtp,
-    });
-
-    // Construct the entered OTP from the newOTP array
-
-    //console.log(enteredOtp);
-  };
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setNewPhoneNumber({
@@ -71,8 +35,8 @@ const Change_Verify_PhoneNum = ({
   }, [userPhoneNumber]);
 
   const changePhoneNumber = async (action) => {
+    setLoading(true);
     try {
-      setLoading(true);
       let payload = {
         country_code: newPhoneNumber.countryCode,
         phoneno: String(newPhoneNumber.phoneno),
@@ -89,15 +53,41 @@ const Change_Verify_PhoneNum = ({
             otpid: response.data.otpid,
           });
           message.success("OTP sent successfully");
-          handleContinue(); // Move to the next screen
+          handleContinue();
         } else {
           handleVerificationStatusChange(false);
           message.success("Phone number changed but not verified");
-          onCancel(); // Close the modal
+          onCancel();
           getAccountSettingsDetails();
         }
       } else {
         message.error("Failed to change phone number");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toVerifyChangedNumber = async () => {
+    try {
+      setLoading(true);
+      let payload = {
+        country_code: newPhoneNumber.countryCode,
+        phoneno: newPhoneNumber.phoneno,
+        otpid: newPhoneNumber.otpid,
+        enteredotp: newPhoneNumber.enteredotp,
+      };
+
+      const response = await API.verifyChangedPhoneNumber(payload);
+      console.log(response);
+      if (response.status === "success") {
+        message.success("Phone number updated and verified successfully");
+        getAccountSettingsDetails();
+        onCancel();
+      } else {
+        message.error("Failed to verify phone number");
       }
     } catch (error) {
       console.log(error);
@@ -125,51 +115,36 @@ const Change_Verify_PhoneNum = ({
     }
   };
 
-  const toVerifyChangedNumber = async () => {
-    try {
-      setLoading(true);
-      let payload = {
-        country_code: newPhoneNumber.countryCode,
-        phoneno: newPhoneNumber.phoneno,
-        otpid: newPhoneNumber.otpid,
-        enteredotp: newPhoneNumber.enteredotp,
-      };
-      //console.log("Verification payload:", payload);
-      const response = await API.verifyChangedPhoneNumber(payload);
-      console.log(response);
-      if (response.status === "success") {
-        message.success("Phone number updated and verified successfully");
-        getAccountSettingsDetails();
-        onCancel(); // Close the modal
-      } else {
-        message.error("Failed to verify phone number");
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    if (screen === 3 && timer > 0) {
+      const countdown = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+
+      return () => clearInterval(countdown);
     }
+  }, [screen, timer]);
+
+  useEffect(() => {
+    if (screen === 3) {
+      setTimer(600);
+    }
+  }, [screen]);
+
+  const handleInputChange = (index, value) => {
+    const newOTP = [...otp];
+    newOTP[index] = value;
+    setOTP(newOTP);
+    if (value !== "" && index < inputRefs.current.length - 1) {
+      inputRefs.current[index + 1].focus();
+    }
+
+    const enteredOtp = newOTP.join("");
+    setNewPhoneNumber({
+      ...newPhoneNumber,
+      enteredotp: enteredOtp,
+    });
   };
-  //console.log(typeof newPhoneNumber.phoneno);
-
-  // const updateAccountSettingsPhoneNumber = async () => {
-  //   const token = localStorage.getItem("token");
-  //   try {
-  //     let payload = {
-  //       phone: newPhoneNumber,
-  //       access_token: token,
-  //     };
-
-  //     const response = await API.UpdateUserDetails(payload);
-
-  //     console.log(response);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // useEffect(() => {
-  //   setNewPhoneNumber(userPhoneNumber);
-  // }, [userPhoneNumber]);
 
   return (
     <Modal
@@ -187,19 +162,7 @@ const Change_Verify_PhoneNum = ({
                 className="mt-[2px] cursor-pointer h-10 w-10 relative bg-transparent"
                 onClick={onCancel}
               >
-                <span className="block leading-none">
-                  <svg
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="#343538"
-                    xmlns="http://www.w3.org/2000/svg"
-                    size="24"
-                    aria-hidden="true"
-                  >
-                    <path d="M12 10.415 6.292 4.707 4.708 6.291l5.708 5.708-5.708 5.708 1.584 1.584L12 13.583l5.708 5.708 1.584-1.584-5.708-5.708 5.708-5.708-1.584-1.584z"></path>
-                  </svg>
-                </span>
+                <img src={CrossSvg} alt="cross-svg" />
               </button>
             </div>
             <h1 className="flex-grow text-lg font-medium text-center">
@@ -260,21 +223,37 @@ const Change_Verify_PhoneNum = ({
           <div className="flex justify-end px-4">
             <div className="flex gap-3">
               <button
-                className="cursor-pointer relative h-[54px] pr-6 bg-[#F6F7F8] rounded-[27px]"
-                //onClick={() => updateAccountSettingsPhoneNumber()}
+                className={`cursor-pointer relative h-[54px] pr-6 bg-[#F6F7F8] rounded-[27px]
+                ${loading ? "opacity-50" : ""}
+                `}
                 onClick={() => handleChangeNumber()}
+                disabled={loading}
               >
                 <span className="block px-4 ml-5 text-xl text-ellipsis">
-                  change number
+                  Change number
                 </span>
+                {loading && (
+                  <div className="">
+                    <Spinner fontsize={20} loaderColor="#FFFFFF" />
+                  </div>
+                )}
               </button>
-              <button className="cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 ">
+              <button
+                className={`cursor-pointer relative h-[54px] rounded-[27px] bg-[#2C890F] text-white pr-6 ${
+                  loading ? "opacity-50" : ""
+                }`}
+              >
                 <span
                   className="block px-4 ml-5 text-xl text-ellipsis"
                   onClick={() => handleVerifyNumber()}
                 >
-                  verify number
+                  Verify number
                 </span>
+                {loading && (
+                  <div className="">
+                    <Spinner fontsize={20} loaderColor="#FFFFFF" />
+                  </div>
+                )}
               </button>
             </div>
           </div>
@@ -327,18 +306,18 @@ const Change_Verify_PhoneNum = ({
                   <button
                     type="submit"
                     className={`box-border relative flex items-center justify-center w-full bg-[#2C890F] border cursor-pointer h-14 rounded-xl ${
-                      isLoading ? "opacity-50" : ""
+                      loading ? "opacity-50" : ""
                     }`}
                     onClick={() => toVerifyChangedNumber()}
-                    disabled={isLoading}
+                    disabled={loading}
                   >
                     <div className="flex items-center justify-center">
                       <span className="block text-xl font-semibold leading-5 text-white">
                         Verify Changed Number
                       </span>
-                      {isLoading && (
-                        <div className="ml-2 h-5 w-5 mt-[-20px]">
-                          <Loader size={20} />
+                      {loading && (
+                        <div className="">
+                          <Spinner fontsize={20} loaderColor="#FFFFFF" />
                         </div>
                       )}
                     </div>
