@@ -141,6 +141,7 @@ const ShopListing = ({ selectedCategoryId }) => {
                 )}
               </div>
             ) : (
+              
               giftBannerImages?.length > 0 && (
                 <div className="mb-8">
                   <div className="flex justify-between items-center mb-2">

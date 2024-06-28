@@ -33,19 +33,16 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
   const [phoneError, setPhoneError] = useState("");
 
   useEffect(() => {
-    // Start the timer when the component mounts
     if (screen === 3 && timer > 0) {
       const countdown = setInterval(() => {
         setTimer((prevTimer) => prevTimer - 1);
       }, 1000);
 
-      // Clear the interval when the component unmounts
       return () => clearInterval(countdown);
     }
   }, [screen, timer]);
 
   useEffect(() => {
-    // Reset the timer when the screen changes
     if (screen === 3) {
       setTimer(600);
     }
@@ -64,7 +61,6 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
       ...loginUserDetails,
       enteredotp: enteredotp,
     });
-    // console.log(enteredotp);
   };
 
   const validateEmail = (email) => {
@@ -77,7 +73,7 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
     }
   };
 
-  // Function to validate password
+
   const validatePassword = (password) => {
     if (!password) {
       setPasswordError("Password required");
@@ -88,7 +84,7 @@ const Login = ({ login, onCancel, onClickSignup, onResetpasswordHandler }) => {
     }
   };
 
-  // Function to validate phone number
+
   const validatePhoneNumber = (phone) => {
     if (!phone) {
       setPhoneError("Phone number required");

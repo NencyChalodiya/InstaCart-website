@@ -84,7 +84,7 @@ const ApplyForGift = ({
                           <div className="relative flex-grow w-full h-full">
                             <input
                               className={`w-full h-full p-5 text-base leading-6 bg-transparent  rounded-lg outline-none  `}
-                              placeholder="recipitentMobileNo"
+                              placeholder="Recipient Mobile Number"
                               value={giftUserDetails.recipitentMobileNo}
                               onChange={(e) => {
                                 setGiftUserDetails({
